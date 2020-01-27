@@ -1,7 +1,10 @@
 {
   "name": "react-native-design-kit",
   "version": "1.0.0",
-  "private": true,
+  "description": "All in one react native material design",
+  "main": "src/index.ts",
+  "author": "Praya Amadiga Pitasa <prayaamadigapitasa@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -10,9 +13,15 @@
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./"
   },
+  "keywords": [
+    "react-native",
+    "material",
+    "design",
+    "ui"
+  ],
   "dependencies": {
-    "react": "16.9.0",
-    "react-native": "0.61.4",
+    "react": "^16.9.0",
+    "react-native": "^0.61.4",
     "react-native-vector-icons": "^6.6.0",
     "typescript": "^3.6.3"
   },
