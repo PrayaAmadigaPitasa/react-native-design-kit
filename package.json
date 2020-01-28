@@ -1,8 +1,8 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "All in one react native material design",
-  "main": "src/index.ts",
+  "main": "./src/index.ts",
   "author": "Praya Amadiga Pitasa <prayaamadigapitasa@gmail.com>",
   "license": "MIT",
   "scripts": {

@@ -21,17 +21,22 @@ DerivedData
 *.ipa
 *.xcuserstate
 
-# Android/IntelliJ
+# Android
 #
+android/
 build/
 .idea
 .gradle
 local.properties
 *.iml
 
+# iOS
+ios/
+
 # node.js
 #
 node_modules/
+package-lock.json
 npm-debug.log
 yarn-error.log
 
@@ -54,6 +59,3 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
-
-# CocoaPods
-/ios/Pods/
