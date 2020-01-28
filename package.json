@@ -1,8 +1,9 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "All in one react native material design",
   "main": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "src/"
   ],
@@ -29,8 +30,7 @@
   "dependencies": {
     "react": "^16.9.0",
     "react-native": "^0.61.4",
-    "react-native-vector-icons": "^6.6.0",
-    "typescript": "^3.6.3"
+    "react-native-vector-icons": "^6.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -39,7 +39,6 @@
     "@types/jest": "^24.0.25",
     "@types/react-native": "^0.60.22",
     "@types/react-native-vector-icons": "^6.4.5",
-    "@types/react-test-renderer": "16.9.0",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "babel-jest": "^24.9.0",
     "eslint": "^6.8.0",
@@ -52,6 +51,7 @@
     "mem": ">=4.0.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "^1.19.1",
-    "react-test-renderer": "16.9.0"
+    "react-test-renderer": "16.9.0",
+    "typescript": "^3.6.3"
   }
 }
