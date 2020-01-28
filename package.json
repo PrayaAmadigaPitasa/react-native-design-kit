@@ -35,6 +35,7 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^24.0.25",
     "@types/react-native": "^0.60.22",
+    "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-test-renderer": "16.9.0",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "babel-jest": "^24.9.0",

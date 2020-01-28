@@ -167,17 +167,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     overflow: 'hidden',
   },
-  containerRaised: Platform.select({
-    android: {
-      elevation: 4,
-    },
-    ios: {
-      shadowColor: '#9a9a9a',
-      shadowOffset: {height: 1, width: 1},
-      shadowOpacity: 1,
-      shadowRadius: 1,
-    },
-  }),
+  containerRaised: {
+    ...Platform.select({
+      android: {
+        elevation: 4,
+      },
+      ios: {
+        shadowColor: '#9a9a9a',
+        shadowOffset: {height: 1, width: 1},
+        shadowOpacity: 1,
+        shadowRadius: 1,
+      },
+    }),
+  },
   containerNoBackground: {
     backgroundColor: 'transparent',
   },
