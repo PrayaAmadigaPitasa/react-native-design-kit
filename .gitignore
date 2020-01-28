@@ -1,5 +1,5 @@
 # Android/
-android
+android/
 build/
 .idea
 .gradle
@@ -7,7 +7,7 @@ local.properties
 *.iml
 
 # iOS
-ios
+ios/
 
 # node.js
 node_modules

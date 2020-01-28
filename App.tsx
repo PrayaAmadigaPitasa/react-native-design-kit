@@ -5,6 +5,7 @@ import {InputOTP} from './src';
 export default function App() {
   return (
     <View style={styles.container}>
+      <View />
       <InputOTP />
     </View>
   );
