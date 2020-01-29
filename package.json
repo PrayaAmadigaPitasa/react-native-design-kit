@@ -1,10 +1,11 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "All in one react native material design",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "src/"
+    "dist/"
   ],
   "author": "Praya Amadiga Pitasa <prayaamadigapitasa@gmail.com>",
   "license": "MIT",
@@ -12,7 +13,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "build": "tsc helloworld.ts",
+    "build": "tsc",
     "test": "jest",
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./"
@@ -27,10 +28,6 @@
     "design",
     "ui"
   ],
-  "dependencies": {
-    "react": "^16.9.0",
-    "react-native": "^0.61.4"
-  },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
@@ -50,8 +47,14 @@
     "mem": ">=4.0.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "^1.19.1",
+    "react": "16.9.0",
+    "react-native": "0.61.4",
     "react-native-vector-icons": "^6.6.0",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.6.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
   }
 }
