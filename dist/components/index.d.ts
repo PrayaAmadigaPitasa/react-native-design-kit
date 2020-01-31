@@ -30,21 +30,4 @@ export * from './Slider';
 export * from './Stepper';
 export * from './Switch';
 export * from './SwitchableText';
-export {
-  Avatar,
-  Badge,
-  Button,
-  ButtonGroup,
-  Checkbox,
-  Chip,
-  Input,
-  InputOTP,
-  Modal,
-  Picker,
-  PlayingBar,
-  Radio,
-  Slider,
-  Stepper,
-  Switch,
-  SwitchableText,
-};
+export { Avatar, Badge, Button, ButtonGroup, Checkbox, Chip, Input, InputOTP, Modal, Picker, PlayingBar, Radio, Slider, Stepper, Switch, SwitchableText, };
