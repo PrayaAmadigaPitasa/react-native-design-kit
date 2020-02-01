@@ -62,6 +62,7 @@ export interface ChipProps
   horizontal?: boolean;
   horizontalScrollIndicator?: boolean;
   horizontalScrollEnabled?: boolean;
+  horizontalScrollButton?: boolean;
   selectedId?: string | string[];
   onSelect(id: string, selected: string[]): void;
 }
@@ -110,6 +111,7 @@ export default function Chip({
   horizontal,
   horizontalScrollIndicator = false,
   horizontalScrollEnabled = true,
+  horizontalScrollButton,
   selectedId,
   leftIcon,
   leftIconAction,
@@ -316,26 +318,28 @@ export default function Chip({
 
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
-      <TouchableOpacity
-        activeOpacity={activeOpacity}
-        disabled={!allowScrollLeft()}
-        onPress={() => {
-          if (scrollRef !== null) {
-            scrollRef.scrollToOffset({
-              offset: Math.max(0, offset.x - 125),
-              animated: true,
-            });
-          }
-        }}>
-        <View
-          style={StyleSheet.flatten([
-            styles.scrollContainer,
-            styles.scrollLeftIconContainer,
-            !allowScrollLeft() ? styles.scrollContainerDisabled : {},
-          ])}>
-          <Icon name="chevron-left" />
-        </View>
-      </TouchableOpacity>
+      {horizontalScrollButton && (
+        <TouchableOpacity
+          activeOpacity={activeOpacity}
+          disabled={!allowScrollLeft()}
+          onPress={() => {
+            if (scrollRef !== null) {
+              scrollRef.scrollToOffset({
+                offset: Math.max(0, offset.x - 125),
+                animated: true,
+              });
+            }
+          }}>
+          <View
+            style={StyleSheet.flatten([
+              styles.scrollContainer,
+              styles.scrollLeftIconContainer,
+              !allowScrollLeft() ? styles.scrollContainerDisabled : {},
+            ])}>
+            <Icon name="chevron-left" />
+          </View>
+        </TouchableOpacity>
+      )}
       <FlatList
         ref={instance => setScrollRef(instance)}
         onLayout={event => setLayout(event.nativeEvent.layout)}
@@ -351,28 +355,30 @@ export default function Chip({
         keyExtractor={item => item}
         renderItem={({item}) => getChipItem(item)}
       />
-      <TouchableOpacity
-        activeOpacity={activeOpacity}
-        disabled={!allowScrollRight()}
-        onPress={() => {
-          const difSize = getDifSize();
+      {horizontalScrollButton && (
+        <TouchableOpacity
+          activeOpacity={activeOpacity}
+          disabled={!allowScrollRight()}
+          onPress={() => {
+            const difSize = getDifSize();
 
-          if (scrollRef !== null && difSize !== undefined) {
-            scrollRef.scrollToOffset({
-              offset: Math.min(difSize, offset.x + 125),
-              animated: true,
-            });
-          }
-        }}>
-        <View
-          style={StyleSheet.flatten([
-            styles.scrollContainer,
-            styles.scrollRightIconContainer,
-            !allowScrollRight() ? styles.scrollContainerDisabled : {},
-          ])}>
-          <Icon name="chevron-right" />
-        </View>
-      </TouchableOpacity>
+            if (scrollRef !== null && difSize !== undefined) {
+              scrollRef.scrollToOffset({
+                offset: Math.min(difSize, offset.x + 125),
+                animated: true,
+              });
+            }
+          }}>
+          <View
+            style={StyleSheet.flatten([
+              styles.scrollContainer,
+              styles.scrollRightIconContainer,
+              !allowScrollRight() ? styles.scrollContainerDisabled : {},
+            ])}>
+            <Icon name="chevron-right" />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   ) : (
     <View style={StyleSheet.flatten([containerStyle, styles.containerWrap])}>
