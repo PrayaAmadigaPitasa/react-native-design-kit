@@ -11,6 +11,7 @@ import {isNumber} from '../utilities/RegexUtil';
 export interface InputOTPBaseProps {
   inputContainerStyle?: ViewStyle;
   placeholderComponent?: JSX.Element;
+  placeholderComponentContainerStyle?: ViewStyle;
 }
 
 export interface InputOTPProps extends TextInputProps, InputOTPBaseProps {
@@ -28,7 +29,10 @@ export interface InputOTPBoxProps extends TextInputProps, InputOTPBaseProps {
 export function InputOTPBox({
   inputContainerStyle,
   placeholderComponent,
+  placeholderComponentContainerStyle,
   refInput,
+  style,
+  keyboardType,
   onFocus,
   onBlur,
   ...props
@@ -40,7 +44,13 @@ export function InputOTPBox({
       style={StyleSheet.flatten([styles.inputContainer, inputContainerStyle])}>
       {placeholderComponent && showPlaceholder && (
         <View style={styles.sectionPlaceholderComponent}>
-          {placeholderComponent}
+          <View
+            style={StyleSheet.flatten([
+              styles.placeholderComponentContainer,
+              placeholderComponentContainerStyle,
+            ])}>
+            {placeholderComponent}
+          </View>
         </View>
       )}
       <TextInput
@@ -50,8 +60,8 @@ export function InputOTPBox({
             refInput(instance);
           }
         }}
-        style={StyleSheet.flatten([styles.inputBox, props.style])}
-        keyboardType="number-pad"
+        style={StyleSheet.flatten([styles.inputBox, style])}
+        keyboardType={keyboardType || 'number-pad'}
         maxLength={1}
         onFocus={e => {
           onFocus !== undefined && onFocus(e);
@@ -202,9 +212,15 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#9a9a9a',
-    backgroundColor: '#fafafa',
+    borderColor: 'darkgray',
+    backgroundColor: 'whitesmoke',
     marginHorizontal: 12,
+  },
+  placeholderComponentContainer: {
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputBox: {
     width: '100%',
@@ -214,9 +230,8 @@ const styles = StyleSheet.create({
   },
   sectionPlaceholderComponent: {
     position: 'absolute',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
   },
   sectionSeparator: {
     alignItems: 'center',
