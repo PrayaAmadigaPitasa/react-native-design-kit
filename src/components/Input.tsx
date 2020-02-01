@@ -24,6 +24,7 @@ export interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   label?: string;
   labelStyle?: TextStyle;
+  labelContainerStyle?: ViewStyle;
   labelPosition?: 'container' | 'box' | 'border';
   labelBoxStandBySize?: number;
   labelBoxActiveSize?: number;
@@ -39,6 +40,7 @@ export interface InputProps extends TextInputProps {
   rightIconContainerStyle?: ViewStyle;
   focusStyle?: TextStyle;
   focusLabelStyle?: TextStyle;
+  focusLabelContainerStyle?: ViewStyle;
   focusContainerStyle?: ViewStyle;
   focusInputContainerStyle?: ViewStyle;
   focusLeftIconContainerStyle?: ViewStyle;
@@ -49,12 +51,14 @@ export default function Input({
   containerStyle,
   label,
   labelStyle,
+  labelContainerStyle,
   labelPosition = 'container',
   inputContainerStyle,
   inputRef,
   focusStyle,
   focusLabelStyle,
   focusContainerStyle,
+  focusLabelContainerStyle,
   focusInputContainerStyle,
   focusLeftIconContainerStyle,
   focusRightIconContainerStyle,
@@ -179,15 +183,22 @@ export default function Input({
     <View
       style={[styles.container, containerStyle, focus && focusContainerStyle]}>
       {showLabel && labelPosition === 'container' ? (
-        <Text
+        <View
           style={StyleSheet.flatten([
-            styles.label,
-            styles.labelThemeContainer,
-            labelStyle,
-            focus && focusLabelStyle,
+            styles.labelContainerThemeContainer,
+            labelContainerStyle,
+            focus && focusLabelContainerStyle,
           ])}>
-          {label}
-        </Text>
+          <Text
+            style={StyleSheet.flatten([
+              styles.label,
+              styles.labelThemeContainer,
+              labelStyle,
+              focus && focusLabelStyle,
+            ])}>
+            {label}
+          </Text>
+        </View>
       ) : (
         <></>
       )}
@@ -197,7 +208,7 @@ export default function Input({
           inputContainerStyle,
           focus &&
             StyleSheet.flatten([
-              styles.inputContainerFocused,
+              styles.focusInputContainer,
               focusInputContainerStyle,
             ]),
         ]}>
@@ -304,7 +315,13 @@ export default function Input({
             {showLabel && labelPosition === 'border' ? (
               <View
                 style={[
-                  styles.sectionLabelThemeBorder,
+                  styles.labelContainerThemeBorder,
+                  labelContainerStyle,
+                  focus &&
+                    StyleSheet.flatten([
+                      styles.focusLabelContainerThemeBorder,
+                      focusLabelContainerStyle,
+                    ]),
                   {
                     top: -1 + (layout ? -layout.height / 2 : 0),
                   },
@@ -355,8 +372,18 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     backgroundColor: 'whitesmoke',
   },
-  inputContainerFocused: {
-    borderColor: 'dodgerblue',
+  labelContainerThemeContainer: {
+    marginBottom: 5,
+  },
+  labelContainerThemeBorder: {
+    position: 'absolute',
+    paddingHorizontal: 2,
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: 'lightgray',
+    backgroundColor: 'whitesmoke',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconContainer: {
     height: '100%',
@@ -369,6 +396,12 @@ const styles = StyleSheet.create({
   iconRightContainer: {
     marginLeft: 6,
   },
+  focusInputContainer: {
+    borderColor: 'dodgerblue',
+  },
+  focusLabelContainerThemeBorder: {
+    borderColor: 'dodgerblue',
+  },
   sectionInputReverse: {
     flex: 1,
     height: '100%',
@@ -378,16 +411,6 @@ const styles = StyleSheet.create({
   sectionInputBox: {
     flex: 1,
     height: '100%',
-  },
-  sectionLabelThemeBorder: {
-    position: 'absolute',
-    paddingHorizontal: 2,
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: 'lightgray',
-    backgroundColor: 'whitesmoke',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sectionLabelThemeBox: {
     position: 'absolute',
@@ -401,7 +424,6 @@ const styles = StyleSheet.create({
   labelThemeContainer: {
     color: 'dimgray',
     fontWeight: 'bold',
-    marginBottom: 5,
   },
   labelThemeBorder: {
     fontWeight: '600',
