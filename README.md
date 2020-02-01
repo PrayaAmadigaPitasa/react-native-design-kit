@@ -1,11 +1,9 @@
 ## Stil In Development
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/react-native-design-kit"><img src="https://img.shields.io/npm/v/react-native-design-kit.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/react-native-design-kit"><img src="https://img.shields.io/npm/dm/react-native-design-kit.svg?style=flat-square"></a>
-  <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg"><a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
-</p>
+<a href="https://www.npmjs.com/package/react-native-design-kit"><img src="https://img.shields.io/npm/v/react-native-design-kit.svg?style=flat-square"></a>
+<a href="https://www.npmjs.com/package/react-native-design-kit"><img src="https://img.shields.io/npm/dm/react-native-design-kit.svg?style=flat-square"></a>
+<a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg"><a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
 
 #### Available Components:
 
