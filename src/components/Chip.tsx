@@ -63,6 +63,8 @@ export interface ChipProps
   horizontalScrollIndicator?: boolean;
   horizontalScrollEnabled?: boolean;
   horizontalScrollButton?: boolean;
+  horizontalScrollLeftButton?: JSX.Element;
+  horizontalScrollRightButton?: JSX.Element;
   selectedId?: string | string[];
   onSelect(id: string, selected: string[]): void;
 }
@@ -112,6 +114,8 @@ export default function Chip({
   horizontalScrollIndicator = false,
   horizontalScrollEnabled = true,
   horizontalScrollButton = true,
+  horizontalScrollLeftButton,
+  horizontalScrollRightButton,
   selectedId,
   leftIcon,
   leftIconAction,
@@ -317,6 +321,11 @@ export default function Chip({
         <TouchableOpacity
           activeOpacity={activeOpacity}
           disabled={!allowScrollLeft()}
+          style={StyleSheet.flatten([
+            styles.scrollContainer,
+            styles.scrollLeftIconContainer,
+            !allowScrollLeft() ? styles.scrollContainerDisabled : {},
+          ])}
           onPress={() => {
             if (scrollRef !== null) {
               scrollRef.scrollToOffset({
@@ -325,14 +334,7 @@ export default function Chip({
               });
             }
           }}>
-          <View
-            style={StyleSheet.flatten([
-              styles.scrollContainer,
-              styles.scrollLeftIconContainer,
-              !allowScrollLeft() ? styles.scrollContainerDisabled : {},
-            ])}>
-            <Icon name="chevron-left" />
-          </View>
+          {horizontalScrollLeftButton || <Icon name="chevron-left" />}
         </TouchableOpacity>
       )}
       <FlatList
@@ -354,6 +356,11 @@ export default function Chip({
         <TouchableOpacity
           activeOpacity={activeOpacity}
           disabled={!allowScrollRight()}
+          style={StyleSheet.flatten([
+            styles.scrollContainer,
+            styles.scrollRightIconContainer,
+            !allowScrollRight() ? styles.scrollContainerDisabled : {},
+          ])}
           onPress={() => {
             const difSize = getDifSize();
 
@@ -364,14 +371,7 @@ export default function Chip({
               });
             }
           }}>
-          <View
-            style={StyleSheet.flatten([
-              styles.scrollContainer,
-              styles.scrollRightIconContainer,
-              !allowScrollRight() ? styles.scrollContainerDisabled : {},
-            ])}>
-            <Icon name="chevron-right" />
-          </View>
+          {horizontalScrollRightButton || <Icon name="chevron-right" />}
         </TouchableOpacity>
       )}
     </View>

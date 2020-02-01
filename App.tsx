@@ -8,7 +8,8 @@ export default function App() {
       <Chip
         horizontal
         actionType="radio"
-        chips={['Place', 'Hotel', 'Road', 'Mansion']}
+        chips={['Place', 'Hotel', 'Road', 'Mansion', 'Highway', 'Store']}
+        horizontalScrollButton={false}
         onSelect={() => {}}
       />
     </View>
