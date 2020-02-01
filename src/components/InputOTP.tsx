@@ -18,7 +18,7 @@ export interface InputOTPProps extends TextInputProps, InputOTPBaseProps {
   numberOfCode?: number;
   containerStyle?: ViewStyle;
   separatorComponent?: JSX.Element;
-  onChangeOTP?(values: string[], isValid: boolean): void;
+  onChangeOTP(otp: string, values: string[], isValid: boolean): void;
 }
 
 export interface InputOTPBoxProps extends TextInputProps, InputOTPBaseProps {
@@ -150,7 +150,8 @@ export default function InputOTP({
             values[index] = text;
             setValues(values);
             onChangeText !== undefined && onChangeText(text);
-            onChangeOTP !== undefined && onChangeOTP(values, isValid());
+            onChangeOTP !== undefined &&
+              onChangeOTP(values.join(''), values, isValid());
 
             if (text === ' ') {
               inputReferences[index].clear();

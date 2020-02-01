@@ -1,16 +1,11 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Input} from './src';
+import {InputOTP} from './src';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Input
-        leftIconAction="toggleVisiblity"
-        rightIconAction="delete"
-        label="Title"
-        labelPosition="box"
-      />
+      <InputOTP onChangeOTP={() => {}} />
     </View>
   );
 }
