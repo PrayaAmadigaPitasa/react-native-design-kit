@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
-import {Button, Input} from './src';
+import {Button, Input, ButtonGroup} from './src';
 
 export default function App() {
   const [value, setValue] = useState('');
@@ -11,6 +11,12 @@ export default function App() {
     <View style={styles.container}>
       <Button disabled={value === ''} onPress={() => Alert.alert('Test')} />
       <Input onChangeText={text => setValue(text)} />
+      <ButtonGroup
+        type="outline"
+        actionType="radio"
+        buttonIds={['Banana', 'Apple', 'Orange']}
+        onSelect={() => {}}
+      />
     </View>
   );
 }

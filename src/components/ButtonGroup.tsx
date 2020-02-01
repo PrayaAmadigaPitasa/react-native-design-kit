@@ -193,13 +193,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     borderRadius: 0,
-    borderWidth: 1,
-    borderColor: '#194bbf',
+    borderWidth: 0.5,
+    borderColor: 'mediumblue',
   },
   selectedButtonContainer: {
-    backgroundColor: '#295bcf',
+    backgroundColor: 'royalblue',
   },
   selectedTitle: {
-    color: '#092b9f',
+    color: 'darkblue',
   },
 });
