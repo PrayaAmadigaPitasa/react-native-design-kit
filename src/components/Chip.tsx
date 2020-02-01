@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   selectedChipContainer: {
-    backgroundColor: '#598bff',
+    backgroundColor: 'dodgerblue',
   },
   selectedChipTitle: {
     color: '#222b45',

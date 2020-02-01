@@ -87,11 +87,13 @@ export default function Button({
   return (
     <TouchableOpacity
       {...props}
+      disabled={disabled}
       style={StyleSheet.flatten([
         styles.container,
         type === 'outline' && styles.containerOutlined,
         containerStyle,
-        disabled && {...styles.disabled, ...disabledContainerStyle},
+        disabled &&
+          StyleSheet.flatten([styles.disabled, disabledContainerStyle]),
         raised && [styles.containerRaised, raisedStyle],
         type !== 'solid' && styles.containerNoBackground,
         type === 'text' && styles.containerNoOutline,
@@ -126,7 +128,7 @@ export default function Button({
               styles.title,
               type !== 'solid' && styles.titleNoBackground,
               titleStyle,
-              disabled && {...disabledTitleStyle},
+              disabled && disabledTitleStyle,
             ]}>
             {title}
           </Text>
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 12,
     width: 'auto',
-    backgroundColor: '#598bff',
+    backgroundColor: 'dodgerblue',
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
         elevation: 4,
       },
       ios: {
-        shadowColor: '#9a9a9a',
+        shadowColor: 'darkgray',
         shadowOffset: {height: 1, width: 1},
         shadowOpacity: 1,
         shadowRadius: 1,
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
   },
   containerOutlined: {
     borderWidth: 1,
-    borderColor: '#598bff',
+    borderColor: 'dodgerblue',
   },
   topIconContainer: {
     marginBottom: 5,
@@ -223,7 +225,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   titleNoBackground: {
-    color: '#598bff',
+    color: 'dodgerblue',
   },
   disabled: {
     opacity: 0.6,

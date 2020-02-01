@@ -1,16 +1,16 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Avatar} from './src';
+import React, {useState} from 'react';
+import {View, StyleSheet, Alert} from 'react-native';
+import {Button, Input} from './src';
 
 export default function App() {
+  const [value, setValue] = useState('');
+
+  console.log(value);
+
   return (
     <View style={styles.container}>
-      <Avatar
-        source={{
-          uri:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRzsqqgesZavhYaOVQ9dGueMWLgfo_5b3gLpnjaRcevpS7CAcyt',
-        }}
-      />
+      <Button disabled={value === ''} onPress={() => Alert.alert('Test')} />
+      <Input onChangeText={text => setValue(text)} />
     </View>
   );
 }

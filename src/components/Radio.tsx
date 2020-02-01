@@ -211,12 +211,12 @@ const styles = StyleSheet.create({
   },
   selectedRadioOuter: {
     borderWidth: 1,
-    borderColor: '#598bff',
+    borderColor: 'dodgerblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
   selectedRadioInner: {
-    backgroundColor: '#598bff',
+    backgroundColor: 'dodgerblue',
   },
   disabledRadio: {
     borderWidth: 1,

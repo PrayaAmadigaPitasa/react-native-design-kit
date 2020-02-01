@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   selectedContainer: {
-    borderColor: '#598bff',
+    borderColor: 'dodgerblue',
     backgroundColor: '#fff',
   },
   dropdownContainer: {
