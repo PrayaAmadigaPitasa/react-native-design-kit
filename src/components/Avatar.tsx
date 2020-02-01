@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'darkgray',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     ...Platform.select({
       android: {
         elevation: 4,

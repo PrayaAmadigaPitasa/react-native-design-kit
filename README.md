@@ -1,3 +1,6 @@
 # react-native-design-kit
 
-Still in development
+List TODO:
+- Documentation [✖️]
+- [Component] Avatar [✔️]
+- [Component] Button [✔️]

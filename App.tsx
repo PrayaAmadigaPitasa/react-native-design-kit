@@ -10,6 +10,9 @@ export default function App() {
           uri:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRzsqqgesZavhYaOVQ9dGueMWLgfo_5b3gLpnjaRcevpS7CAcyt',
         }}
+        editButton={
+          <View style={{height: 20, width: 20, backgroundColor: 'black'}} />
+        }
       />
     </View>
   );
