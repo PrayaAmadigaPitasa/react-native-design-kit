@@ -27,6 +27,7 @@ export interface InputProps extends TextInputProps {
   labelContainerStyle?: ViewStyle;
   labelPosition?: 'container' | 'box' | 'border';
   labelBoxStandBySize?: number;
+  labelBoxStandByOffset?: number;
   labelBoxActiveSize?: number;
   labelBoxActiveOffset?: number;
   inputBoxActiveOffset?: number;
@@ -69,9 +70,10 @@ export default function Input({
   rightIconAction,
   rightIconContainerStyle,
   labelBoxStandBySize = 15,
+  labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
-  labelBoxActiveOffset = -14,
-  inputBoxActiveOffset = 5,
+  labelBoxActiveOffset = 1,
+  inputBoxActiveOffset = 6,
   style,
   placeholder,
   multiline,
@@ -245,10 +247,14 @@ export default function Input({
               <Animated.View
                 style={StyleSheet.flatten([
                   styles.sectionLabelThemeBox,
+                  focus && focusLabelContainerStyle,
                   {
                     top: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, labelBoxActiveOffset],
+                      outputRange: [
+                        labelBoxStandByOffset,
+                        labelBoxActiveOffset,
+                      ],
                     }),
                   },
                 ])}>
@@ -279,9 +285,8 @@ export default function Input({
             <View
               style={StyleSheet.flatten([
                 {height: '100%', width: '100%'},
-                labelPosition === 'box' && themeBorderActive
-                  ? {paddingTop: inputBoxActiveOffset}
-                  : {},
+                labelPosition === 'box' &&
+                  themeBorderActive && {paddingTop: inputBoxActiveOffset},
               ])}>
               <TextInput
                 {...props}
@@ -322,6 +327,7 @@ export default function Input({
                       styles.focusLabelContainerThemeBorder,
                       focusLabelContainerStyle,
                     ]),
+                  styles.sectionLabelThemeBorder,
                   {
                     top: -1 + (layout ? -layout.height / 2 : 0),
                   },
@@ -376,7 +382,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   labelContainerThemeBorder: {
-    position: 'absolute',
     paddingHorizontal: 2,
     borderWidth: 1,
     borderRadius: 2,
@@ -412,11 +417,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
   },
+  sectionLabelThemeBorder: {
+    position: 'absolute',
+  },
   sectionLabelThemeBox: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
   },
   label: {
     fontSize: 16,

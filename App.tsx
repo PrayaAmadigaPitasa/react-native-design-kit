@@ -6,9 +6,10 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Input
-        rightIconAction="toggleVisiblity"
+        leftIconAction="toggleVisiblity"
+        rightIconAction="delete"
         label="Title"
-        labelPosition="border"
+        labelPosition="box"
       />
     </View>
   );
