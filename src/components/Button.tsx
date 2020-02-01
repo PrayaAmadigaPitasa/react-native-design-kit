@@ -36,11 +36,6 @@ export interface ButtonTitleProps {
   titleContainerStyle?: ViewStyle;
 }
 
-export interface ButtonRaisedProps {
-  raised?: boolean;
-  raisedStyle?: ViewStyle;
-}
-
 export interface ButtonBaseProps {
   containerStyle?: ViewStyle;
   disabledContainerStyle?: ViewStyle;
@@ -50,10 +45,11 @@ export interface ButtonBaseProps {
 export interface ButtonProps
   extends TouchableOpacityProps,
     ButtonIconProps,
-    ButtonRaisedProps,
     ButtonTypeProps,
     ButtonTitleProps,
     ButtonBaseProps {
+  raised?: boolean;
+  raisedStyle?: ViewStyle;
   children?: ReactNode;
 }
 

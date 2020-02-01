@@ -28,30 +28,19 @@ export interface ChipInfo {
   isSelected: boolean;
 }
 
-export interface ChipIconProps {
-  leftIcon?: ChipIcon;
-  leftIconAction?: ChipIconAction;
-  rightIcon?: ChipIcon;
-  rightIconAction?: ChipIconAction;
-}
-
-export interface ChipItemBaseProps {
+export interface ChipItemBaseProps
+  extends TouchableOpacityProps,
+    ButtonBaseProps {
   rounded?: boolean;
   children?: ReactNode;
 }
 
 export interface ChipItemProps
-  extends TouchableOpacityProps,
-    ButtonBaseProps,
-    ButtonIconProps,
+  extends ButtonIconProps,
     ButtonTitleProps,
     ChipItemBaseProps {}
 
-export interface ChipProps
-  extends TouchableOpacityProps,
-    ButtonBaseProps,
-    ChipIconProps,
-    ChipItemBaseProps {
+export interface ChipProps extends ChipItemBaseProps {
   actionType?: 'chip' | 'radio' | 'checkbox';
   chips: string[];
   chipContainerStyle?: ViewStyle;
@@ -59,6 +48,10 @@ export interface ChipProps
   chipTitleStyle?: TextStyle;
   selectedChipContainerStyle?: ViewStyle;
   selectedChipTitleStyle?: TextStyle;
+  leftIcon?: ChipIcon;
+  leftIconAction?: ChipIconAction;
+  rightIcon?: ChipIcon;
+  rightIconAction?: ChipIconAction;
   horizontal?: boolean;
   horizontalScrollIndicator?: boolean;
   horizontalScrollEnabled?: boolean;
