@@ -5,16 +5,19 @@ import {
   View,
   ViewStyle,
   TextInputProps,
+  TextStyle,
 } from 'react-native';
 import {isNumber} from '../utilities/RegexUtil';
 
-export interface InputOTPBaseProps {
+export interface InputOTPBaseProps extends TextInputProps {
   inputContainerStyle?: ViewStyle;
   placeholderComponent?: JSX.Element;
   placeholderComponentContainerStyle?: ViewStyle;
+  focusStyle?: TextStyle;
+  focusInputContainerStyle?: ViewStyle;
 }
 
-export interface InputOTPProps extends TextInputProps, InputOTPBaseProps {
+export interface InputOTPProps extends InputOTPBaseProps {
   firstEmptyFocus?: boolean;
   numberOfCode?: number;
   containerStyle?: ViewStyle;
@@ -22,7 +25,7 @@ export interface InputOTPProps extends TextInputProps, InputOTPBaseProps {
   onChangeOTP(otp: string, values: string[], isValid: boolean): void;
 }
 
-export interface InputOTPBoxProps extends TextInputProps, InputOTPBaseProps {
+export interface InputOTPBoxProps extends InputOTPBaseProps {
   refInput?(instance: any): void;
 }
 
@@ -30,6 +33,8 @@ export function InputOTPBox({
   inputContainerStyle,
   placeholderComponent,
   placeholderComponentContainerStyle,
+  focusStyle,
+  focusInputContainerStyle,
   refInput,
   style,
   keyboardType,
@@ -38,10 +43,19 @@ export function InputOTPBox({
   ...props
 }: InputOTPBoxProps) {
   const [showPlaceholder, setShowPlaceholder] = useState(true);
+  const [focus, setFocus] = useState(false);
 
   return (
     <View
-      style={StyleSheet.flatten([styles.inputContainer, inputContainerStyle])}>
+      style={StyleSheet.flatten([
+        styles.inputContainer,
+        inputContainerStyle,
+        focus &&
+          StyleSheet.flatten([
+            styles.focusInputContainer,
+            focusInputContainerStyle,
+          ]),
+      ])}>
       {placeholderComponent && showPlaceholder && (
         <View style={styles.sectionPlaceholderComponent}>
           <View
@@ -60,11 +74,16 @@ export function InputOTPBox({
             refInput(instance);
           }
         }}
-        style={StyleSheet.flatten([styles.inputBox, style])}
+        style={StyleSheet.flatten([
+          styles.inputBox,
+          style,
+          focus && focusStyle,
+        ])}
         keyboardType={keyboardType || 'number-pad'}
         maxLength={1}
         onFocus={e => {
           onFocus !== undefined && onFocus(e);
+          setFocus(true);
 
           if (showPlaceholder) {
             setShowPlaceholder(false);
@@ -72,6 +91,7 @@ export function InputOTPBox({
         }}
         onBlur={e => {
           onBlur !== undefined && onBlur(e);
+          setFocus(false);
 
           if (e.nativeEvent.text === '' && !showPlaceholder) {
             setShowPlaceholder(true);
@@ -221,6 +241,9 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  focusInputContainer: {
+    borderColor: 'dodgerblue',
   },
   inputBox: {
     width: '100%',
