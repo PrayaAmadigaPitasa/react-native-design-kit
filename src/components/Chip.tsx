@@ -111,7 +111,7 @@ export default function Chip({
   horizontal,
   horizontalScrollIndicator = false,
   horizontalScrollEnabled = true,
-  horizontalScrollButton,
+  horizontalScrollButton = true,
   selectedId,
   leftIcon,
   leftIconAction,
@@ -261,12 +261,7 @@ export default function Chip({
         title={title}
         titleStyle={StyleSheet.flatten([
           chipTitleStyle,
-          isSelected(id)
-            ? StyleSheet.flatten([
-                styles.selectedChipTitle,
-                selectedChipTitleStyle,
-              ])
-            : {},
+          isSelected(id) ? selectedChipTitleStyle : {},
         ])}
         rounded={rounded}
         leftIcon={getIcon(id, leftIcon, leftIconAction)}
@@ -401,11 +396,11 @@ const styles = StyleSheet.create({
     padding: 7.5,
     marginHorizontal: 5,
     marginVertical: 5,
-    backgroundColor: '#dcdcdc',
+    backgroundColor: 'lightgray',
   },
   chipTitle: {
     fontWeight: 'normal',
-    color: '#000',
+    color: 'black',
   },
   chipTitleContainer: {
     marginHorizontal: 5,
@@ -419,7 +414,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     paddingVertical: 10,
     paddingHorizontal: 5,
-    backgroundColor: '#efefef',
+    backgroundColor: 'whitesmoke',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -435,15 +430,12 @@ const styles = StyleSheet.create({
   selectedChipContainer: {
     backgroundColor: 'dodgerblue',
   },
-  selectedChipTitle: {
-    color: '#222b45',
-  },
   sectionWrap: {
     alignItems: 'center',
   },
   deleteIcon: {
     fontSize: 20,
-    color: '#696969',
+    color: 'dimgray',
     textAlign: 'center',
     textAlignVertical: 'center',
   },

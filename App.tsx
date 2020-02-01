@@ -7,6 +7,7 @@ export default function App() {
     <View style={styles.container}>
       <Chip
         horizontal
+        actionType="radio"
         chips={['Place', 'Hotel', 'Road', 'Mansion']}
         onSelect={() => {}}
       />
