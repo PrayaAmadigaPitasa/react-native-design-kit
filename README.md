@@ -1,4 +1,7 @@
+### Stil In Development
+
 Available Components:
+
 - Avatar
 - Button
 - ButtonGroup
@@ -13,6 +16,7 @@ Available Components:
 - SwitchableText
 
 List Todo:
+
 - Documentation
 - Badge
 - Checkbox
