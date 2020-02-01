@@ -20,36 +20,29 @@ export type InputFillStatus = 'empty' | 'filled';
 export type InputVisibilityStatus = 'visibile' | 'hidden';
 export type InputStatus = 'normal' | InputFillStatus | InputVisibilityStatus;
 
-export interface InputPositionBoxProps {
+export interface InputProps extends TextInputProps {
+  containerStyle?: ViewStyle;
+  label?: string;
+  labelStyle?: TextStyle;
+  labelPosition?: 'container' | 'box' | 'border';
   labelBoxStandBySize?: number;
   labelBoxActiveSize?: number;
   labelBoxActiveOffset?: number;
   inputBoxActiveOffset?: number;
-}
-
-export interface InputIconProps {
+  inputContainerStyle?: ViewStyle;
+  inputRef?(instance: TextInput | null): void;
   leftIcon?: InputIcon;
   leftIconAction?: InputIconAction;
   leftIconContainerStyle?: ViewStyle;
   rightIcon?: InputIcon;
   rightIconAction?: InputIconAction;
   rightIconContainerStyle?: ViewStyle;
-}
-
-export interface InputProps
-  extends TextInputProps,
-    InputPositionBoxProps,
-    InputIconProps {
-  containerStyle?: ViewStyle;
-  label?: string;
-  labelStyle?: TextStyle;
-  labelPosition?: 'container' | 'box' | 'border';
-  inputContainerStyle?: ViewStyle;
-  inputRef?(instance: TextInput | null): void;
   focusStyle?: TextStyle;
   focusLabelStyle?: TextStyle;
   focusContainerStyle?: ViewStyle;
   focusInputContainerStyle?: ViewStyle;
+  focusLeftIconContainerStyle?: ViewStyle;
+  focusRightIconContainerStyle?: ViewStyle;
 }
 
 export default function Input({
@@ -63,6 +56,8 @@ export default function Input({
   focusLabelStyle,
   focusContainerStyle,
   focusInputContainerStyle,
+  focusLeftIconContainerStyle,
+  focusRightIconContainerStyle,
   leftIcon,
   leftIconAction,
   leftIconContainerStyle,
@@ -212,6 +207,7 @@ export default function Input({
               styles.iconContainer,
               styles.iconLeftContainer,
               leftIconContainerStyle,
+              focus && focusLeftIconContainerStyle,
             ]}>
             <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
               {inputLeftIcon}
@@ -225,6 +221,7 @@ export default function Input({
                 styles.iconContainer,
                 styles.iconRightContainer,
                 rightIconContainerStyle,
+                focus && focusRightIconContainerStyle,
               ]}>
               <TouchableWithoutFeedback
                 onPress={getIconAction(rightIconAction)}>
