@@ -25,10 +25,10 @@ export interface AvatarProps extends ImageProps {
 
 export default function Avatar({
   containerStyle,
-  rounded = true,
+  rounded,
   size = 48,
   editButton,
-  editButtonEnabled = true,
+  editButtonEnabled,
   editButtonSize = 20,
   editButtonContainerStyle,
   onPress,

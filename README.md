@@ -1,6 +1,23 @@
-# react-native-design-kit
+Available Components:
+- Avatar
+- Button
+- ButtonGroup
+- Chip
+- Input
+- InputOTP
+- Picker
+- PlayingBar
+- Radio
+- Slider
+- Stepper
+- SwitchableText
 
-List TODO:
-- Documentation [✖️]
-- [Component] Avatar [✔️]
-- [Component] Button [✔️]
+List Todo:
+- Documentation
+- Badge
+- Checkbox
+- Drawer
+- Header
+- Modal
+- Swiper
+- Tab
