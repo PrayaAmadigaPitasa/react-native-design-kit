@@ -65,6 +65,9 @@ export default function Input({
   labelBoxActiveSize = 12,
   labelBoxActiveOffset = -14,
   inputBoxActiveOffset = 5,
+  style,
+  placeholder,
+  multiline,
   onChangeText,
   secureTextEntry,
   ...props
@@ -226,7 +229,7 @@ export default function Input({
                         }
                       : {},
                   ])}>
-                  {label !== undefined ? label : props.placeholder}
+                  {label !== undefined ? label : placeholder}
                 </Animated.Text>
               </Animated.View>
             ) : (
@@ -245,11 +248,14 @@ export default function Input({
                   setRef(instance);
                   inputRef !== undefined && inputRef(instance);
                 }}
+                multiline={multiline}
                 secureTextEntry={!visibility}
-                placeholder={
-                  labelPosition === 'box' ? undefined : props.placeholder
-                }
-                style={StyleSheet.flatten([styles.inputBox, props.style])}
+                placeholder={labelPosition === 'box' ? undefined : placeholder}
+                style={StyleSheet.flatten([
+                  styles.inputBox,
+                  multiline && styles.inputBoxMultiline,
+                  style,
+                ])}
                 onChangeText={text => {
                   onChangeText && onChangeText(text);
                   setInputValue(text);
@@ -291,6 +297,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     fontSize: 15,
+    textAlignVertical: 'center',
+  },
+  inputBoxMultiline: {
     textAlignVertical: 'top',
   },
   inputContainer: {
