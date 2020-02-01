@@ -63,7 +63,6 @@ export interface ChipProps
   horizontalScrollIndicator?: boolean;
   horizontalScrollEnabled?: boolean;
   horizontalScrollButton?: boolean;
-  horizontalScrollButtonContainerStyle?: ViewStyle;
   horizontalScrollLeftButton?: JSX.Element;
   horizontalScrollLeftButtonContainerStyle?: ViewStyle;
   horizontalScrollRightButton?: JSX.Element;
@@ -117,7 +116,6 @@ export default function Chip({
   horizontalScrollIndicator = false,
   horizontalScrollEnabled = true,
   horizontalScrollButton = true,
-  horizontalScrollButtonContainerStyle,
   horizontalScrollLeftButton,
   horizontalScrollLeftButtonContainerStyle,
   horizontalScrollRightButton,
@@ -330,7 +328,6 @@ export default function Chip({
           style={StyleSheet.flatten([
             styles.scrollContainer,
             styles.scrollLeftIconContainer,
-            horizontalScrollButtonContainerStyle,
             horizontalScrollLeftButtonContainerStyle,
             !allowScrollLeft() ? styles.scrollContainerDisabled : {},
           ])}
@@ -367,7 +364,6 @@ export default function Chip({
           style={StyleSheet.flatten([
             styles.scrollContainer,
             styles.scrollRightIconContainer,
-            horizontalScrollButtonContainerStyle,
             horizontalScrollRightButtonContainerStyle,
             !allowScrollRight() ? styles.scrollContainerDisabled : {},
           ])}
