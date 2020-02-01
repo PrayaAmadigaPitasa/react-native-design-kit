@@ -1,6 +1,6 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.18",
+  "version": "1.0.20",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,8 +25,24 @@
   "keywords": [
     "react-native",
     "material",
+    "material design",
     "design",
-    "ui"
+    "design kit",
+    "ui/ux",
+    "avatar",
+    "button",
+    "button group",
+    "chip",
+    "input",
+    "input otp",
+    "otp",
+    "picker",
+    "playing bar",
+    "radio",
+    "radio button",
+    "slider",
+    "stepper",
+    "switchable text"
   ],
   "devDependencies": {
     "@babel/core": "^7.6.2",
