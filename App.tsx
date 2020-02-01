@@ -5,7 +5,11 @@ import {Input} from './src';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Input rightIconAction="delete" label="Title" labelPosition="box" />
+      <Input
+        rightIconAction="toggleVisiblity"
+        label="Title"
+        labelPosition="border"
+      />
     </View>
   );
 }

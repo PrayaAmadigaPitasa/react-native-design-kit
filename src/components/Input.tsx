@@ -46,6 +46,10 @@ export interface InputProps
   labelPosition?: 'container' | 'box' | 'border';
   inputContainerStyle?: ViewStyle;
   inputRef?(instance: TextInput | null): void;
+  focusStyle?: TextStyle;
+  focusLabelStyle?: TextStyle;
+  focusContainerStyle?: ViewStyle;
+  focusInputContainerStyle?: ViewStyle;
 }
 
 export default function Input({
@@ -55,6 +59,10 @@ export default function Input({
   labelPosition = 'container',
   inputContainerStyle,
   inputRef,
+  focusStyle,
+  focusLabelStyle,
+  focusContainerStyle,
+  focusInputContainerStyle,
   leftIcon,
   leftIconAction,
   leftIconContainerStyle,
@@ -68,12 +76,15 @@ export default function Input({
   style,
   placeholder,
   multiline,
-  onChangeText,
   secureTextEntry,
+  onChangeText,
+  onFocus,
+  onBlur,
   ...props
 }: InputProps) {
   const [layout, setLayout] = useState<LayoutRectangle>();
   const [visibility, setVisibility] = useState(false);
+  const [focus, setFocus] = useState(false);
   const [inputValue, setInputValue] = useState(
     props.value !== undefined ? props.value : props.defaultValue,
   );
@@ -170,35 +181,56 @@ export default function Input({
   }
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View
+      style={[styles.container, containerStyle, focus && focusContainerStyle]}>
       {showLabel && labelPosition === 'container' ? (
         <Text
           style={StyleSheet.flatten([
             styles.label,
             styles.labelThemeContainer,
             labelStyle,
+            focus && focusLabelStyle,
           ])}>
           {label}
         </Text>
       ) : (
         <></>
       )}
-      <View style={[styles.inputContainer, inputContainerStyle]}>
+      <View
+        style={[
+          styles.inputContainer,
+          inputContainerStyle,
+          focus &&
+            StyleSheet.flatten([
+              styles.inputContainerFocused,
+              focusInputContainerStyle,
+            ]),
+        ]}>
         {inputLeftIcon && (
-          <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
-            <View style={[styles.iconLeftContainer, leftIconContainerStyle]}>
+          <View
+            style={[
+              styles.iconContainer,
+              styles.iconLeftContainer,
+              leftIconContainerStyle,
+            ]}>
+            <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
               {inputLeftIcon}
-            </View>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </View>
         )}
         <View style={styles.sectionInputReverse}>
           {inputRightIcon && (
-            <TouchableWithoutFeedback onPress={getIconAction(rightIconAction)}>
-              <View
-                style={[styles.iconRightContainer, rightIconContainerStyle]}>
+            <View
+              style={[
+                styles.iconContainer,
+                styles.iconRightContainer,
+                rightIconContainerStyle,
+              ]}>
+              <TouchableWithoutFeedback
+                onPress={getIconAction(rightIconAction)}>
                 {inputRightIcon}
-              </View>
-            </TouchableWithoutFeedback>
+              </TouchableWithoutFeedback>
+            </View>
           )}
           <View style={styles.sectionInputBox}>
             {labelPosition === 'box' ? (
@@ -217,6 +249,7 @@ export default function Input({
                     styles.label,
                     styles.labelThemeBox,
                     labelStyle,
+                    focus && focusLabelStyle,
                     {
                       fontSize: animation.interpolate({
                         inputRange: [0, 1],
@@ -255,10 +288,19 @@ export default function Input({
                   styles.inputBox,
                   multiline && styles.inputBoxMultiline,
                   style,
+                  focus && focusStyle,
                 ])}
                 onChangeText={text => {
                   onChangeText && onChangeText(text);
                   setInputValue(text);
+                }}
+                onFocus={event => {
+                  onFocus && onFocus(event);
+                  setFocus(true);
+                }}
+                onBlur={event => {
+                  onBlur && onBlur(event);
+                  setFocus(false);
                 }}
               />
             </View>
@@ -275,6 +317,8 @@ export default function Input({
                   style={StyleSheet.flatten([
                     styles.label,
                     styles.labelThemeBorder,
+                    labelStyle,
+                    focus && focusLabelStyle,
                   ])}>
                   {label}
                 </Text>
@@ -314,14 +358,23 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     backgroundColor: 'whitesmoke',
   },
+  inputContainerFocused: {
+    borderColor: 'dodgerblue',
+  },
+  iconContainer: {
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   iconLeftContainer: {
     marginRight: 6,
   },
   iconRightContainer: {
-    marginHorizontal: 6,
+    marginLeft: 6,
   },
   sectionInputReverse: {
     flex: 1,
+    height: '100%',
     flexDirection: 'row-reverse',
     alignItems: 'center',
   },
