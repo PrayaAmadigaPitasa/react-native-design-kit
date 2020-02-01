@@ -63,8 +63,11 @@ export interface ChipProps
   horizontalScrollIndicator?: boolean;
   horizontalScrollEnabled?: boolean;
   horizontalScrollButton?: boolean;
+  horizontalScrollButtonContainerStyle?: ViewStyle;
   horizontalScrollLeftButton?: JSX.Element;
+  horizontalScrollLeftButtonContainerStyle?: ViewStyle;
   horizontalScrollRightButton?: JSX.Element;
+  horizontalScrollRightButtonContainerStyle?: ViewStyle;
   selectedId?: string | string[];
   onSelect(id: string, selected: string[]): void;
 }
@@ -114,8 +117,11 @@ export default function Chip({
   horizontalScrollIndicator = false,
   horizontalScrollEnabled = true,
   horizontalScrollButton = true,
+  horizontalScrollButtonContainerStyle,
   horizontalScrollLeftButton,
+  horizontalScrollLeftButtonContainerStyle,
   horizontalScrollRightButton,
+  horizontalScrollRightButtonContainerStyle,
   selectedId,
   leftIcon,
   leftIconAction,
@@ -324,6 +330,8 @@ export default function Chip({
           style={StyleSheet.flatten([
             styles.scrollContainer,
             styles.scrollLeftIconContainer,
+            horizontalScrollButtonContainerStyle,
+            horizontalScrollLeftButtonContainerStyle,
             !allowScrollLeft() ? styles.scrollContainerDisabled : {},
           ])}
           onPress={() => {
@@ -359,6 +367,8 @@ export default function Chip({
           style={StyleSheet.flatten([
             styles.scrollContainer,
             styles.scrollRightIconContainer,
+            horizontalScrollButtonContainerStyle,
+            horizontalScrollRightButtonContainerStyle,
             !allowScrollRight() ? styles.scrollContainerDisabled : {},
           ])}
           onPress={() => {

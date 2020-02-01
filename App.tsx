@@ -9,7 +9,7 @@ export default function App() {
         horizontal
         actionType="radio"
         chips={['Place', 'Hotel', 'Road', 'Mansion', 'Highway', 'Store']}
-        horizontalScrollButton={false}
+        horizontalScrollButton
         onSelect={() => {}}
       />
     </View>
