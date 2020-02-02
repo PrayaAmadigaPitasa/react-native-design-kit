@@ -21,6 +21,8 @@ export interface SliderProps {
   startButtonContainerStyle?: ViewStyle;
   endButton?: JSX.Element;
   endButtonContainerStyle?: ViewStyle;
+  thumb?: JSX.Element;
+  thumbContainerStyle?: ViewStyle;
   trackContainerStyle?: ViewStyle;
   indicator?: boolean;
   numberOfSection?: number;
@@ -41,6 +43,8 @@ export default function Slider({
   startButtonContainerStyle,
   endButton,
   endButtonContainerStyle,
+  thumb,
+  thumbContainerStyle,
   trackContainerStyle,
   indicator,
   numberOfSection = 10,
@@ -195,6 +199,7 @@ export default function Slider({
               }}
               style={StyleSheet.flatten([
                 styles.thumbContainer,
+                thumbContainerStyle,
                 styles.sectionThumb,
                 {
                   left:
@@ -202,7 +207,7 @@ export default function Slider({
                     (thumbLayout !== undefined ? thumbLayout.width / 2 : 0),
                 },
               ])}>
-              <View style={styles.thumb} />
+              {thumb || <View style={styles.thumb} />}
             </View>
           </View>
           {indicator && (
@@ -272,6 +277,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   thumbContainer: {
+    paddingHorizontal: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },

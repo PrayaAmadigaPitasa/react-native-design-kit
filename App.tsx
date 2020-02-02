@@ -14,7 +14,7 @@ export default function App() {
       />
       <Input />
       <Radio radioIds={['Banana', 'Melon', 'Orange']} onSelect={() => {}} />
-      <Slider indicator onChangeValue={() => {}} />
+      <Slider button indicator onChangeValue={() => {}} />
       <Stepper />
       <SwitchableText texts={['Work hard play hard', 'Do as you wish']} />
     </View>
