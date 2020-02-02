@@ -35,6 +35,9 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   dropdownItemSelectedContainerStyle?: ViewStyle;
   placeholder?: string;
   placeholderColor?: string;
+  icon?: JSX.Element;
+  iconContainerStyle?: ViewStyle;
+  animationRotation?: string;
   data: ReadonlyArray<ItemT>;
   keyExtractor(item: ItemT, index: number): string;
   titleExtractor(item: ItemT): string;
@@ -51,6 +54,9 @@ export default function Picker<ItemT>({
   dropdownItemSelectedContainerStyle,
   placeholder = 'Select Option',
   placeholderColor = 'darkgray',
+  icon,
+  iconContainerStyle,
+  animationRotation = '-180deg',
   data,
   keyExtractor,
   titleExtractor,
@@ -128,19 +134,20 @@ export default function Picker<ItemT>({
         </Text>
         <Animated.View
           style={StyleSheet.flatten([
-            styles.chevronContainer,
+            styles.iconContainer,
+            iconContainerStyle,
             {
               transform: [
                 {
                   rotateZ: animation.interpolate({
                     inputRange: [0, 1],
-                    outputRange: ['0deg', '-180deg'],
+                    outputRange: ['0deg', animationRotation],
                   }),
                 },
               ],
             },
           ])}>
-          <Icon name={'chevron-down'} />
+          {icon || <Icon name={'chevron-down'} />}
         </Animated.View>
       </TouchableOpacity>
       {layout !== undefined && (
@@ -227,7 +234,7 @@ const styles = StyleSheet.create({
   dropdownItemSelectedContainer: {
     backgroundColor: 'whitesmoke',
   },
-  chevronContainer: {
+  iconContainer: {
     marginLeft: 12,
   },
   title: {
