@@ -15,22 +15,26 @@ export interface RadioInfo {
   isSelected: boolean;
 }
 
-export interface RadioBaseProps {
+export interface RadioBaseProps extends TouchableOpacityProps {
   radioContainerStyle?: ViewStyle;
-  radioSelectContainerStyle?: ViewStyle;
+  radioIconContainerStyle?: ViewStyle;
   radioComponentContainerStyle?: ViewStyle;
   selectedRadio?: JSX.Element;
+  selectedRadioContainerStyle?: ViewStyle;
+  selectedRadioIconContainerStyle?: ViewStyle;
+  selectedRadioComponentContainerStyle?: ViewStyle;
+  selectedRadioTitleStyle?: ViewStyle;
   disabledRadio?: JSX.Element;
-  title?: string;
-  titleStyle?: TextStyle;
 }
 
-export interface RadioItemProps extends TouchableOpacityProps, RadioBaseProps {
+export interface RadioItemProps extends RadioBaseProps {
+  title?: string;
+  titleStyle?: TextStyle;
   isSelected?: boolean;
   children?: ReactNode;
 }
 
-export interface RadioProps extends TouchableOpacityProps, RadioBaseProps {
+export interface RadioProps extends RadioBaseProps {
   containerStyle?: ViewStyle;
   radioIds: string[];
   radioComponent?(info: RadioInfo): string | JSX.Element;
@@ -41,32 +45,53 @@ export interface RadioProps extends TouchableOpacityProps, RadioBaseProps {
 export function RadioItem({
   isSelected = false,
   selectedRadio = <DefaultSelectedRadio />,
+  selectedRadioContainerStyle,
+  selectedRadioIconContainerStyle,
+  selectedRadioComponentContainerStyle,
+  selectedRadioTitleStyle,
   disabledRadio = <DefaultDisabledRadio />,
   title,
   titleStyle,
   radioContainerStyle,
-  radioSelectContainerStyle,
+  radioIconContainerStyle,
   radioComponentContainerStyle,
   children,
   ...props
 }: RadioItemProps) {
   return (
-    <TouchableOpacity {...props} activeOpacity={0.75}>
-      <View style={[styles.sectionRadio, radioContainerStyle]}>
-        <View style={radioSelectContainerStyle}>
-          {isSelected ? selectedRadio : disabledRadio}
-        </View>
-        <View
-          style={StyleSheet.flatten([
-            styles.radioComponentContainer,
-            radioComponentContainerStyle,
-          ])}>
-          {typeof children === 'object' ? (
-            children
-          ) : (
-            <Text style={[styles.title, titleStyle]}>{title}</Text>
-          )}
-        </View>
+    <TouchableOpacity
+      {...props}
+      style={[
+        styles.radioContainer,
+        radioContainerStyle,
+        isSelected && selectedRadioContainerStyle,
+      ]}
+      activeOpacity={0.75}>
+      <View
+        style={StyleSheet.flatten([
+          radioIconContainerStyle,
+          isSelected && selectedRadioIconContainerStyle,
+        ])}>
+        {isSelected ? selectedRadio : disabledRadio}
+      </View>
+      <View
+        style={StyleSheet.flatten([
+          styles.radioComponentContainer,
+          radioComponentContainerStyle,
+          isSelected && selectedRadioComponentContainerStyle,
+        ])}>
+        {typeof children === 'object' ? (
+          children
+        ) : (
+          <Text
+            style={StyleSheet.flatten([
+              styles.title,
+              titleStyle,
+              isSelected && selectedRadioTitleStyle,
+            ])}>
+            {title}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -77,13 +102,7 @@ export default function Radio({
   radioIds,
   radioComponent,
   defaultId,
-  selectedRadio = <DefaultSelectedRadio />,
-  disabledRadio = <DefaultDisabledRadio />,
-  titleStyle,
   onSelect,
-  radioContainerStyle,
-  radioSelectContainerStyle,
-  radioComponentContainerStyle,
   onPress,
   ...props
 }: RadioProps) {
@@ -109,12 +128,6 @@ export default function Radio({
         key={id}
         title={title}
         isSelected={selected === id}
-        selectedRadio={selectedRadio}
-        disabledRadio={disabledRadio}
-        titleStyle={titleStyle}
-        radioContainerStyle={radioContainerStyle}
-        radioSelectContainerStyle={radioSelectContainerStyle}
-        radioComponentContainerStyle={radioComponentContainerStyle}
         onPress={event => {
           onPress !== undefined && onPress(event);
           onSelect(id);
@@ -126,16 +139,16 @@ export default function Radio({
   }
 
   function getListRadioItem() {
-    const listComponent: ReactNode[] = [];
+    const list: ReactNode[] = [];
 
     for (let index = 0; index < radioIds.length; index++) {
       const id = radioIds[index];
       const item = getRadioItem(id);
 
-      listComponent.push(item);
+      list.push(item);
     }
 
-    return listComponent;
+    return list;
   }
 
   return <View style={containerStyle}>{getListRadioItem()}</View>;
@@ -158,7 +171,7 @@ function DefaultSelectedRadio() {
           width: sizeOuter,
           borderRadius: sizeOuter / 2,
         },
-        styles.selectedRadioOuter,
+        styles.defaultSelectedRadioContainer,
       ]}>
       <Animated.View
         style={[
@@ -176,7 +189,7 @@ function DefaultSelectedRadio() {
               outputRange: [0, sizeInner / 2],
             }),
           },
-          styles.selectedRadioInner,
+          styles.defaultSelectedRadioInnerContainer,
         ]}
       />
     </View>
@@ -194,34 +207,34 @@ function DefaultDisabledRadio() {
           width: size,
           borderRadius: size / 2,
         },
-        styles.disabledRadio,
+        styles.defaultDisabledRadioContainer,
       ]}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  radioComponentContainer: {
-    marginLeft: 12,
-  },
-  sectionRadio: {
+  radioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 6,
   },
-  selectedRadioOuter: {
+  radioComponentContainer: {
+    marginLeft: 12,
+  },
+  defaultDisabledRadioContainer: {
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    backgroundColor: 'whitesmoke',
+  },
+  defaultSelectedRadioContainer: {
     borderWidth: 1,
     borderColor: 'dodgerblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  selectedRadioInner: {
+  defaultSelectedRadioInnerContainer: {
     backgroundColor: 'dodgerblue',
-  },
-  disabledRadio: {
-    borderWidth: 1,
-    borderColor: 'rgb(197, 206, 224)',
-    backgroundColor: 'rgba(197, 206, 224, 0.4)',
   },
   title: {
     fontSize: 15,

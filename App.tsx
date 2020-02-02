@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Picker, Input, Button} from './src';
+import {Picker, Input, Radio} from './src';
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
         onSelect={() => {}}
       />
       <Input />
-      <Button title="Title" />
+      <Radio radioIds={['Banana', 'Melon', 'Orange']} onSelect={() => {}} />
     </View>
   );
 }

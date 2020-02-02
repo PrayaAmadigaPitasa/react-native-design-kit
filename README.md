@@ -25,7 +25,7 @@
 #### List Todo:
 
 - Documentation
-- Badge
+- Badge (WIP)
 - Checkbox
 - Drawer
 - Header
