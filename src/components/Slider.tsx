@@ -25,6 +25,8 @@ export interface SliderProps {
   thumbContainerStyle?: ViewStyle;
   trackContainerStyle?: ViewStyle;
   indicator?: boolean;
+  indicatorComponent?: JSX.Element;
+  indicatorSubComponent?: JSX.Element;
   indicatorContainerStyle?: ViewStyle;
   numberOfSection?: number;
   numberOfSubSection?: number;
@@ -48,6 +50,8 @@ export default function Slider({
   thumbContainerStyle,
   trackContainerStyle,
   indicator,
+  indicatorComponent,
+  indicatorSubComponent,
   indicatorContainerStyle,
   numberOfSection = 10,
   numberOfSubSection = 2,
@@ -85,15 +89,14 @@ export default function Slider({
   }
 
   function getIndicatorComponent() {
-    const indicatorComponent: JSX.Element[] = [];
+    const components: JSX.Element[] = [];
 
     if (numberOfSection > 0) {
       for (let index = 0; index <= numberOfSection; index++) {
-        indicatorComponent.push(
-          <View
-            key={`{indicatorSection: ${index}}`}
-            style={styles.indicator}
-          />,
+        components.push(
+          <View key={`{indicatorSection: ${index}}`}>
+            {indicatorComponent || <View style={styles.indicator} />}
+          </View>,
         );
 
         if (index < numberOfSection) {
@@ -102,21 +105,24 @@ export default function Slider({
             indexSub < numberOfSubSection - 1;
             indexSub++
           ) {
-            indicatorComponent.push(
-              <View
-                key={`{indicator: ${index}, sub: ${indexSub}}`}
-                style={StyleSheet.flatten([
-                  styles.indicator,
-                  styles.indicatorSub,
-                ])}
-              />,
+            components.push(
+              <View key={`{indicator: ${index}, sub: ${indexSub}}`}>
+                {indicatorSubComponent || (
+                  <View
+                    style={StyleSheet.flatten([
+                      styles.indicator,
+                      styles.indicatorSub,
+                    ])}
+                  />
+                )}
+              </View>,
             );
           }
         }
       }
     }
 
-    return indicatorComponent;
+    return components;
   }
 
   return (
