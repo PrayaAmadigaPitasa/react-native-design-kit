@@ -17,7 +17,9 @@ export interface SliderProps {
   initialValue?: number;
   button?: boolean;
   buttonValue?: number;
+  startButton?: JSX.Element;
   startButtonContainerStyle?: ViewStyle;
+  endButton?: JSX.Element;
   endButtonContainerStyle?: ViewStyle;
   trackContainerStyle?: ViewStyle;
   indicator?: boolean;
@@ -35,7 +37,9 @@ export default function Slider({
   initialValue,
   button,
   buttonValue,
+  startButton,
   startButtonContainerStyle,
+  endButton,
   endButtonContainerStyle,
   trackContainerStyle,
   indicator,
@@ -126,7 +130,7 @@ export default function Slider({
                   : (maxValue - minValue) * 0.15),
             )
           }>
-          <Icon style={styles.buttonIcon} name="caret-left" />
+          {startButton || <Icon style={styles.buttonIcon} name="caret-left" />}
         </TouchableOpacity>
       )}
       {width === undefined ? (
@@ -190,6 +194,7 @@ export default function Slider({
                 }
               }}
               style={StyleSheet.flatten([
+                styles.thumbContainer,
                 styles.sectionThumb,
                 {
                   left:
@@ -226,7 +231,7 @@ export default function Slider({
                   : (maxValue - minValue) * 0.15),
             )
           }>
-          <Icon style={styles.buttonIcon} name="caret-right" />
+          {endButton || <Icon style={styles.buttonIcon} name="caret-right" />}
         </TouchableOpacity>
       )}
     </View>
@@ -266,6 +271,10 @@ const styles = StyleSheet.create({
     paddingLeft: 4,
     marginLeft: 6,
   },
+  thumbContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sectionTrack: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -277,8 +286,6 @@ const styles = StyleSheet.create({
   },
   sectionThumb: {
     position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sectionIndicator: {
     flexDirection: 'row',
