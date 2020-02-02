@@ -20,19 +20,6 @@ interface Layout extends LayoutRectangle {
   pageY: number;
 }
 
-function isLayoutValid(layout: Layout) {
-  const {x, y, width, height, pageX, pageY} = layout;
-
-  return (
-    x !== 0 ||
-    y !== 0 ||
-    width !== 0 ||
-    height !== 0 ||
-    pageX !== 0 ||
-    pageY !== 0
-  );
-}
-
 export interface PickerDataSelection {
   key: string;
   title?: string;
@@ -85,9 +72,11 @@ export default function Picker<ItemT>({
   }, [selected]);
 
   return (
-    <View style={styles.root}>
+    <>
       <TouchableOpacity
-        ref={instance => instance && setButtonRef(instance)}
+        ref={instance =>
+          instance && buttonRef !== instance && setButtonRef(instance)
+        }
         onLayout={() =>
           buttonRef?.measure((x, y, width, height, pageX, pageY) =>
             setLayout({
@@ -133,7 +122,7 @@ export default function Picker<ItemT>({
           <Icon name={'chevron-down'} />
         </Animated.View>
       </TouchableOpacity>
-      {layout !== undefined && isLayoutValid(layout) && (
+      {layout !== undefined && (
         <Modal visible={toggle} onPressBackdrop={() => setToggle(!toggle)}>
           <View
             style={StyleSheet.flatten([
@@ -174,14 +163,11 @@ export default function Picker<ItemT>({
           </View>
         </Modal>
       )}
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    zIndex: 1,
-  },
   container: {
     flexDirection: 'row',
     padding: 12,
