@@ -25,7 +25,9 @@ export interface SliderProps {
   thumbContainerStyle?: ViewStyle;
   trackContainerStyle?: ViewStyle;
   indicator?: boolean;
+  indicatorStyle?: ViewStyle;
   indicatorComponent?: JSX.Element;
+  indicatorSubStyle?: ViewStyle;
   indicatorSubComponent?: JSX.Element;
   indicatorContainerStyle?: ViewStyle;
   numberOfSection?: number;
@@ -50,7 +52,9 @@ export default function Slider({
   thumbContainerStyle,
   trackContainerStyle,
   indicator,
+  indicatorStyle,
   indicatorComponent,
+  indicatorSubStyle,
   indicatorSubComponent,
   indicatorContainerStyle,
   numberOfSection = 10,
@@ -95,7 +99,11 @@ export default function Slider({
       for (let index = 0; index <= numberOfSection; index++) {
         components.push(
           <View key={`{indicatorSection: ${index}}`}>
-            {indicatorComponent || <View style={styles.indicator} />}
+            {indicatorComponent || (
+              <View
+                style={StyleSheet.flatten([styles.indicator, indicatorStyle])}
+              />
+            )}
           </View>,
         );
 
@@ -112,6 +120,7 @@ export default function Slider({
                     style={StyleSheet.flatten([
                       styles.indicator,
                       styles.indicatorSub,
+                      indicatorSubStyle,
                     ])}
                   />
                 )}
