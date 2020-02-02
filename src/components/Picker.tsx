@@ -30,9 +30,9 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   selected?: string;
   selectedContainerStyle?: ViewStyle;
   selectedTitleStyle?: TextStyle;
-  dropdownContainerStyle?: ViewStyle;
-  dropdownItemContainerStyle?: ViewStyle;
-  dropdownItemSelectedContainerStyle?: ViewStyle;
+  listContainerStyle?: ViewStyle;
+  listItemContainerStyle?: ViewStyle;
+  listItemSelectedContainerStyle?: ViewStyle;
   placeholder?: string;
   placeholderColor?: string;
   icon?: JSX.Element;
@@ -49,9 +49,9 @@ export default function Picker<ItemT>({
   selected,
   selectedContainerStyle,
   selectedTitleStyle,
-  dropdownContainerStyle,
-  dropdownItemContainerStyle,
-  dropdownItemSelectedContainerStyle,
+  listContainerStyle,
+  listItemContainerStyle,
+  listItemSelectedContainerStyle,
   placeholder = 'Select Option',
   placeholderColor = 'darkgray',
   icon,
@@ -154,8 +154,8 @@ export default function Picker<ItemT>({
         <Modal visible={toggle} onPressBackdrop={() => setToggle(!toggle)}>
           <View
             style={StyleSheet.flatten([
-              styles.dropdownContainer,
-              dropdownContainerStyle,
+              styles.listContainer,
+              listContainerStyle,
               {
                 position: 'absolute',
                 width: layout.width,
@@ -176,12 +176,12 @@ export default function Picker<ItemT>({
                   <TouchableOpacity
                     activeOpacity={0.5}
                     style={StyleSheet.flatten([
-                      styles.dropdownItemContainer,
-                      dropdownItemContainerStyle,
+                      styles.listItemContainer,
+                      listItemContainerStyle,
                       selection !== undefined && selection === key
                         ? [
-                            styles.dropdownItemSelectedContainer,
-                            dropdownItemSelectedContainerStyle,
+                            styles.listItemSelectedContainer,
+                            listItemSelectedContainerStyle,
                           ]
                         : {},
                     ])}
@@ -218,20 +218,20 @@ const styles = StyleSheet.create({
     borderColor: 'dodgerblue',
     backgroundColor: 'white',
   },
-  dropdownContainer: {
+  listContainer: {
     borderWidth: 1,
     borderRadius: 4,
     borderColor: 'lightgray',
     backgroundColor: '#fff',
     maxHeight: 300,
   },
-  dropdownItemContainer: {
+  listItemContainer: {
     paddingHorizontal: 12,
     paddingTop: 12,
     paddingBottom: 8,
     justifyContent: 'center',
   },
-  dropdownItemSelectedContainer: {
+  listItemSelectedContainer: {
     backgroundColor: 'whitesmoke',
   },
   iconContainer: {
