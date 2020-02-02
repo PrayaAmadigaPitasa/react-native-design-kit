@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Picker, Input, Radio, Slider} from './src';
+import {Picker, Input, Radio, Slider, Stepper, SwitchableText} from './src';
 
 export default function App() {
   return (
@@ -14,7 +14,9 @@ export default function App() {
       />
       <Input />
       <Radio radioIds={['Banana', 'Melon', 'Orange']} onSelect={() => {}} />
-      <Slider indicator onChangeValue={value => console.log(value)} />
+      <Slider indicator onChangeValue={() => {}} />
+      <Stepper />
+      <SwitchableText texts={['Work hard play hard', 'Do as you wish']} />
     </View>
   );
 }
