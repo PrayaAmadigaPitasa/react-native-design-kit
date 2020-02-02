@@ -14,6 +14,7 @@
 - Chip
 - Input
 - InputOTP
+- Modal
 - Picker
 - PlayingBar
 - Radio
@@ -28,6 +29,6 @@
 - Checkbox
 - Drawer
 - Header
-- Modal
+- Marquee
 - Swiper
 - Tab

@@ -1,11 +1,19 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {InputOTP} from './src';
+import {View, StyleSheet, Text} from 'react-native';
+import {Picker, Input, Button} from './src';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <InputOTP onChangeOTP={() => {}} />
+      <Picker
+        data={['Banana', 'Melon', 'Orange']}
+        keyExtractor={item => item}
+        renderItem={({item}) => <Text>{item}</Text>}
+        titleExtractor={item => item}
+        onSelect={() => {}}
+      />
+      <Input />
+      <Button title="Title" />
     </View>
   );
 }

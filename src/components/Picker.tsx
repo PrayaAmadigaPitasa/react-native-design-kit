@@ -10,11 +10,10 @@ import {
   FlatList,
   ViewStyle,
   TextStyle,
-  Modal,
-  TouchableWithoutFeedback,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Modal from './Modal';
 
 interface Layout extends LayoutRectangle {
   pageX: number;
@@ -62,7 +61,7 @@ export default function Picker<ItemT>({
   dropdownItemContainerStyle,
   dropdownItemSelectedContainerStyle,
   placeholder = 'Select Option',
-  placeholderColor = '#a9a9a9',
+  placeholderColor = 'darkgray',
   titleExtractor,
   onSelect,
   renderItem,
@@ -135,10 +134,7 @@ export default function Picker<ItemT>({
         </Animated.View>
       </TouchableOpacity>
       {layout !== undefined && isLayoutValid(layout) && (
-        <Modal visible={toggle} transparent>
-          <TouchableWithoutFeedback onPress={() => setToggle(!toggle)}>
-            <View style={{height: '100%', width: '100%'}} />
-          </TouchableWithoutFeedback>
+        <Modal visible={toggle} onPressBackdrop={() => setToggle(!toggle)}>
           <View
             style={StyleSheet.flatten([
               styles.dropdownContainer,
@@ -191,20 +187,20 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: '#e4e9f2',
-    backgroundColor: '#f7f9fc',
+    borderColor: 'lightgray',
+    backgroundColor: 'whitesmoke',
     alignItems: 'center',
     justifyContent: 'space-between',
     zIndex: 1,
   },
   selectedContainer: {
     borderColor: 'dodgerblue',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
   dropdownContainer: {
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: '#e4e9f2',
+    borderColor: 'lightgray',
     backgroundColor: '#fff',
     maxHeight: 300,
   },
@@ -215,7 +211,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dropdownItemSelectedContainer: {
-    backgroundColor: '#f7f9fc',
+    backgroundColor: 'whitesmoke',
   },
   chevronContainer: {
     marginLeft: 12,

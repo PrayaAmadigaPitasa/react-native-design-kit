@@ -4,6 +4,7 @@ import ButtonGroup from './ButtonGroup';
 import Chip from './Chip';
 import Input from './Input';
 import InputOTP from './InputOTP';
+import Modal from './Modal';
 import Picker from './Picker';
 import PlayingBar from './PlayingBar';
 import Radio from './Radio';
@@ -17,6 +18,7 @@ export * from './ButtonGroup';
 export * from './Chip';
 export * from './Input';
 export * from './InputOTP';
+export * from './Modal';
 export * from './Picker';
 export * from './PlayingBar';
 export * from './Radio';
@@ -29,6 +31,7 @@ export {
   ButtonGroup,
   Chip,
   Input,
+  Modal,
   InputOTP,
   Picker,
   PlayingBar,
