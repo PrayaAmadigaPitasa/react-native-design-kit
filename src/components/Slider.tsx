@@ -17,11 +17,13 @@ export interface SliderProps {
   initialValue?: number;
   button?: boolean;
   buttonValue?: number;
+  startButtonContainerStyle?: ViewStyle;
+  endButtonContainerStyle?: ViewStyle;
   trackContainerStyle?: ViewStyle;
   indicator?: boolean;
   numberOfSection?: number;
   numberOfSubSection?: number;
-  onChangeValue?(value: number, progress: number): void;
+  onChangeValue(value: number, progress: number): void;
 }
 
 export default function Slider({
@@ -30,16 +32,20 @@ export default function Slider({
   minTrackContainerStyle,
   maxValue = 100,
   maxTrackContainerStyle,
-  initialValue = 25,
+  initialValue,
   button,
   buttonValue,
+  startButtonContainerStyle,
+  endButtonContainerStyle,
   trackContainerStyle,
   indicator,
   numberOfSection = 10,
   numberOfSubSection = 2,
   onChangeValue,
 }: SliderProps) {
-  const [progress, setProgress] = useState(getProgress(initialValue));
+  const [progress, setProgress] = useState(
+    (initialValue !== undefined && getProgress(initialValue)) || 0.25,
+  );
   const [startProgress, setStartProgress] = useState(progress);
   const [thumbLayout, setThumbLayout] = useState<LayoutRectangle>();
   const [pageX, setPageX] = useState<number>();
@@ -47,7 +53,7 @@ export default function Slider({
 
   useEffect(() => {
     setWidth(undefined);
-  }, [trackContainerStyle]);
+  }, [trackContainerStyle, button]);
 
   useEffect(() => {
     onChangeValue !== undefined && onChangeValue(getValue(), progress);
@@ -107,6 +113,10 @@ export default function Slider({
     <View style={StyleSheet.flatten([styles.container, containerStyle])}>
       {button && (
         <TouchableOpacity
+          style={StyleSheet.flatten([
+            styles.startButtonContainer,
+            startButtonContainerStyle,
+          ])}
           activeOpacity={0.5}
           onPress={() =>
             setValue(
@@ -116,9 +126,7 @@ export default function Slider({
                   : (maxValue - minValue) * 0.15),
             )
           }>
-          <View style={styles.buttonLeftIconContainer}>
-            <Icon style={styles.buttonIcon} name="caret-left" />
-          </View>
+          <Icon style={styles.buttonIcon} name="caret-left" />
         </TouchableOpacity>
       )}
       {width === undefined ? (
@@ -204,6 +212,10 @@ export default function Slider({
       )}
       {button && (
         <TouchableOpacity
+          style={StyleSheet.flatten([
+            styles.endButtonContainer,
+            endButtonContainerStyle,
+          ])}
           activeOpacity={0.5}
           onPress={() =>
             setValue(
@@ -213,9 +225,7 @@ export default function Slider({
                   : (maxValue - minValue) * 0.15),
             )
           }>
-          <View style={styles.buttonRightIconContainer}>
-            <Icon style={styles.buttonIcon} name="caret-right" />
-          </View>
+          <Icon style={styles.buttonIcon} name="caret-right" />
         </TouchableOpacity>
       )}
     </View>
@@ -238,18 +248,22 @@ const styles = StyleSheet.create({
   trackContainerMin: {
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: '#390',
+    backgroundColor: 'green',
   },
   trackContainerMax: {
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
-    backgroundColor: '#dddddd',
+    backgroundColor: 'lightgray',
   },
-  buttonLeftIconContainer: {
-    marginRight: 10,
+  startButtonContainer: {
+    paddingVertical: 2,
+    paddingRight: 4,
+    marginRight: 6,
   },
-  buttonRightIconContainer: {
-    marginLeft: 10,
+  endButtonContainer: {
+    paddingVertical: 2,
+    paddingLeft: 4,
+    marginLeft: 6,
   },
   sectionTrack: {
     flexDirection: 'row',
@@ -277,19 +291,19 @@ const styles = StyleSheet.create({
   },
   buttonIcon: {
     fontSize: 20,
-    color: '#888',
+    color: 'darkgray',
   },
   thumb: {
     height: 20,
     width: 7.5,
     borderWidth: 1,
-    borderColor: '#fff',
-    backgroundColor: '#888',
+    borderColor: 'white',
+    backgroundColor: 'darkgray',
   },
   indicator: {
     width: 1.5,
     height: 12,
-    backgroundColor: '#dddddd',
+    backgroundColor: 'lightgray',
   },
   indicatorSub: {
     height: 5,
