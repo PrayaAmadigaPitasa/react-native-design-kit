@@ -25,6 +25,7 @@ export interface SliderProps {
   thumbContainerStyle?: ViewStyle;
   trackContainerStyle?: ViewStyle;
   indicator?: boolean;
+  indicatorContainerStyle?: ViewStyle;
   numberOfSection?: number;
   numberOfSubSection?: number;
   onChangeValue(value: number, progress: number): void;
@@ -47,6 +48,7 @@ export default function Slider({
   thumbContainerStyle,
   trackContainerStyle,
   indicator,
+  indicatorContainerStyle,
   numberOfSection = 10,
   numberOfSubSection = 2,
   onChangeValue,
@@ -149,6 +151,7 @@ export default function Slider({
           {indicator && (
             <View
               style={StyleSheet.flatten([
+                indicatorContainerStyle,
                 styles.sectionIndicator,
                 styles.sectionIndicatorTop,
               ])}>
@@ -213,6 +216,7 @@ export default function Slider({
           {indicator && (
             <View
               style={StyleSheet.flatten([
+                indicatorContainerStyle,
                 styles.sectionIndicator,
                 styles.sectionIndicatorBottom,
               ])}>
