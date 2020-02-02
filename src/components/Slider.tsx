@@ -172,7 +172,8 @@ export default function Slider({
               }}
               onStartShouldSetResponder={() => true}
               onResponderStart={event => {
-                setPageX(event.nativeEvent.pageX), setStartProgress(progress);
+                setPageX(event.nativeEvent.pageX);
+                setStartProgress(progress);
               }}
               onResponderMove={event => {
                 if (pageX !== undefined) {
