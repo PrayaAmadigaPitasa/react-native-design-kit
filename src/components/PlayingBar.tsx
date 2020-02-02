@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     width: 3.5,
-    backgroundColor: '#000',
+    backgroundColor: 'black',
     marginHorizontal: 1,
   },
 });

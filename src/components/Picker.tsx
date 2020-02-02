@@ -27,7 +27,7 @@ export interface PickerDataSelection {
 
 export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   containerStyle?: ViewStyle;
-  selected?: ItemT;
+  selected?: string;
   selectedContainerStyle?: ViewStyle;
   selectedTitleStyle?: TextStyle;
   dropdownContainerStyle?: ViewStyle;
@@ -35,8 +35,10 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   dropdownItemSelectedContainerStyle?: ViewStyle;
   placeholder?: string;
   placeholderColor?: string;
+  data: ReadonlyArray<ItemT>;
+  keyExtractor(item: ItemT, index: number): string;
   titleExtractor(item: ItemT): string;
-  onSelect(item: ItemT): void;
+  onSelect(key: string, item: ItemT, index: number): void;
 }
 
 export default function Picker<ItemT>({
@@ -49,16 +51,19 @@ export default function Picker<ItemT>({
   dropdownItemSelectedContainerStyle,
   placeholder = 'Select Option',
   placeholderColor = 'darkgray',
+  data,
+  keyExtractor,
   titleExtractor,
   onSelect,
   renderItem,
   ...props
 }: PickerProps<ItemT>) {
-  const [selection, setSelected] = useState<ItemT | undefined>(selected);
+  const [selection, setSelected] = useState(selected);
   const [toggle, setToggle] = useState(false);
   const [layout, setLayout] = useState<Layout>();
   const [buttonRef, setButtonRef] = useState<TouchableOpacity>();
   const animation = useState(new Animated.Value(0))[0];
+  const selectionItem = getSelectionItem();
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -70,6 +75,20 @@ export default function Picker<ItemT>({
   useEffect(() => {
     setSelected(selected);
   }, [selected]);
+
+  function getSelectionItem() {
+    if (selection !== undefined) {
+      for (let index = 0; index < data.length; index++) {
+        const item = data[index];
+
+        if (keyExtractor(item, index) === selection) {
+          return item;
+        }
+      }
+    }
+
+    return undefined;
+  }
 
   return (
     <>
@@ -99,11 +118,13 @@ export default function Picker<ItemT>({
         <Text
           style={StyleSheet.flatten([
             styles.title,
-            selection !== undefined
+            selectionItem !== undefined
               ? selectedTitleStyle
               : {color: placeholderColor},
           ])}>
-          {selection !== undefined ? titleExtractor(selection) : placeholder}
+          {selectionItem !== undefined
+            ? titleExtractor(selectionItem)
+            : placeholder}
         </Text>
         <Animated.View
           style={StyleSheet.flatten([
@@ -138,27 +159,34 @@ export default function Picker<ItemT>({
             ])}>
             <FlatList
               {...props}
-              renderItem={info => (
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  style={StyleSheet.flatten([
-                    styles.dropdownItemContainer,
-                    dropdownItemContainerStyle,
-                    selection !== undefined && selection === info.item
-                      ? [
-                          styles.dropdownItemSelectedContainer,
-                          dropdownItemSelectedContainerStyle,
-                        ]
-                      : {},
-                  ])}
-                  onPress={() => {
-                    setSelected(info.item);
-                    setToggle(false);
-                    onSelect(info.item);
-                  }}>
-                  {renderItem(info)}
-                </TouchableOpacity>
-              )}
+              data={data}
+              keyExtractor={keyExtractor}
+              renderItem={info => {
+                const {item, index} = info;
+                const key = keyExtractor(item, index);
+
+                return (
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    style={StyleSheet.flatten([
+                      styles.dropdownItemContainer,
+                      dropdownItemContainerStyle,
+                      selection !== undefined && selection === key
+                        ? [
+                            styles.dropdownItemSelectedContainer,
+                            dropdownItemSelectedContainerStyle,
+                          ]
+                        : {},
+                    ])}
+                    onPress={() => {
+                      setSelected(key);
+                      setToggle(false);
+                      onSelect(key, item, index);
+                    }}>
+                    {renderItem(info)}
+                  </TouchableOpacity>
+                );
+              }}
             />
           </View>
         </Modal>
