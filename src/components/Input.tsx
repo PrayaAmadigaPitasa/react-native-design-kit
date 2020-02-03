@@ -51,6 +51,9 @@ export interface InputProps extends TextInputProps {
   errorLabelStyle?: TextStyle;
   errorLabelContainerStyle?: ViewStyle;
   errorContainerStyle?: ViewStyle;
+  errorInputContainerStyle?: ViewStyle;
+  errorLeftIconContainerStyle?: ViewStyle;
+  errorRightIconContainerStyle?: ViewStyle;
 }
 
 export default function Input({
@@ -79,6 +82,9 @@ export default function Input({
   errorLabelStyle,
   errorLabelContainerStyle,
   errorContainerStyle,
+  errorInputContainerStyle,
+  errorLeftIconContainerStyle,
+  errorRightIconContainerStyle,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -225,7 +231,11 @@ export default function Input({
               styles.focusInputContainer,
               focusInputContainerStyle,
             ]),
-          error !== undefined && styles.errorInputContainer,
+          error !== undefined &&
+            StyleSheet.flatten([
+              styles.errorInputContainer,
+              errorInputContainerStyle,
+            ]),
         ]}>
         {inputLeftIcon && (
           <View
@@ -234,6 +244,7 @@ export default function Input({
               styles.iconLeftContainer,
               leftIconContainerStyle,
               focus && focusLeftIconContainerStyle,
+              error !== undefined && errorLeftIconContainerStyle,
             ]}>
             <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
               {inputLeftIcon}
@@ -248,6 +259,7 @@ export default function Input({
                 styles.iconRightContainer,
                 rightIconContainerStyle,
                 focus && focusRightIconContainerStyle,
+                error !== undefined && errorRightIconContainerStyle,
               ]}>
               <TouchableWithoutFeedback
                 onPress={getIconAction(rightIconAction)}>
