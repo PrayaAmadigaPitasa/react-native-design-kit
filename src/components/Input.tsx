@@ -215,6 +215,7 @@ export default function Input({
               styles.focusInputContainer,
               focusInputContainerStyle,
             ]),
+          error !== undefined && styles.errorInputContainer,
         ]}>
         {inputLeftIcon && (
           <View
@@ -353,7 +354,7 @@ export default function Input({
       </View>
       {error !== undefined && (
         <View>
-          <Text>{error}</Text>
+          <Text style={styles.error}>{error}</Text>
         </View>
       )}
     </View>
@@ -414,6 +415,9 @@ const styles = StyleSheet.create({
   focusLabelContainerThemeBorder: {
     borderColor: 'dodgerblue',
   },
+  errorInputContainer: {
+    borderColor: 'red',
+  },
   sectionInputReverse: {
     flex: 1,
     height: '100%',
@@ -450,5 +454,8 @@ const styles = StyleSheet.create({
     color: 'darkgray',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  error: {
+    color: 'red',
   },
 });
