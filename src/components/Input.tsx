@@ -7,12 +7,13 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  LayoutRectangle,
   Animated,
   Platform,
   TouchableWithoutFeedback,
+  LayoutRectangle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {Layout} from '../layout';
 
 export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
 export type InputIconAction = 'delete' | 'toggleVisiblity' | (() => void);
@@ -32,7 +33,7 @@ export interface InputProps extends TextInputProps {
   labelBoxActiveOffset?: number;
   inputBoxActiveOffset?: number;
   inputContainerStyle?: ViewStyle;
-  inputRef?(instance: TextInput | null): void;
+  inputRef?(instance: TextInput): void;
   leftIcon?: InputIcon;
   leftIconAction?: InputIconAction;
   leftIconContainerStyle?: ViewStyle;
@@ -47,6 +48,7 @@ export interface InputProps extends TextInputProps {
   focusLeftIconContainerStyle?: ViewStyle;
   focusRightIconContainerStyle?: ViewStyle;
   error?: string;
+  errorPosition?: 'relative' | 'absolute';
   errorStyle?: TextStyle;
   errorLabelStyle?: TextStyle;
   errorLabelContainerStyle?: ViewStyle;
@@ -78,6 +80,7 @@ export default function Input({
   focusLeftIconContainerStyle,
   focusRightIconContainerStyle,
   error,
+  errorPosition = 'relative',
   errorStyle,
   errorLabelStyle,
   errorLabelContainerStyle,
@@ -99,7 +102,6 @@ export default function Input({
   onBlur,
   ...props
 }: InputProps) {
-  const [layout, setLayout] = useState<LayoutRectangle>();
   const [visibility, setVisibility] = useState(false);
   const [focus, setFocus] = useState(false);
   const [inputValue, setInputValue] = useState(
@@ -108,10 +110,13 @@ export default function Input({
   const [fillStatus, setFillStatus] = useState<InputFillStatus>(
     inputValue !== undefined && inputValue.length > 0 ? 'filled' : 'empty',
   );
-  const [ref, setRef] = useState<TextInput | null>();
+  const [layout, setLayout] = useState<Layout>();
+  const [layoutBorder, setLayoutBorder] = useState<LayoutRectangle>();
+  const [ref, setRef] = useState<TextInput>();
+  const [refBorder, setRefBorder] = useState<View>();
+  const [refContainer, setRefContainer] = useState<View>();
   const themeBorderActive = inputValue !== undefined && inputValue !== '';
   const animation = useState(new Animated.Value(themeBorderActive ? 1 : 0))[0];
-  const showLabel = label !== undefined && label !== '';
   const inputLeftIcon = getIcon(leftIcon, leftIconAction);
   const inputRightIcon = getIcon(rightIcon, rightIconAction);
 
@@ -138,6 +143,46 @@ export default function Input({
       bounciness: 0,
     }).start();
   }, [inputValue]);
+
+  function updateLayout() {
+    errorPosition === 'absolute' &&
+      refContainer?.measure((x, y, width, height, pageX, pageY) => {
+        setLayout({
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          pageX: pageX,
+          pageY: pageY,
+        });
+      });
+  }
+
+  function updateLayoutBorder() {
+    labelPosition === 'border' &&
+      refBorder?.measure((x, y, width, height) => {
+        setLayoutBorder({
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+        });
+      });
+  }
+
+  useEffect(() => {
+    updateLayout();
+  }, [containerStyle, focusContainerStyle, errorContainerStyle]);
+
+  useEffect(() => {
+    updateLayoutBorder();
+  }, [
+    label,
+    labelPosition,
+    labelContainerStyle,
+    focusLabelContainerStyle,
+    errorLabelContainerStyle,
+  ]);
 
   function getIcon(inputIcon?: InputIcon, inputIconAction?: InputIconAction) {
     if (inputIconAction !== undefined) {
@@ -198,198 +243,236 @@ export default function Input({
   }
 
   return (
-    <View
-      style={[styles.container, containerStyle, focus && focusContainerStyle]}>
-      {showLabel && labelPosition === 'container' ? (
-        <View
-          style={StyleSheet.flatten([
-            styles.labelContainerThemeContainer,
-            labelContainerStyle,
-            focus && focusLabelContainerStyle,
-            error !== undefined && errorLabelContainerStyle,
-          ])}>
-          <Text
-            style={StyleSheet.flatten([
-              styles.label,
-              styles.labelThemeContainer,
-              labelStyle,
-              focus && focusLabelStyle,
-              error !== undefined && errorLabelStyle,
-            ])}>
-            {label}
-          </Text>
-        </View>
-      ) : (
-        <></>
-      )}
+    <>
       <View
+        ref={instance => instance && setRefContainer(instance)}
+        onLayout={() => layout === undefined && updateLayout()}
         style={[
-          styles.inputContainer,
-          inputContainerStyle,
-          focus &&
-            StyleSheet.flatten([
-              styles.focusInputContainer,
-              focusInputContainerStyle,
-            ]),
-          error !== undefined &&
-            StyleSheet.flatten([
-              styles.errorInputContainer,
-              errorInputContainerStyle,
-            ]),
+          styles.container,
+          containerStyle,
+          focus && focusContainerStyle,
         ]}>
-        {inputLeftIcon && (
+        {label !== undefined && labelPosition === 'container' ? (
           <View
-            style={[
-              styles.iconContainer,
-              styles.iconLeftContainer,
-              leftIconContainerStyle,
-              focus && focusLeftIconContainerStyle,
-              error !== undefined && errorLeftIconContainerStyle,
-            ]}>
-            <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
-              {inputLeftIcon}
-            </TouchableWithoutFeedback>
+            style={StyleSheet.flatten([
+              styles.labelContainerThemeContainer,
+              labelContainerStyle,
+              focus && focusLabelContainerStyle,
+              error !== undefined && errorLabelContainerStyle,
+            ])}>
+            <Text
+              style={StyleSheet.flatten([
+                styles.label,
+                styles.labelThemeContainer,
+                labelStyle,
+                focus && focusLabelStyle,
+                error !== undefined && errorLabelStyle,
+              ])}>
+              {label}
+            </Text>
           </View>
+        ) : (
+          <></>
         )}
-        <View style={styles.sectionInputReverse}>
-          {inputRightIcon && (
+        <View
+          style={[
+            styles.inputContainer,
+            inputContainerStyle,
+            focus &&
+              StyleSheet.flatten([
+                styles.focusInputContainer,
+                focusInputContainerStyle,
+              ]),
+            error !== undefined &&
+              StyleSheet.flatten([
+                styles.errorInputContainer,
+                errorInputContainerStyle,
+              ]),
+          ]}>
+          {inputLeftIcon && (
             <View
               style={[
                 styles.iconContainer,
-                styles.iconRightContainer,
-                rightIconContainerStyle,
-                focus && focusRightIconContainerStyle,
-                error !== undefined && errorRightIconContainerStyle,
+                styles.iconLeftContainer,
+                leftIconContainerStyle,
+                focus && focusLeftIconContainerStyle,
+                error !== undefined && errorLeftIconContainerStyle,
               ]}>
-              <TouchableWithoutFeedback
-                onPress={getIconAction(rightIconAction)}>
-                {inputRightIcon}
+              <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
+                {inputLeftIcon}
               </TouchableWithoutFeedback>
             </View>
           )}
-          <View style={styles.sectionInputBox}>
-            {labelPosition === 'box' ? (
-              <Animated.View
-                style={StyleSheet.flatten([
-                  styles.sectionLabelThemeBox,
-                  focus && focusLabelContainerStyle,
-                  error !== undefined && errorLabelContainerStyle,
-                  {
-                    top: animation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [
-                        labelBoxStandByOffset,
-                        labelBoxActiveOffset,
-                      ],
-                    }),
-                  },
-                ])}>
-                <Animated.Text
-                  style={StyleSheet.flatten([
-                    styles.label,
-                    styles.labelThemeBox,
-                    labelStyle,
-                    focus && focusLabelStyle,
-                    error !== undefined && errorLabelStyle,
-                    {
-                      fontSize: animation.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [labelBoxStandBySize, labelBoxActiveSize],
-                      }),
-                    },
-                    props.placeholderTextColor !== undefined
-                      ? {
-                          color: props.placeholderTextColor,
-                        }
-                      : {},
-                  ])}>
-                  {label !== undefined ? label : placeholder}
-                </Animated.Text>
-              </Animated.View>
-            ) : (
-              <></>
-            )}
-            <View
-              style={StyleSheet.flatten([
-                {height: '100%', width: '100%'},
-                labelPosition === 'box' &&
-                  themeBorderActive && {paddingTop: inputBoxActiveOffset},
-              ])}>
-              <TextInput
-                {...props}
-                ref={instance => {
-                  setRef(instance);
-                  inputRef !== undefined && inputRef(instance);
-                }}
-                multiline={multiline}
-                secureTextEntry={!visibility}
-                placeholder={labelPosition === 'box' ? undefined : placeholder}
-                style={StyleSheet.flatten([
-                  styles.inputBox,
-                  multiline && styles.inputBoxMultiline,
-                  style,
-                  focus && focusStyle,
-                ])}
-                onChangeText={text => {
-                  onChangeText && onChangeText(text);
-                  setInputValue(text);
-                }}
-                onFocus={event => {
-                  onFocus && onFocus(event);
-                  setFocus(true);
-                }}
-                onBlur={event => {
-                  onBlur && onBlur(event);
-                  setFocus(false);
-                }}
-              />
-            </View>
-            {showLabel && labelPosition === 'border' ? (
+          <View style={styles.sectionInputReverse}>
+            {inputRightIcon && (
               <View
                 style={[
-                  styles.labelContainerThemeBorder,
-                  labelContainerStyle,
-                  focus &&
-                    StyleSheet.flatten([
-                      styles.focusLabelContainerThemeBorder,
-                      focusLabelContainerStyle,
-                    ]),
-                  error !== undefined &&
-                    StyleSheet.flatten([
-                      styles.errorLabelContainerThemeBorder,
-                      errorLabelContainerStyle,
-                    ]),
-                  styles.sectionLabelThemeBorder,
-                  {
-                    top: -1 + (layout ? -layout.height / 2 : 0),
-                  },
-                ]}
-                onLayout={e => setLayout(e.nativeEvent.layout)}>
-                <Text
-                  style={StyleSheet.flatten([
-                    styles.label,
-                    styles.labelThemeBorder,
-                    labelStyle,
-                    focus && focusLabelStyle,
-                    error !== undefined && errorLabelStyle,
-                  ])}>
-                  {label}
-                </Text>
+                  styles.iconContainer,
+                  styles.iconRightContainer,
+                  rightIconContainerStyle,
+                  focus && focusRightIconContainerStyle,
+                  error !== undefined && errorRightIconContainerStyle,
+                ]}>
+                <TouchableWithoutFeedback
+                  onPress={getIconAction(rightIconAction)}>
+                  {inputRightIcon}
+                </TouchableWithoutFeedback>
               </View>
-            ) : (
-              <></>
             )}
+            <View style={styles.sectionInputBox}>
+              {labelPosition === 'box' ? (
+                <Animated.View
+                  style={StyleSheet.flatten([
+                    styles.sectionLabelThemeBox,
+                    focus && focusLabelContainerStyle,
+                    error !== undefined && errorLabelContainerStyle,
+                    {
+                      top: animation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [
+                          labelBoxStandByOffset,
+                          labelBoxActiveOffset,
+                        ],
+                      }),
+                    },
+                  ])}>
+                  <Animated.Text
+                    style={StyleSheet.flatten([
+                      styles.label,
+                      styles.labelThemeBox,
+                      labelStyle,
+                      focus && focusLabelStyle,
+                      error !== undefined && errorLabelStyle,
+                      {
+                        fontSize: animation.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [
+                            labelBoxStandBySize,
+                            labelBoxActiveSize,
+                          ],
+                        }),
+                      },
+                      props.placeholderTextColor !== undefined
+                        ? {
+                            color: props.placeholderTextColor,
+                          }
+                        : {},
+                    ])}>
+                    {label !== undefined ? label : placeholder}
+                  </Animated.Text>
+                </Animated.View>
+              ) : (
+                <></>
+              )}
+              <View
+                style={StyleSheet.flatten([
+                  {height: '100%', width: '100%'},
+                  labelPosition === 'box' &&
+                    themeBorderActive && {paddingTop: inputBoxActiveOffset},
+                ])}>
+                <TextInput
+                  {...props}
+                  ref={instance => {
+                    if (instance && ref !== instance) {
+                      inputRef && inputRef(instance);
+                      setRef(instance);
+                    }
+                  }}
+                  multiline={multiline}
+                  secureTextEntry={!visibility}
+                  placeholder={
+                    labelPosition === 'box' ? undefined : placeholder
+                  }
+                  style={StyleSheet.flatten([
+                    styles.inputBox,
+                    multiline && styles.inputBoxMultiline,
+                    style,
+                    focus && focusStyle,
+                  ])}
+                  onChangeText={text => {
+                    onChangeText && onChangeText(text);
+                    setInputValue(text);
+                  }}
+                  onFocus={event => {
+                    onFocus && onFocus(event);
+                    setFocus(true);
+                  }}
+                  onBlur={event => {
+                    onBlur && onBlur(event);
+                    setFocus(false);
+                  }}
+                />
+              </View>
+              {label !== undefined && labelPosition === 'border' ? (
+                <View
+                  ref={instance => instance && setRefBorder(instance)}
+                  onLayout={() =>
+                    layoutBorder === undefined && updateLayoutBorder()
+                  }
+                  style={[
+                    styles.labelContainerThemeBorder,
+                    labelContainerStyle,
+                    focus &&
+                      StyleSheet.flatten([
+                        styles.focusLabelContainerThemeBorder,
+                        focusLabelContainerStyle,
+                      ]),
+                    error !== undefined &&
+                      StyleSheet.flatten([
+                        styles.errorLabelContainerThemeBorder,
+                        errorLabelContainerStyle,
+                      ]),
+                    styles.sectionLabelThemeBorder,
+                    !layoutBorder &&
+                      styles.labelContainerThemeBorderTransparent,
+                    {
+                      top: -1 + (layoutBorder ? -layoutBorder.height / 2 : 0),
+                    },
+                  ]}>
+                  <Text
+                    style={StyleSheet.flatten([
+                      styles.label,
+                      styles.labelThemeBorder,
+                      labelStyle,
+                      focus && focusLabelStyle,
+                      error !== undefined && errorLabelStyle,
+                    ])}>
+                    {label}
+                  </Text>
+                </View>
+              ) : (
+                <></>
+              )}
+            </View>
           </View>
         </View>
+        {error !== undefined && errorPosition === 'relative' && (
+          <View style={errorContainerStyle}>
+            <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
+              {error}
+            </Text>
+          </View>
+        )}
       </View>
-      {error !== undefined && (
-        <View style={errorContainerStyle}>
-          <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
-            {error}
-          </Text>
-        </View>
-      )}
-    </View>
+      {error !== undefined &&
+        errorPosition === 'absolute' &&
+        layout !== undefined && (
+          <View
+            style={StyleSheet.flatten([
+              errorContainerStyle,
+              {
+                position: 'absolute',
+                width: layout.width,
+                left: layout.pageX,
+                top: layout.pageY + layout.height,
+              },
+            ])}>
+            <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
+              {error}
+            </Text>
+          </View>
+        )}
+    </>
   );
 }
 
@@ -429,6 +512,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'whitesmoke',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  labelContainerThemeBorderTransparent: {
+    opacity: 0,
   },
   iconContainer: {
     height: '100%',

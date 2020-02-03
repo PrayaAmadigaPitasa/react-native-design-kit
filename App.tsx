@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Picker, Input, Radio, Slider, Stepper, SwitchableText} from './src';
+import {Picker, Input, Radio, Slider, Stepper} from './src';
 
 Icon.loadFont();
 
@@ -15,11 +15,16 @@ export default function App() {
         titleExtractor={item => item}
         onSelect={() => {}}
       />
-      <Input label="Title" labelPosition="border" error="Error message" />
+      <Input
+        label="Title"
+        labelPosition="border"
+        error="Error message"
+        errorPosition="absolute"
+        rightIconAction="delete"
+      />
       <Radio radioIds={['Banana', 'Melon', 'Orange']} onSelect={() => {}} />
       <Slider button indicator onChangeValue={() => {}} />
       <Stepper />
-      <SwitchableText texts={['Work hard play hard', 'Do as you wish']} />
     </View>
   );
 }

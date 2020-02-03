@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  LayoutRectangle,
   FlatList,
   ViewStyle,
   TextStyle,
@@ -14,11 +13,7 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from './Modal';
-
-interface Layout extends LayoutRectangle {
-  pageX: number;
-  pageY: number;
-}
+import {Layout} from '../layout';
 
 export interface PickerDataSelection {
   key: string;
