@@ -47,6 +47,8 @@ export interface InputProps extends TextInputProps {
   focusLeftIconContainerStyle?: ViewStyle;
   focusRightIconContainerStyle?: ViewStyle;
   error?: string;
+  errorStyle?: TextStyle;
+  errorLabelStyle?: TextStyle;
 }
 
 export default function Input({
@@ -71,6 +73,8 @@ export default function Input({
   focusLeftIconContainerStyle,
   focusRightIconContainerStyle,
   error,
+  errorStyle,
+  errorLabelStyle,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -199,6 +203,7 @@ export default function Input({
               styles.labelThemeContainer,
               labelStyle,
               focus && focusLabelStyle,
+              error !== undefined && errorLabelStyle,
             ])}>
             {label}
           </Text>
@@ -267,6 +272,7 @@ export default function Input({
                     styles.labelThemeBox,
                     labelStyle,
                     focus && focusLabelStyle,
+                    error !== undefined && errorLabelStyle,
                     {
                       fontSize: animation.interpolate({
                         inputRange: [0, 1],
@@ -342,6 +348,7 @@ export default function Input({
                     styles.labelThemeBorder,
                     labelStyle,
                     focus && focusLabelStyle,
+                    error !== undefined && errorLabelStyle,
                   ])}>
                   {label}
                 </Text>
@@ -354,7 +361,9 @@ export default function Input({
       </View>
       {error !== undefined && (
         <View>
-          <Text style={styles.error}>{error}</Text>
+          <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
+            {error}
+          </Text>
         </View>
       )}
     </View>
