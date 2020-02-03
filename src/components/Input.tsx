@@ -46,6 +46,7 @@ export interface InputProps extends TextInputProps {
   focusInputContainerStyle?: ViewStyle;
   focusLeftIconContainerStyle?: ViewStyle;
   focusRightIconContainerStyle?: ViewStyle;
+  error?: string;
 }
 
 export default function Input({
@@ -56,6 +57,12 @@ export default function Input({
   labelPosition = 'container',
   inputContainerStyle,
   inputRef,
+  leftIcon,
+  leftIconAction,
+  leftIconContainerStyle,
+  rightIcon,
+  rightIconAction,
+  rightIconContainerStyle,
   focusStyle,
   focusLabelStyle,
   focusContainerStyle,
@@ -63,12 +70,7 @@ export default function Input({
   focusInputContainerStyle,
   focusLeftIconContainerStyle,
   focusRightIconContainerStyle,
-  leftIcon,
-  leftIconAction,
-  leftIconContainerStyle,
-  rightIcon,
-  rightIconAction,
-  rightIconContainerStyle,
+  error,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -349,6 +351,11 @@ export default function Input({
           </View>
         </View>
       </View>
+      {error !== undefined && (
+        <View>
+          <Text>{error}</Text>
+        </View>
+      )}
     </View>
   );
 }
