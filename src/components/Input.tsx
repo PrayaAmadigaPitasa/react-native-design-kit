@@ -49,6 +49,8 @@ export interface InputProps extends TextInputProps {
   error?: string;
   errorStyle?: TextStyle;
   errorLabelStyle?: TextStyle;
+  errorLabelContainerStyle?: ViewStyle;
+  errorContainerStyle?: ViewStyle;
 }
 
 export default function Input({
@@ -75,6 +77,8 @@ export default function Input({
   error,
   errorStyle,
   errorLabelStyle,
+  errorLabelContainerStyle,
+  errorContainerStyle,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -196,6 +200,7 @@ export default function Input({
             styles.labelContainerThemeContainer,
             labelContainerStyle,
             focus && focusLabelContainerStyle,
+            error !== undefined && errorLabelContainerStyle,
           ])}>
           <Text
             style={StyleSheet.flatten([
@@ -256,6 +261,7 @@ export default function Input({
                 style={StyleSheet.flatten([
                   styles.sectionLabelThemeBox,
                   focus && focusLabelContainerStyle,
+                  error !== undefined && errorLabelContainerStyle,
                   {
                     top: animation.interpolate({
                       inputRange: [0, 1],
@@ -336,6 +342,11 @@ export default function Input({
                       styles.focusLabelContainerThemeBorder,
                       focusLabelContainerStyle,
                     ]),
+                  error !== undefined &&
+                    StyleSheet.flatten([
+                      styles.errorLabelContainerThemeBorder,
+                      errorLabelContainerStyle,
+                    ]),
                   styles.sectionLabelThemeBorder,
                   {
                     top: -1 + (layout ? -layout.height / 2 : 0),
@@ -360,7 +371,7 @@ export default function Input({
         </View>
       </View>
       {error !== undefined && (
-        <View>
+        <View style={errorContainerStyle}>
           <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
             {error}
           </Text>
@@ -425,6 +436,9 @@ const styles = StyleSheet.create({
     borderColor: 'dodgerblue',
   },
   errorInputContainer: {
+    borderColor: 'red',
+  },
+  errorLabelContainerThemeBorder: {
     borderColor: 'red',
   },
   sectionInputReverse: {
