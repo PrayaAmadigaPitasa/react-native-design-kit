@@ -144,6 +144,27 @@ export default function Input({
     }).start();
   }, [inputValue]);
 
+  useEffect(() => {
+    updateLayout();
+  }, [
+    containerStyle,
+    focusContainerStyle,
+    errorContainerStyle,
+    inputContainerStyle,
+    focusInputContainerStyle,
+    errorInputContainerStyle,
+  ]);
+
+  useEffect(() => {
+    updateLayoutBorder();
+  }, [
+    label,
+    labelPosition,
+    labelContainerStyle,
+    focusLabelContainerStyle,
+    errorLabelContainerStyle,
+  ]);
+
   function updateLayout() {
     errorPosition === 'absolute' &&
       refContainer?.measure((x, y, width, height, pageX, pageY) => {
@@ -169,20 +190,6 @@ export default function Input({
         });
       });
   }
-
-  useEffect(() => {
-    updateLayout();
-  }, [containerStyle, focusContainerStyle, errorContainerStyle]);
-
-  useEffect(() => {
-    updateLayoutBorder();
-  }, [
-    label,
-    labelPosition,
-    labelContainerStyle,
-    focusLabelContainerStyle,
-    errorLabelContainerStyle,
-  ]);
 
   function getIcon(inputIcon?: InputIcon, inputIconAction?: InputIconAction) {
     if (inputIconAction !== undefined) {

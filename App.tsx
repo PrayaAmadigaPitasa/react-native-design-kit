@@ -15,13 +15,7 @@ export default function App() {
         titleExtractor={item => item}
         onSelect={() => {}}
       />
-      <Input
-        label="Title"
-        labelPosition="border"
-        error="Error message"
-        errorPosition="absolute"
-        rightIconAction="delete"
-      />
+      <Input label="Title" labelPosition="border" rightIconAction="delete" />
       <Radio radioIds={['Banana', 'Melon', 'Orange']} onSelect={() => {}} />
       <Slider button indicator onChangeValue={() => {}} />
       <Stepper />
