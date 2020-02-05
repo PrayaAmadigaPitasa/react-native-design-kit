@@ -285,11 +285,7 @@ export default function Input({
           style={[
             styles.inputContainer,
             inputContainerStyle,
-            focus &&
-              StyleSheet.flatten([
-                styles.focusInputContainer,
-                focusInputContainerStyle,
-              ]),
+            focus && focusInputContainerStyle,
             error !== undefined &&
               StyleSheet.flatten([
                 styles.errorInputContainer,
@@ -419,11 +415,7 @@ export default function Input({
                   style={[
                     styles.labelContainerThemeBorder,
                     labelContainerStyle,
-                    focus &&
-                      StyleSheet.flatten([
-                        styles.focusLabelContainerThemeBorder,
-                        focusLabelContainerStyle,
-                      ]),
+                    focus && focusLabelContainerStyle,
                     error !== undefined &&
                       StyleSheet.flatten([
                         styles.errorLabelContainerThemeBorder,
@@ -533,12 +525,6 @@ const styles = StyleSheet.create({
   },
   iconRightContainer: {
     marginLeft: 6,
-  },
-  focusInputContainer: {
-    borderColor: 'dodgerblue',
-  },
-  focusLabelContainerThemeBorder: {
-    borderColor: 'dodgerblue',
   },
   errorInputContainer: {
     borderColor: 'red',
