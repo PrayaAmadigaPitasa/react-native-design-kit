@@ -50,11 +50,16 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@storybook/addon-actions": "^5.3.12",
+    "@storybook/addon-links": "^5.3.12",
+    "@storybook/addons": "^5.3.12",
+    "@storybook/react-native": "^5.3.12",
     "@types/jest": "^24.0.25",
     "@types/react-native": "^0.60.22",
     "@types/react-native-vector-icons": "^6.4.5",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-import": "^2.19.1",
@@ -74,5 +79,6 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  }
+  },
+  "dependencies": {}
 }
