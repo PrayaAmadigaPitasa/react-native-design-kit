@@ -1,11 +1,14 @@
 import React from 'react';
-import {Button} from '../../../src';
 import {StyleSheet, View, Alert} from 'react-native';
+import {Chip} from '../../../src';
 
-export default function ButtonStory() {
+export default function ChipStory() {
   return (
     <View style={styles.container}>
-      <Button title="Button" onPress={() => Alert.alert('Clicked')} />
+      <Chip
+        chips={['Apple', 'Melon', 'Banana', 'Pear', 'Grape']}
+        onSelect={id => Alert.alert(`ID: ${id}`)}
+      />
     </View>
   );
 }
@@ -13,7 +16,6 @@ export default function ButtonStory() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -22,10 +22,14 @@
 - Stepper
 - SwitchableText
 
+### On Progress:
+
+- StoryBook Documentation (WIP)
+- Badge (WIP)
+
 #### List Todo:
 
-- Documentation
-- Badge (WIP)
+- Web Documentation
 - Checkbox
 - Drawer
 - Header
