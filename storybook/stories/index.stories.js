@@ -12,6 +12,7 @@ configure(
     require('./picker/index.stories'),
     require('./playing-bar/index.stories'),
     require('./radio/index.stories'),
+    require('./slider/index.stories'),
   ],
   module,
 );
