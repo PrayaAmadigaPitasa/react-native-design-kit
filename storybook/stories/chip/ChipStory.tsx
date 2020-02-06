@@ -1,14 +1,27 @@
 import React from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
-import {Chip} from '../../../src';
+import {StyleSheet, View} from 'react-native';
+import {Chip, ChipProps} from '../../../src';
 
-export default function ChipStory() {
+export interface ChipStoryProps extends ChipProps {}
+
+export default function ChipStory({
+  chips = [
+    'Apple',
+    'Melon',
+    'Banana',
+    'Grape',
+    'Pear',
+    'Peach',
+    'Orange',
+    'Apricot',
+    'Durian',
+  ],
+  onSelect = () => {},
+  ...props
+}: ChipStoryProps) {
   return (
     <View style={styles.container}>
-      <Chip
-        chips={['Apple', 'Melon', 'Banana', 'Pear', 'Grape']}
-        onSelect={id => Alert.alert(`ID: ${id}`)}
-      />
+      <Chip {...props} chips={chips} onSelect={onSelect} />
     </View>
   );
 }
