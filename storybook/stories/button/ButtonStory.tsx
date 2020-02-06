@@ -1,11 +1,16 @@
 import React from 'react';
-import {Button} from '../../../src';
+import {Button, ButtonProps} from '../../../src';
 import {StyleSheet, View, Alert} from 'react-native';
 
-export default function ButtonStory() {
+export interface ButtonStoryProps extends ButtonProps {}
+
+export default function ButtonStory({
+  title = 'Button',
+  ...props
+}: ButtonStoryProps) {
   return (
     <View style={styles.container}>
-      <Button title="Button" onPress={() => Alert.alert('Clicked')} />
+      <Button {...props} title={title} onPress={() => Alert.alert('Clicked')} />
     </View>
   );
 }
