@@ -10,6 +10,7 @@ configure(
     require('./input-otp/index.stories'),
     require('./modal/index.stories'),
     require('./picker/index.stories'),
+    require('./playing-bar/index.stories'),
   ],
   module,
 );
