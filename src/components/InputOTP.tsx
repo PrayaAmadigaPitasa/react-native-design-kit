@@ -50,11 +50,7 @@ export function InputOTPBox({
       style={StyleSheet.flatten([
         styles.inputContainer,
         inputContainerStyle,
-        focus &&
-          StyleSheet.flatten([
-            styles.focusInputContainer,
-            focusInputContainerStyle,
-          ]),
+        focus && focusInputContainerStyle,
       ])}>
       {placeholderComponent && showPlaceholder && (
         <View style={styles.sectionPlaceholderComponent}>
@@ -241,9 +237,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  focusInputContainer: {
-    borderColor: 'dodgerblue',
   },
   inputBox: {
     width: '100%',

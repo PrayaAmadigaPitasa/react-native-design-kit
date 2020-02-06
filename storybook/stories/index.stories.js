@@ -7,6 +7,7 @@ configure(
     require('./button-group/index.stories'),
     require('./chip/index.stories'),
     require('./input/index.stories'),
+    require('./input-otp/index.stories'),
   ],
   module,
 );
