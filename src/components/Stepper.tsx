@@ -60,6 +60,7 @@ export default function Stepper({
         }}
       />
       <TextInput
+        editable={false}
         style={StyleSheet.flatten([styles.input, inputStyle])}
         value={inputValue.toString()}
       />
