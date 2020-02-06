@@ -9,7 +9,6 @@ export interface SwitchableTextProps {
   tps?: number;
   progressBar?: boolean;
   progressBarStyle?: ViewStyle;
-  progressBarEasing?(value: number): number;
 }
 
 export default function SwitchableText({
@@ -24,17 +23,10 @@ export default function SwitchableText({
   const [index, setIndex] = useState(0);
   const [width, setWidth] = useState<number>();
   const [progress, setProgress] = useState(0);
-  const [timestamp, setTimestamp] = useState();
 
   useEffect(() => {
     if (width !== undefined) {
       if (progress >= 1) {
-        const now = new Date().getTime();
-
-        if (timestamp !== undefined) {
-          console.log(`elapsed time: ${now - timestamp}`);
-        }
-        setTimestamp(now);
         setIndex((index + 1) % texts.length);
         setProgress(0);
       } else {
