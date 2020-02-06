@@ -16,11 +16,10 @@ export interface RadioInfo {
 }
 
 export interface RadioBaseProps extends TouchableOpacityProps {
-  radioContainerStyle?: ViewStyle;
   radioIconContainerStyle?: ViewStyle;
   radioComponentContainerStyle?: ViewStyle;
   selectedRadio?: JSX.Element;
-  selectedRadioContainerStyle?: ViewStyle;
+  selectedRadioStyle?: ViewStyle;
   selectedRadioIconContainerStyle?: ViewStyle;
   selectedRadioComponentContainerStyle?: ViewStyle;
   selectedRadioTitleStyle?: ViewStyle;
@@ -44,15 +43,15 @@ export interface RadioProps extends RadioBaseProps {
 
 export function RadioItem({
   isSelected = false,
+  style,
+  title,
+  titleStyle,
   selectedRadio = <DefaultSelectedRadio />,
-  selectedRadioContainerStyle,
+  selectedRadioStyle,
   selectedRadioIconContainerStyle,
   selectedRadioComponentContainerStyle,
   selectedRadioTitleStyle,
   disabledRadio = <DefaultDisabledRadio />,
-  title,
-  titleStyle,
-  radioContainerStyle,
   radioIconContainerStyle,
   radioComponentContainerStyle,
   children,
@@ -61,11 +60,7 @@ export function RadioItem({
   return (
     <TouchableOpacity
       {...props}
-      style={[
-        styles.radioContainer,
-        radioContainerStyle,
-        isSelected && selectedRadioContainerStyle,
-      ]}
+      style={[styles.radioContainer, style, isSelected && selectedRadioStyle]}
       activeOpacity={0.75}>
       <View
         style={StyleSheet.flatten([
