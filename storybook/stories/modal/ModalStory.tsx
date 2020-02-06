@@ -5,8 +5,6 @@ import {Button, Modal} from '../../../src';
 export default function ModalStory() {
   const [toggle, setToggle] = useState(false);
 
-  console.log(`toggle: ${toggle}`);
-
   return (
     <View style={styles.container}>
       <Button title="Click Me" onPress={() => setToggle(true)} />

@@ -9,6 +9,7 @@ configure(
     require('./input/index.stories'),
     require('./input-otp/index.stories'),
     require('./modal/index.stories'),
+    require('./picker/index.stories'),
   ],
   module,
 );

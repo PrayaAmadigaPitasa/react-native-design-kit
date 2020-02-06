@@ -5,7 +5,7 @@ import {Input} from '../../../src';
 export default function InputStory() {
   return (
     <View style={styles.container}>
-      <Input />
+      <Input label="Label" />
     </View>
   );
 }

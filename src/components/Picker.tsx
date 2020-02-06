@@ -91,23 +91,24 @@ export default function Picker<ItemT>({
     return undefined;
   }
 
+  function updateLayout() {
+    buttonRef?.measure((x, y, width, height, pageX, pageY) =>
+      setLayout({
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        pageX: pageX,
+        pageY: pageY,
+      }),
+    );
+  }
+
   return (
     <>
       <TouchableOpacity
         ref={instance =>
           instance && buttonRef !== instance && setButtonRef(instance)
-        }
-        onLayout={() =>
-          buttonRef?.measure((x, y, width, height, pageX, pageY) =>
-            setLayout({
-              x: x,
-              y: y,
-              width: width,
-              height: height,
-              pageX: pageX,
-              pageY: pageY,
-            }),
-          )
         }
         style={StyleSheet.flatten([
           styles.container,
@@ -115,7 +116,10 @@ export default function Picker<ItemT>({
           toggle ? [styles.selectedContainer, selectedContainerStyle] : {},
         ])}
         activeOpacity={0.5}
-        onPress={() => setToggle(!toggle)}>
+        onPress={() => {
+          updateLayout();
+          setToggle(!toggle);
+        }}>
         <Text
           style={StyleSheet.flatten([
             styles.title,
@@ -146,7 +150,10 @@ export default function Picker<ItemT>({
         </Animated.View>
       </TouchableOpacity>
       {layout !== undefined && (
-        <Modal visible={toggle} onPressBackdrop={() => setToggle(!toggle)}>
+        <Modal
+          transparent
+          visible={toggle}
+          onPressBackdrop={() => setToggle(!toggle)}>
           <View
             style={StyleSheet.flatten([
               styles.listContainer,
