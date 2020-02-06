@@ -1,20 +1,17 @@
 import React from 'react';
 import {Button, ButtonProps} from '../../../src';
-import {StyleSheet, View, Alert} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 export interface ButtonStoryProps extends ButtonProps {}
 
 export default function ButtonStory({
   title = 'Button',
+  onPress = () => {},
   ...props
 }: ButtonStoryProps) {
   return (
     <View style={styles.container}>
-      <Button
-        {...props}
-        title={title}
-        onPress={() => Alert.alert('type: solid')}
-      />
+      <Button {...props} title={title} onPress={onPress} />
     </View>
   );
 }

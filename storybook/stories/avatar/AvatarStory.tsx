@@ -6,20 +6,14 @@ export interface AvatarStoryProps extends AvatarProps {}
 
 export default function AvatarStory({
   size = 240,
-  source,
+  source = {
+    uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large',
+  },
   ...props
 }: AvatarStoryProps) {
   return (
     <View style={styles.container}>
-      <Avatar
-        {...props}
-        size={size}
-        source={
-          source || {
-            uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large',
-          }
-        }
-      />
+      <Avatar {...props} size={size} source={source} />
     </View>
   );
 }
