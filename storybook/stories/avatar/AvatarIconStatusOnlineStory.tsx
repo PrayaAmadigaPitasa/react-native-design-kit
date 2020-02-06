@@ -2,20 +2,20 @@ import React from 'react';
 import AvatarStory, {AvatarStoryProps} from './AvatarStory';
 import {Alert} from 'react-native';
 
-export interface AvatarIconEditStoryProps extends AvatarStoryProps {}
+export interface AvatarIconStatusOnlineStoryProps extends AvatarStoryProps {}
 
-export default function AvatarIconEditStory({
+export default function AvatarIconStatusOnlineStory({
   source,
   ...props
-}: AvatarIconEditStoryProps) {
+}: AvatarIconStatusOnlineStoryProps) {
   return (
     <AvatarStory
       {...props}
-      icon="edit"
+      icon="status-online"
       source={
         source || {uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large'}
       }
-      onPressIcon={() => Alert.alert('Icon: Edit')}
+      onPressIcon={() => Alert.alert('Icon: Status Online')}
     />
   );
 }

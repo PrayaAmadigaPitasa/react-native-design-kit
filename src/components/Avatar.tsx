@@ -15,7 +15,12 @@ export interface AvatarProps extends ImageProps {
   containerStyle?: ViewStyle;
   rounded?: boolean;
   size?: number;
-  icon?: JSX.Element | 'edit';
+  icon?:
+    | JSX.Element
+    | 'edit'
+    | 'status-online'
+    | 'status-offline'
+    | 'status-standby';
   iconSize?: number;
   iconContainerStyle?: ViewStyle;
   onPress?(event: GestureResponderEvent): void;
@@ -24,7 +29,7 @@ export interface AvatarProps extends ImageProps {
 
 export default function Avatar({
   containerStyle,
-  rounded,
+  rounded = true,
   size = 48,
   icon,
   iconSize,
@@ -43,12 +48,31 @@ export default function Avatar({
         if (icon === 'edit') {
           return (
             <Icon
-              style={styles.editButtonDefault}
+              style={styles.iconEdit}
               name="pencil"
               size={iconSizeComponent}
             />
           );
         }
+
+        let statusColor;
+
+        if (icon === 'status-online') {
+          statusColor = 'green';
+        } else if (icon === 'status-offline') {
+          statusColor = 'red';
+        } else {
+          statusColor = 'gold';
+        }
+
+        return (
+          <View
+            style={StyleSheet.flatten([
+              styles.iconStatus,
+              {backgroundColor: statusColor},
+            ])}
+          />
+        );
       }
 
       return icon;
@@ -104,6 +128,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     backgroundColor: 'darkgray',
+    borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
@@ -122,9 +147,13 @@ const styles = StyleSheet.create({
   sectionIcon: {
     position: 'absolute',
   },
-  editButtonDefault: {
+  iconEdit: {
     color: 'white',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  iconStatus: {
+    height: '100%',
+    width: '100%',
   },
 });
