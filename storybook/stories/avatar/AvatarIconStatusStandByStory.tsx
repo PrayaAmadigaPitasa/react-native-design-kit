@@ -15,7 +15,7 @@ export default function AvatarIconStatusStandByStory({
       source={
         source || {uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large'}
       }
-      onPressIcon={() => Alert.alert('Icon: Status StandBy')}
+      onPressIcon={() => Alert.alert('icon: status-standby')}
     />
   );
 }

@@ -11,7 +11,7 @@ export default function ButtonTypeOutlineStory({
     <ButtonStory
       {...props}
       type="outline"
-      onPress={() => Alert.alert('Clicked')}
+      onPress={() => Alert.alert('type: outline')}
     />
   );
 }

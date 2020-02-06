@@ -15,7 +15,7 @@ export default function AvatarIconEditStory({
       source={
         source || {uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large'}
       }
-      onPressIcon={() => Alert.alert('Icon: Edit')}
+      onPressIcon={() => Alert.alert('icon: edit')}
     />
   );
 }

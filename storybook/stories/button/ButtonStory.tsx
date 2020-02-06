@@ -10,7 +10,11 @@ export default function ButtonStory({
 }: ButtonStoryProps) {
   return (
     <View style={styles.container}>
-      <Button {...props} title={title} onPress={() => Alert.alert('Clicked')} />
+      <Button
+        {...props}
+        title={title}
+        onPress={() => Alert.alert('type: solid')}
+      />
     </View>
   );
 }

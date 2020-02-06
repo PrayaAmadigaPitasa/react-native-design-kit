@@ -15,7 +15,7 @@ export default function AvatarIconStatusOfflineStory({
       source={
         source || {uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large'}
       }
-      onPressIcon={() => Alert.alert('Icon: Status Offline')}
+      onPressIcon={() => Alert.alert('icon: status-offline')}
     />
   );
 }

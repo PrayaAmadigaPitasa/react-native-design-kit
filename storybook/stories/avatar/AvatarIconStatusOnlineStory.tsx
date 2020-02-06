@@ -15,7 +15,7 @@ export default function AvatarIconStatusOnlineStory({
       source={
         source || {uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large'}
       }
-      onPressIcon={() => Alert.alert('Icon: Status Online')}
+      onPressIcon={() => Alert.alert('icon: status-online')}
     />
   );
 }

@@ -11,7 +11,7 @@ export default function ButtonTypeTextStory({
     <ButtonStory
       {...props}
       type="text"
-      onPress={() => Alert.alert('Clicked')}
+      onPress={() => Alert.alert('type: text')}
     />
   );
 }
