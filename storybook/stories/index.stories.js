@@ -8,6 +8,7 @@ configure(
     require('./chip/index.stories'),
     require('./input/index.stories'),
     require('./input-otp/index.stories'),
+    require('./modal/index.stories'),
   ],
   module,
 );

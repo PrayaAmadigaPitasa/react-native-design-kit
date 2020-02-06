@@ -10,12 +10,16 @@ import {
 } from 'react-native';
 
 export interface ModalProps extends ModalPropsRN {
+  containerStyle?: ViewStyle;
+  hasBackdrop?: boolean;
   backdropContainerStyle?: ViewStyle;
   children: ReactNode;
   onPressBackdrop?(event: GestureResponderEvent): void;
 }
 
 export default function Modal({
+  containerStyle,
+  hasBackdrop = true,
   backdropContainerStyle,
   onPressBackdrop,
   visible = false,
@@ -31,24 +35,41 @@ export default function Modal({
 
   return (
     <ModalRN {...props} transparent visible={toggle}>
-      <TouchableWithoutFeedback
-        onPress={event => {
-          onPressBackdrop !== undefined && onPressBackdrop(event);
-          setToggle(!toggle);
-        }}>
-        <View
-          style={StyleSheet.flatten([
-            !transparent && backdropContainerStyle,
-            styles.sectionBackdrop,
-          ])}
-        />
-      </TouchableWithoutFeedback>
-      {children}
+      <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+        {hasBackdrop && (
+          <TouchableWithoutFeedback
+            onPress={event => {
+              onPressBackdrop !== undefined && onPressBackdrop(event);
+              setToggle(!toggle);
+            }}>
+            <View
+              style={StyleSheet.flatten([
+                !transparent &&
+                  StyleSheet.flatten([
+                    styles.backdropContainer,
+                    backdropContainerStyle,
+                  ]),
+                styles.sectionBackdrop,
+              ])}
+            />
+          </TouchableWithoutFeedback>
+        )}
+        {children}
+      </View>
     </ModalRN>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backdropContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
   sectionBackdrop: {
     position: 'absolute',
     height: '100%',
