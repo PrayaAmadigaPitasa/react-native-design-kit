@@ -1,16 +1,26 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Avatar} from '../../../src';
+import {Avatar, AvatarProps} from '../../../src';
 
-export default function AvatarStory() {
+export interface AvatarStoryProps extends AvatarProps {}
+
+export default function AvatarStory({
+  rounded = true,
+  size = 240,
+  source,
+  ...props
+}: AvatarStoryProps) {
   return (
     <View style={styles.container}>
       <Avatar
-        rounded
-        size={200}
-        source={{
-          uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large',
-        }}
+        {...props}
+        rounded={rounded}
+        size={size}
+        source={
+          source || {
+            uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large',
+          }
+        }
       />
     </View>
   );

@@ -6,8 +6,8 @@ import {
   ViewStyle,
   StyleSheet,
   Platform,
-  TouchableHighlight,
   GestureResponderEvent,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -15,31 +15,53 @@ export interface AvatarProps extends ImageProps {
   containerStyle?: ViewStyle;
   rounded?: boolean;
   size?: number;
-  editButton?: JSX.Element;
-  editButtonEnabled?: boolean;
-  editButtonSize?: number;
-  editButtonContainerStyle?: ViewStyle;
+  icon?: JSX.Element | 'edit';
+  iconSize?: number;
+  iconContainerStyle?: ViewStyle;
   onPress?(event: GestureResponderEvent): void;
-  onPressEditButton?(event: GestureResponderEvent): void;
+  onPressIcon?(event: GestureResponderEvent): void;
 }
 
 export default function Avatar({
   containerStyle,
   rounded,
   size = 48,
-  editButton,
-  editButtonEnabled,
-  editButtonSize = 20,
-  editButtonContainerStyle,
+  icon,
+  iconSize,
+  iconContainerStyle,
   onPress,
-  onPressEditButton,
+  onPressIcon,
   style,
   source,
   ...props
 }: AvatarProps) {
+  const iconSizeComponent = iconSize !== undefined ? iconSize : (size * 5) / 15;
+
+  function getIcon() {
+    if (icon !== undefined) {
+      if (typeof icon === 'string') {
+        if (icon === 'edit') {
+          return (
+            <Icon
+              style={styles.editButtonDefault}
+              name="pencil"
+              size={iconSizeComponent}
+            />
+          );
+        }
+      }
+
+      return icon;
+    }
+
+    return undefined;
+  }
+
   return (
-    <TouchableHighlight disabled={onPress !== undefined} onPress={onPress}>
-      <View style={containerStyle}>
+    <View style={containerStyle}>
+      <TouchableWithoutFeedback
+        disabled={onPress === undefined}
+        onPress={onPress}>
         <Image
           {...props}
           style={StyleSheet.flatten([
@@ -49,38 +71,36 @@ export default function Avatar({
           ])}
           source={source}
         />
-        {editButtonEnabled && (
-          <TouchableHighlight
-            disabled={onPressEditButton !== undefined}
-            onPress={onPressEditButton}>
-            <View
-              style={StyleSheet.flatten([
-                styles.editButtonContainer,
-                editButtonContainerStyle,
-                {
-                  width: editButtonSize,
-                  height: editButtonSize,
-                  borderRadius: editButtonSize / 2,
-                },
-              ])}>
-              {editButton || (
-                <Icon
-                  style={styles.editButtonDefault}
-                  name="pencil"
-                  size={editButtonSize * 0.75}
-                />
-              )}
-            </View>
-          </TouchableHighlight>
-        )}
-      </View>
-    </TouchableHighlight>
+      </TouchableWithoutFeedback>
+      {icon !== undefined && (
+        <TouchableWithoutFeedback
+          disabled={onPressIcon === undefined}
+          onPress={onPressIcon}>
+          <View
+            style={StyleSheet.flatten([
+              styles.iconContainer,
+              iconContainerStyle,
+              styles.sectionIcon,
+              {
+                width: iconSizeComponent,
+                height: iconSizeComponent,
+                borderRadius: iconSizeComponent / 2,
+              },
+            ])}>
+            {getIcon()}
+          </View>
+        </TouchableWithoutFeedback>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  editButtonContainer: {
-    position: 'absolute',
+  avatarContainer: {
+    height: '100%',
+    width: '100%',
+  },
+  iconContainer: {
     bottom: 0,
     right: 0,
     backgroundColor: 'darkgray',
@@ -98,6 +118,9 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
       },
     }),
+  },
+  sectionIcon: {
+    position: 'absolute',
   },
   editButtonDefault: {
     color: 'white',
