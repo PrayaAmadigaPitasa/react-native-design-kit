@@ -1,8 +1,8 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react-native';
-import {ChipStory} from '.';
-import ChipHorizontalStory from './ChipHorizontalStory';
+import {ChipStory, ChipHorizontalStory, ChipIconActionDeleteStory} from '.';
 
 storiesOf('Chip', module)
   .add('chip', () => <ChipStory />)
-  .add('chip horizontal', () => <ChipHorizontalStory />);
+  .add('chip horizontal', () => <ChipHorizontalStory />)
+  .add('chip icon action delete', () => <ChipIconActionDeleteStory />);
