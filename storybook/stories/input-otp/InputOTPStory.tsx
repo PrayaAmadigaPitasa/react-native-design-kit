@@ -5,7 +5,10 @@ import {InputOTP} from '../../../src';
 export default function InputOTPStory() {
   return (
     <View style={styles.container}>
-      <InputOTP onChangeOTP={() => {}} />
+      <InputOTP
+        focusInputContainerStyle={styles.focusInputContainer}
+        onChangeOTP={() => {}}
+      />
     </View>
   );
 }
@@ -16,5 +19,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  focusInputContainer: {
+    borderColor: 'dodgerblue',
   },
 });
