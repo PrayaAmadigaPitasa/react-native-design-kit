@@ -1,11 +1,16 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Slider} from '../../../src';
+import {Slider, SliderProps} from '../../../src';
 
-export default function SliderStory() {
+export interface SliderStoryProps extends SliderProps {}
+
+export default function SliderStory({
+  onChangeValue = () => {},
+  ...props
+}: SliderStoryProps) {
   return (
     <View style={styles.container}>
-      <Slider onChangeValue={() => {}} />
+      <Slider {...props} onChangeValue={onChangeValue} />
     </View>
   );
 }
