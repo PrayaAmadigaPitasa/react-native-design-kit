@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Layout} from '../layout';
 
 export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
-export type InputIconAction = 'delete' | 'toggleVisiblity' | (() => void);
+export type InputIconAction = 'delete' | 'toggle-visibility' | (() => void);
 export type InputFillStatus = 'empty' | 'filled';
 export type InputVisibilityStatus = 'visibile' | 'hidden';
 export type InputStatus = 'normal' | InputFillStatus | InputVisibilityStatus;
@@ -206,7 +206,7 @@ export default function Input({
         ) : (
           undefined
         );
-      } else if (inputIconAction === 'toggleVisiblity') {
+      } else if (inputIconAction === 'toggle-visibility') {
         const iconVisibility =
           typeof inputIcon === 'function'
             ? inputIcon(visibility ? 'visibile' : 'hidden')
@@ -238,7 +238,7 @@ export default function Input({
               setFillStatus('empty');
             };
           }
-        } else if (inputIconAction === 'toggleVisiblity') {
+        } else if (inputIconAction === 'toggle-visibility') {
           return () => setVisibility(!visibility);
         }
       } else {
