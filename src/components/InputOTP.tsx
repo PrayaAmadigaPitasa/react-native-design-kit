@@ -37,7 +37,7 @@ export function InputOTPBox({
   focusInputContainerStyle,
   refInput,
   style,
-  keyboardType,
+  keyboardType = 'number-pad',
   onFocus,
   onBlur,
   ...props
@@ -75,7 +75,7 @@ export function InputOTPBox({
           style,
           focus && focusStyle,
         ])}
-        keyboardType={keyboardType || 'number-pad'}
+        keyboardType={keyboardType}
         maxLength={1}
         onFocus={e => {
           onFocus !== undefined && onFocus(e);
