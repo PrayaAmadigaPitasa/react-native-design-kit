@@ -1,5 +1,7 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react-native';
-import {PlayingBarStory} from '.';
+import {PlayingBarStory, PlayingBarAdvancedStory} from '.';
 
-storiesOf('PlayingBar', module).add('playing bar', () => <PlayingBarStory />);
+storiesOf('PlayingBar', module)
+  .add('playing bar', () => <PlayingBarStory />)
+  .add('playing bar advanced', () => <PlayingBarAdvancedStory />);
