@@ -1,14 +1,17 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Radio} from '../../../src';
+import {Radio, RadioProps} from '../../../src';
 
-export default function RadioStory() {
+export interface RadioStoryProps extends RadioProps {}
+
+export default function RadioStory({
+  radioIds = ['Male', 'Female', 'Prefer Not to Say'],
+  onSelect = () => {},
+  ...props
+}: RadioStoryProps) {
   return (
     <View style={styles.container}>
-      <Radio
-        radioIds={['Male', 'Female', 'Prefer Not to Say']}
-        onSelect={() => {}}
-      />
+      <Radio {...props} radioIds={radioIds} onSelect={onSelect} />
     </View>
   );
 }
