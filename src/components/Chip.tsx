@@ -21,7 +21,7 @@ export type ChipIcon = (info: ChipInfo) => JSX.Element;
 export type ChipIconAction = (
   id: string,
   isSelected: boolean,
-) => 'delete' | (() => void);
+) => 'delete' | 'check' | (() => void);
 
 export interface ChipInfo {
   id: string;
@@ -201,7 +201,16 @@ export default function Chip({
       const action = iconActionFunction(id, isSelected(id));
 
       if (action === 'delete') {
-        return <Icon style={styles.deleteIcon} name="times-circle" />;
+        return <Icon style={styles.icon} name="times-circle" />;
+      }
+
+      if (action === 'check' && isSelected(id)) {
+        return (
+          <Icon
+            style={StyleSheet.flatten([styles.icon, styles.iconCheck])}
+            name="check"
+          />
+        );
       }
     }
 
@@ -214,6 +223,8 @@ export default function Chip({
 
       if (action === 'delete') {
         return () => removeIconId(id);
+      } else if (action === 'check') {
+        return () => {};
       }
 
       return action;
@@ -436,10 +447,13 @@ const styles = StyleSheet.create({
   sectionWrap: {
     alignItems: 'center',
   },
-  deleteIcon: {
+  icon: {
     fontSize: 20,
     color: 'dimgray',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  iconCheck: {
+    fontSize: 16,
   },
 });

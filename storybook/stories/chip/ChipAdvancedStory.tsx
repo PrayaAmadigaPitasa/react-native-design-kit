@@ -1,7 +1,6 @@
 import React from 'react';
 import ChipStory, {ChipStoryProps} from './ChipStory';
 import {StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 export interface ChipAdvancedStoryProps extends ChipStoryProps {}
 
@@ -24,7 +23,7 @@ export default function ChipAdvancedStory({...props}: ChipAdvancedStoryProps) {
       rightIconAction={(id, isSelected) =>
         invalid.includes(id) && !isSelected ? 'delete' : undefined
       }
-      leftIcon={info => (info.isSelected ? <Icon name="check" /> : <></>)}
+      leftIconAction={() => 'check'}
       chips={[
         'Apple',
         'Ackee',
