@@ -1,11 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {PlayingBar} from '../../../src';
+import {PlayingBar, PlayingBarProps} from '../../../src';
 
-export default function PlayingBarFunction() {
+export interface PlayingBarStoryProps extends PlayingBarProps {}
+
+export default function PlayingBarStory({...props}: PlayingBarStoryProps) {
   return (
     <View style={styles.container}>
-      <PlayingBar />
+      <PlayingBar {...props} />
     </View>
   );
 }
