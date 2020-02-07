@@ -1,11 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Input} from '../../../src';
+import {Input, InputProps} from '../../../src';
 
-export default function InputStory() {
+export interface InputStoryProps extends InputProps {}
+
+export default function InputStory({label = 'Label', ...props}) {
   return (
     <View style={styles.container}>
-      <Input label="Label" />
+      <Input {...props} label={label} />
     </View>
   );
 }

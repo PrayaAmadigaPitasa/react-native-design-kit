@@ -411,6 +411,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginVertical: 5,
     backgroundColor: 'lightgray',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   chipTitle: {
     fontWeight: 'normal',
