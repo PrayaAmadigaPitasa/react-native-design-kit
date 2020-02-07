@@ -13,6 +13,7 @@ export default function InputAdvanceStory({
   return (
     <InputStory
       {...props}
+      clearErrorOnFocus
       label={label}
       error={{
         regex: REGEX_EMAIL,

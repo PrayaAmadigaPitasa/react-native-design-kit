@@ -63,6 +63,7 @@ export interface InputProps extends TextInputProps {
   errorInputContainerStyle?: ViewStyle;
   errorLeftIconContainerStyle?: ViewStyle;
   errorRightIconContainerStyle?: ViewStyle;
+  clearErrorOnFocus?: boolean;
 }
 
 export default function Input({
@@ -95,6 +96,7 @@ export default function Input({
   errorInputContainerStyle,
   errorLeftIconContainerStyle,
   errorRightIconContainerStyle,
+  clearErrorOnFocus = false,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -448,6 +450,7 @@ export default function Input({
                   }}
                   onFocus={event => {
                     onFocus && onFocus(event);
+                    clearErrorOnFocus && setErrorMessage(undefined);
                     setFocus(true);
                   }}
                   onBlur={event => {
