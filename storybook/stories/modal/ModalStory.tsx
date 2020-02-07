@@ -1,16 +1,31 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Modal} from '../../../src';
+import {Button, Modal, ModalProps} from '../../../src';
 
-export default function ModalStory() {
+export interface ModalStoryProps extends ModalProps {
+  title?: string;
+}
+
+export default function ModalStory({
+  title = 'Click Me',
+  onPressBackdrop,
+  children,
+  ...props
+}: ModalStoryProps) {
   const [toggle, setToggle] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Button title="Click Me" onPress={() => setToggle(true)} />
+      <Button title={title} onPress={() => setToggle(true)} />
       {toggle && (
-        <Modal visible={toggle} onPressBackdrop={() => setToggle(false)}>
-          <View style={styles.modalContainer} />
+        <Modal
+          {...props}
+          visible={toggle}
+          onPressBackdrop={event => {
+            onPressBackdrop && onPressBackdrop(event);
+            setToggle(false);
+          }}>
+          {children || <View style={styles.modalContainer} />}
         </Modal>
       )}
     </View>

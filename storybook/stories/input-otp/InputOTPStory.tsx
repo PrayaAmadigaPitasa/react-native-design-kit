@@ -1,13 +1,21 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {InputOTP} from '../../../src';
+import {InputOTP, InputOTPProps} from '../../../src';
 
-export default function InputOTPStory() {
+export interface InputOTPStoryProps extends InputOTPProps {}
+
+export default function InputOTPStory({
+  focusInputContainerStyle,
+  onChangeOTP = () => {},
+}: InputOTPStoryProps) {
   return (
     <View style={styles.container}>
       <InputOTP
-        focusInputContainerStyle={styles.focusInputContainer}
-        onChangeOTP={() => {}}
+        focusInputContainerStyle={StyleSheet.flatten([
+          styles.focusInputContainer,
+          focusInputContainerStyle,
+        ])}
+        onChangeOTP={onChangeOTP}
       />
     </View>
   );
