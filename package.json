@@ -1,13 +1,17 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.44",
+  "version": "1.0.45",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/"
   ],
-  "author": "Praya Amadiga Pitasa <prayaamadigapitasa@gmail.com>",
+  "author": {
+    "name": "Praya Amadiga Pitasa",
+    "email": "prayaamadigapitasa@gmail.com",
+    "url": "https://github.com/PrayaAmadigaPitasa"
+  },
   "license": "MIT",
   "scripts": {
     "android": "react-native run-android",

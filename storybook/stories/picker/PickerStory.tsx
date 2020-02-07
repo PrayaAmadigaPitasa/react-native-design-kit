@@ -8,7 +8,6 @@ export default function PickerStory() {
       <Picker
         data={['Apple', 'Melon', 'Banana', 'Pear', 'Grape']}
         keyExtractor={item => item}
-        titleExtractor={item => item}
         renderItem={({item}) => <Text>{item}</Text>}
         onSelect={() => {}}
       />

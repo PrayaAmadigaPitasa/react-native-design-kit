@@ -35,7 +35,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   animationRotation?: string;
   data: ReadonlyArray<ItemT>;
   keyExtractor(item: ItemT, index: number): string;
-  titleExtractor(item: ItemT): string;
+  titleExtractor?(item: ItemT, index: number): string;
   onSelect(key: string, item: ItemT, index: number): void;
 }
 
@@ -59,12 +59,12 @@ export default function Picker<ItemT>({
   renderItem,
   ...props
 }: PickerProps<ItemT>) {
-  const [selection, setSelected] = useState(selected);
+  const [selection, setSelection] = useState();
   const [toggle, setToggle] = useState(false);
   const [layout, setLayout] = useState<Layout>();
   const [buttonRef, setButtonRef] = useState<TouchableOpacity>();
   const animation = useState(new Animated.Value(0))[0];
-  const selectionItem = getSelectionItem();
+  const selectionIndex = getSelectionIndex(selection);
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -74,21 +74,35 @@ export default function Picker<ItemT>({
   }, [toggle]);
 
   useEffect(() => {
-    setSelected(selected);
+    if (selected !== undefined && getSelectionIndex(selected) !== undefined) {
+      setSelection(selected);
+    } else {
+      setSelection(undefined);
+    }
   }, [selected]);
 
-  function getSelectionItem() {
-    if (selection !== undefined) {
+  function getSelectionIndex(key: string) {
+    if (key !== undefined) {
       for (let index = 0; index < data.length; index++) {
         const item = data[index];
 
-        if (keyExtractor(item, index) === selection) {
-          return item;
+        if (keyExtractor(item, index) === key) {
+          return index;
         }
       }
     }
 
     return undefined;
+  }
+
+  function getTitle() {
+    if (selectionIndex !== undefined) {
+      return titleExtractor !== undefined
+        ? titleExtractor(selection, selectionIndex)
+        : keyExtractor(selection, selectionIndex);
+    }
+
+    return placeholder;
   }
 
   function updateLayout() {
@@ -123,13 +137,11 @@ export default function Picker<ItemT>({
         <Text
           style={StyleSheet.flatten([
             styles.title,
-            selectionItem !== undefined
+            selectionIndex !== undefined
               ? selectedTitleStyle
               : {color: placeholderColor},
           ])}>
-          {selectionItem !== undefined
-            ? titleExtractor(selectionItem)
-            : placeholder}
+          {selectionIndex !== undefined ? getTitle() : placeholder}
         </Text>
         <Animated.View
           style={StyleSheet.flatten([
@@ -188,7 +200,7 @@ export default function Picker<ItemT>({
                         : {},
                     ])}
                     onPress={() => {
-                      setSelected(key);
+                      setSelection(key);
                       setToggle(false);
                       onSelect(key, item, index);
                     }}>
