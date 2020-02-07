@@ -7,7 +7,7 @@ export interface ChipAdvancedStoryProps extends ChipStoryProps {}
 
 export default function ChipAdvancedStory({...props}: ChipAdvancedStoryProps) {
   const rare = ['Ackee', 'Cherimoya', 'Durian'];
-  const invalid = ['Dragon', 'Bear'];
+  const invalid = ['Dragon', 'Elephant'];
 
   return (
     <ChipStory
@@ -15,6 +15,7 @@ export default function ChipAdvancedStory({...props}: ChipAdvancedStoryProps) {
       actionType="checkbox"
       chipContainerStyle={id =>
         StyleSheet.flatten([
+          styles.chipContainer,
           rare.includes(id) && styles.rareChipContainer,
           invalid.includes(id) && styles.invalidChipContainer,
         ])
@@ -30,27 +31,31 @@ export default function ChipAdvancedStory({...props}: ChipAdvancedStoryProps) {
         'Melon',
         'Dragon',
         'Pear',
-        'Bear',
+        'Elephant',
         'Banana',
         'Cherimoya',
         'Grape',
         'Peach',
         'Durian',
         'Orange',
-        'Apricot',
       ]}
     />
   );
 }
 
 const styles = StyleSheet.create({
+  chipContainer: {
+    width: '30%',
+  },
   rareChipContainer: {
     backgroundColor: 'gold',
   },
   invalidChipContainer: {
-    backgroundColor: 'crimson',
+    borderColor: 'red',
+    borderWidth: 1,
   },
   selectedContainer: {
     backgroundColor: 'transparent',
+    borderWidth: 0,
   },
 });
