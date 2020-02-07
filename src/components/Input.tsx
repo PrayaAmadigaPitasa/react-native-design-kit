@@ -20,6 +20,13 @@ export type InputIconAction = 'delete' | 'toggle-visibility' | (() => void);
 export type InputFillStatus = 'empty' | 'filled';
 export type InputVisibilityStatus = 'visibile' | 'hidden';
 export type InputStatus = 'normal' | InputFillStatus | InputVisibilityStatus;
+export type InputError = string | InputValidation | InputValidation[];
+
+export interface InputValidation {
+  regex?: RegExp;
+  validation?(text: string): boolean;
+  error: string;
+}
 
 export interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
@@ -47,7 +54,7 @@ export interface InputProps extends TextInputProps {
   focusInputContainerStyle?: ViewStyle;
   focusLeftIconContainerStyle?: ViewStyle;
   focusRightIconContainerStyle?: ViewStyle;
-  error?: string;
+  error?: InputError;
   errorPosition?: 'relative' | 'absolute';
   errorStyle?: TextStyle;
   errorLabelStyle?: TextStyle;
@@ -103,6 +110,7 @@ export default function Input({
   ...props
 }: InputProps) {
   const [visibility, setVisibility] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(getErrorMessage(undefined));
   const [focus, setFocus] = useState(false);
   const [inputValue, setInputValue] = useState(
     props.value !== undefined ? props.value : props.defaultValue,
@@ -123,6 +131,10 @@ export default function Input({
   useEffect(() => {
     setVisibility(!secureTextEntry);
   }, [secureTextEntry]);
+
+  useEffect(() => {
+    setErrorMessage(getErrorMessage(inputValue));
+  }, [error]);
 
   useEffect(() => {
     if (
@@ -164,6 +176,44 @@ export default function Input({
     focusLabelContainerStyle,
     errorLabelContainerStyle,
   ]);
+
+  function getErrorMessage(text?: string) {
+    if (error !== undefined) {
+      if (typeof error === 'string') {
+        return error;
+      }
+
+      if (text !== undefined) {
+        if (Array.isArray(error)) {
+          for (let index = 0; index < error.length; index++) {
+            const result = getInputValidationError(error[index], text);
+
+            if (result !== undefined) {
+              return result;
+            }
+          }
+        } else {
+          return getInputValidationError(error, text);
+        }
+      }
+    }
+
+    return undefined;
+  }
+
+  function getInputValidationError(
+    inputValidation: InputValidation,
+    text: string,
+  ) {
+    const regex = inputValidation.regex;
+    const validation = inputValidation.validation;
+
+    if (!regex?.test(text) || (validation && validation(text))) {
+      return inputValidation.error;
+    }
+
+    return undefined;
+  }
 
   function updateLayout() {
     errorPosition === 'absolute' &&
@@ -265,7 +315,7 @@ export default function Input({
               styles.labelContainerThemeContainer,
               labelContainerStyle,
               focus && focusLabelContainerStyle,
-              error !== undefined && errorLabelContainerStyle,
+              errorMessage !== undefined && errorLabelContainerStyle,
             ])}>
             <Text
               style={StyleSheet.flatten([
@@ -273,7 +323,7 @@ export default function Input({
                 styles.labelThemeContainer,
                 labelStyle,
                 focus && focusLabelStyle,
-                error !== undefined && errorLabelStyle,
+                errorMessage !== undefined && errorLabelStyle,
               ])}>
               {label}
             </Text>
@@ -286,7 +336,7 @@ export default function Input({
             styles.inputContainer,
             inputContainerStyle,
             focus && focusInputContainerStyle,
-            error !== undefined &&
+            errorMessage !== undefined &&
               StyleSheet.flatten([
                 styles.errorInputContainer,
                 errorInputContainerStyle,
@@ -299,7 +349,7 @@ export default function Input({
                 styles.iconLeftContainer,
                 leftIconContainerStyle,
                 focus && focusLeftIconContainerStyle,
-                error !== undefined && errorLeftIconContainerStyle,
+                errorMessage !== undefined && errorLeftIconContainerStyle,
               ]}>
               <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
                 {inputLeftIcon}
@@ -314,7 +364,7 @@ export default function Input({
                   styles.iconRightContainer,
                   rightIconContainerStyle,
                   focus && focusRightIconContainerStyle,
-                  error !== undefined && errorRightIconContainerStyle,
+                  errorMessage !== undefined && errorRightIconContainerStyle,
                 ]}>
                 <TouchableWithoutFeedback
                   onPress={getIconAction(rightIconAction)}>
@@ -328,7 +378,7 @@ export default function Input({
                   style={StyleSheet.flatten([
                     styles.sectionLabelThemeBox,
                     focus && focusLabelContainerStyle,
-                    error !== undefined && errorLabelContainerStyle,
+                    errorMessage !== undefined && errorLabelContainerStyle,
                     {
                       top: animation.interpolate({
                         inputRange: [0, 1],
@@ -345,7 +395,7 @@ export default function Input({
                       styles.labelThemeBox,
                       labelStyle,
                       focus && focusLabelStyle,
-                      error !== undefined && errorLabelStyle,
+                      errorMessage !== undefined && errorLabelStyle,
                       {
                         fontSize: animation.interpolate({
                           inputRange: [0, 1],
@@ -401,7 +451,10 @@ export default function Input({
                     setFocus(true);
                   }}
                   onBlur={event => {
+                    const text = event.nativeEvent.text;
+
                     onBlur && onBlur(event);
+                    text.length > 0 && setErrorMessage(getErrorMessage(text));
                     setFocus(false);
                   }}
                 />
@@ -416,7 +469,7 @@ export default function Input({
                     styles.labelContainerThemeBorder,
                     labelContainerStyle,
                     focus && focusLabelContainerStyle,
-                    error !== undefined &&
+                    errorMessage !== undefined &&
                       StyleSheet.flatten([
                         styles.errorLabelContainerThemeBorder,
                         errorLabelContainerStyle,
@@ -434,7 +487,7 @@ export default function Input({
                       styles.labelThemeBorder,
                       labelStyle,
                       focus && focusLabelStyle,
-                      error !== undefined && errorLabelStyle,
+                      errorMessage !== undefined && errorLabelStyle,
                     ])}>
                     {label}
                   </Text>
@@ -445,19 +498,19 @@ export default function Input({
             </View>
           </View>
         </View>
-        {error !== undefined && errorPosition === 'relative' && (
+        {errorMessage !== undefined && errorPosition === 'relative' && (
           <View
             style={StyleSheet.flatten([
               styles.errorContainer,
               errorContainerStyle,
             ])}>
             <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
-              {error}
+              {errorMessage}
             </Text>
           </View>
         )}
       </View>
-      {error !== undefined &&
+      {errorMessage !== undefined &&
         errorPosition === 'absolute' &&
         layout !== undefined && (
           <View
@@ -472,7 +525,7 @@ export default function Input({
               },
             ])}>
             <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
-              {error}
+              {errorMessage}
             </Text>
           </View>
         )}
