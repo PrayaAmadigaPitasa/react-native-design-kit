@@ -1,5 +1,8 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react-native';
-import {SliderStory} from '.';
+import {SliderStory, SliderButtonStory, SliderIndicatorStory} from '.';
 
-storiesOf('Slider', module).add('default', () => <SliderStory />);
+storiesOf('Slider', module)
+  .add('slider', () => <SliderStory />)
+  .add('slider button', () => <SliderButtonStory />)
+  .add('slider indicator', () => <SliderIndicatorStory />);

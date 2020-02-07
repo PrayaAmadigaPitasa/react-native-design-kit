@@ -40,5 +40,5 @@
 #### Known Bugs:
 
 - Icon on Android doesn't show
-- Input Label Position Border on dynamic screen due to event onLayout not triggered after transform
-- Input Error Position Absolute on dynamic screen due to event onLayout not triggered after transform
+- Input Label Position Border not accurate on dynamic screen due to event onLayout not triggered after transform
+- Input Error Position Absolute not accurate on dynamic screen due to event onLayout not triggered after transform
