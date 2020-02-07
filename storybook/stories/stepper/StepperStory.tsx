@@ -1,11 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Stepper} from '../../../src';
+import {Stepper, StepperProps} from '../../../src';
 
-export default function StepperStory() {
+export interface StepperStoryProps extends StepperProps {}
+
+export default function StepperStory({...props}: StepperStoryProps) {
   return (
     <View style={styles.container}>
-      <Stepper />
+      <Stepper {...props} />
     </View>
   );
 }
