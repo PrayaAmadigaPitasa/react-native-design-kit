@@ -22,7 +22,7 @@
 - Stepper
 - SwitchableText
 
-### On Progress:
+#### On Progress:
 
 - StoryBook Documentation (WIP)
 - Badge (WIP)
