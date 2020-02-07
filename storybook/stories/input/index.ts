@@ -1,9 +1,16 @@
-import InputStory from './InputStory';
+import InputErrorStory from './InputErrorStory';
 import InputLabelPositionBorderStory from './InputLabelPositionBorderStory';
 import InputLabelPositionBoxStory from './InputLabelPositionBoxStory';
+import InputStory from './InputStory';
 
-export * from './InputStory';
+export * from './InputErrorStory';
 export * from './InputLabelPositionBorderStory';
 export * from './InputLabelPositionBoxStory';
+export * from './InputStory';
 
-export {InputStory, InputLabelPositionBorderStory, InputLabelPositionBoxStory};
+export {
+  InputErrorStory,
+  InputLabelPositionBorderStory,
+  InputLabelPositionBoxStory,
+  InputStory,
+};

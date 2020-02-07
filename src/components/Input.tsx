@@ -446,7 +446,11 @@ export default function Input({
           </View>
         </View>
         {error !== undefined && errorPosition === 'relative' && (
-          <View style={errorContainerStyle}>
+          <View
+            style={StyleSheet.flatten([
+              styles.errorContainer,
+              errorContainerStyle,
+            ])}>
             <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
               {error}
             </Text>
@@ -458,6 +462,7 @@ export default function Input({
         layout !== undefined && (
           <View
             style={StyleSheet.flatten([
+              styles.errorContainer,
               errorContainerStyle,
               {
                 position: 'absolute',
@@ -531,6 +536,9 @@ const styles = StyleSheet.create({
   },
   errorLabelContainerThemeBorder: {
     borderColor: 'red',
+  },
+  errorContainer: {
+    marginTop: 5,
   },
   sectionInputReverse: {
     flex: 1,
