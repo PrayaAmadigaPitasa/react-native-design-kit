@@ -43,10 +43,10 @@ export interface ChipItemProps
 export interface ChipProps extends ChipItemBaseProps {
   actionType?: 'chip' | 'radio' | 'checkbox';
   chips: string[];
-  chipContainerStyle?: ViewStyle;
+  chipContainerStyle?: ((id: string) => ViewStyle) | ViewStyle;
   chipComponent?(info: ChipInfo): string | JSX.Element;
   chipTitleStyle?: TextStyle;
-  selectedChipContainerStyle?: ViewStyle;
+  selectedChipContainerStyle?: ((id: string) => ViewStyle) | ViewStyle;
   selectedChipTitleStyle?: TextStyle;
   leftIcon?: ChipIcon;
   leftIconAction?: ChipIconAction;
@@ -251,11 +251,15 @@ export default function Chip({
         {...props}
         key={id}
         containerStyle={StyleSheet.flatten([
-          chipContainerStyle,
+          typeof chipContainerStyle === 'function'
+            ? chipContainerStyle(id)
+            : chipContainerStyle,
           isSelected(id)
             ? StyleSheet.flatten([
                 styles.selectedChipContainer,
-                selectedChipContainerStyle,
+                typeof selectedChipContainerStyle === 'function'
+                  ? selectedChipContainerStyle(id)
+                  : selectedChipContainerStyle,
               ])
             : {},
         ])}

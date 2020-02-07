@@ -1,6 +1,6 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

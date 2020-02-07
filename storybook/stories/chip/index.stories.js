@@ -7,10 +7,12 @@ import {
   ChipNotRoundedStory,
   ChipActionTypeCheckboxStory,
   ChipActionTypeRadioStory,
+  ChipAdvancedStory,
 } from '.';
 
 storiesOf('Chip', module)
   .add('chip', () => <ChipStory />)
+  .add('chip advanced', () => <ChipAdvancedStory />)
   .add('chip horizontal', () => <ChipHorizontalStory />)
   .add('chip not rounded', () => <ChipNotRoundedStory />)
   .add('chip icon action delete', () => <ChipIconActionDeleteStory />)
