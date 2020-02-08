@@ -454,10 +454,10 @@ export default function Input({
                     setFocus(true);
                   }}
                   onBlur={event => {
-                    const text = event.nativeEvent.text;
-
                     onBlur && onBlur(event);
-                    text.length > 0 && setErrorMessage(getErrorMessage(text));
+                    inputValue !== undefined &&
+                      inputValue.length > 0 &&
+                      setErrorMessage(getErrorMessage(inputValue));
                     setFocus(false);
                   }}
                 />
