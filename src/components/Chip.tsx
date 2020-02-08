@@ -45,9 +45,9 @@ export interface ChipProps extends ChipItemBaseProps {
   chips: string[];
   chipContainerStyle?: ((id: string) => ViewStyle) | ViewStyle;
   chipComponent?(info: ChipInfo): string | JSX.Element;
-  chipTitleStyle?: TextStyle;
+  chipTitleStyle?: ((id: string) => TextStyle) | TextStyle;
   selectedChipContainerStyle?: ((id: string) => ViewStyle) | ViewStyle;
-  selectedChipTitleStyle?: TextStyle;
+  selectedChipTitleStyle?: ((id: string) => TextStyle) | TextStyle;
   leftIcon?: ChipIcon;
   leftIconAction?: ChipIconAction;
   rightIcon?: ChipIcon;
@@ -276,8 +276,14 @@ export default function Chip({
         ])}
         title={title}
         titleStyle={StyleSheet.flatten([
-          chipTitleStyle,
-          isSelected(id) ? selectedChipTitleStyle : {},
+          typeof chipTitleStyle === 'function'
+            ? chipTitleStyle(id)
+            : chipTitleStyle,
+          isSelected(id)
+            ? typeof selectedChipTitleStyle === 'function'
+              ? selectedChipTitleStyle(id)
+              : selectedChipTitleStyle
+            : {},
         ])}
         rounded={rounded}
         leftIcon={getIcon(id, leftIcon, leftIconAction)}
