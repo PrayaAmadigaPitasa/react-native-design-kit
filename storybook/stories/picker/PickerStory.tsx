@@ -2,29 +2,22 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {Picker, PickerProps} from '../../../src';
 
-export interface PickerStoryProps<ItemT> extends PickerProps<ItemT> {}
+export interface PickerStoryProps extends PickerProps<any> {}
 
-export default function PickerStory<ItemT>({
-  data,
-  keyExtractor,
-  renderItem,
+export default function PickerStory({
+  data = ['Apple', 'Melon', 'Banana', 'Pear', 'Grape'],
+  keyExtractor = (item: any) => item,
+  renderItem = ({item}) => <Text>{item}</Text>,
   onSelect = () => {},
   ...props
-}: PickerStoryProps<ItemT>) {
-  const pickerData: readonly any[] | undefined =
-    data !== undefined ? data : ['Apple', 'Melon', 'Banana', 'Pear', 'Grape'];
-  const pickerKeyExtractor =
-    keyExtractor !== undefined ? keyExtractor : (item: any) => item;
-  const pickerRenderItem =
-    renderItem !== undefined ? renderItem : ({item}) => <Text>{item}</Text>;
-
+}: PickerStoryProps) {
   return (
     <View style={styles.container}>
       <Picker
         {...props}
-        data={pickerData}
-        keyExtractor={pickerKeyExtractor}
-        renderItem={pickerRenderItem}
+        data={data}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
         onSelect={onSelect}
       />
     </View>
