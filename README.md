@@ -9,6 +9,7 @@
 #### Available Components:
 
 - Avatar
+- Badge
 - Button
 - ButtonGroup
 - Chip
@@ -28,14 +29,13 @@
 
 #### On Progress:
 
-- Badge (WIP)
+- Header
 
 #### List Todo:
 
 - Web Documentation
 - Checkbox
 - Drawer
-- Header
 - Marquee
 - Swiper
 - Tab
