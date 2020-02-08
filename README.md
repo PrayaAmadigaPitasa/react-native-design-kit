@@ -22,9 +22,12 @@
 - Stepper
 - SwitchableText
 
+#### Available Helper:
+
+- StoryBook Documentation
+
 #### On Progress:
 
-- StoryBook Documentation (WIP)
 - Badge (WIP)
 
 #### List Todo:
