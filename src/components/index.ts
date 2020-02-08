@@ -1,4 +1,5 @@
 import Avatar from './Avatar';
+import Badge from './Badge';
 import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 import Chip from './Chip';
@@ -13,6 +14,7 @@ import Stepper from './Stepper';
 import SwitchableText from './SwitchableText';
 
 export * from './Avatar';
+export * from './Badge';
 export * from './Button';
 export * from './ButtonGroup';
 export * from './Chip';
@@ -27,6 +29,7 @@ export * from './Stepper';
 export * from './SwitchableText';
 export {
   Avatar,
+  Badge,
   Button,
   ButtonGroup,
   Chip,
