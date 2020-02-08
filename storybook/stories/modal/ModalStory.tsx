@@ -9,6 +9,7 @@ export interface ModalStoryProps extends ModalProps {
 export default function ModalStory({
   title = 'Click Me',
   visible = false,
+  animationType = 'fade',
   onPressBackdrop,
   children,
   ...props
@@ -25,6 +26,7 @@ export default function ModalStory({
       <Modal
         {...props}
         visible={toggle}
+        animationType={animationType}
         onPressBackdrop={event => {
           onPressBackdrop && onPressBackdrop(event);
           setToggle(false);
@@ -40,11 +42,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   modalContainer: {
     height: 200,
-    width: 200,
+    width: '100%',
+    bottom: 0,
+    borderWidth: 1,
     borderRadius: 4,
     backgroundColor: 'white',
   },
