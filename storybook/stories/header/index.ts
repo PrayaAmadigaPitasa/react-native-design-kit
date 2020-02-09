@@ -1,5 +1,3 @@
-import HeaderStory from './HeaderStory';
-
 export * from './HeaderStory';
 
-export {HeaderStory};
+export {default as HeaderStory} from './HeaderStory';

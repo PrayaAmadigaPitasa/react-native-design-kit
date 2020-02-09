@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {Marquee, MarqueeProps} from '../../../src';
 
 export interface MarqueeStoryProps extends MarqueeProps {}
@@ -7,7 +7,13 @@ export interface MarqueeStoryProps extends MarqueeProps {}
 export default function MarqueeStory({...props}: MarqueeStoryProps) {
   return (
     <View style={styles.container}>
-      <Marquee {...props} />
+      <Marquee {...props}>
+        <Text>
+          Components: Avatar - Badge - Button - ButtonGroup - Chip - Header -
+          Input - InputOTP - Marquee - Modal - Picker - PlayingBar - Radio -
+          Slider - Stepper - SwitchableText
+        </Text>
+      </Marquee>
     </View>
   );
 }

@@ -16,6 +16,7 @@
 - Header
 - Input
 - InputOTP
+- Marquee
 - Modal
 - Picker
 - PlayingBar
@@ -30,7 +31,7 @@
 
 #### On Progress:
 
-- Marquee
+- Checkbox
 
 #### List Todo:
 

@@ -1,5 +1,3 @@
-import BadgeStory from './BadgeStory';
-
 export * from './BadgeStory';
 
-export {BadgeStory};
+export {default as BadgeStory} from './BadgeStory';

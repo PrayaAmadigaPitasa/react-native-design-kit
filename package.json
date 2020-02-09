@@ -1,6 +1,6 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.51",
+  "version": "1.0.52",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -43,6 +43,7 @@
     "react-native-input",
     "react-native-input-otp",
     "react-native-otp",
+    "react-native-marquee",
     "react-native-modal",
     "react-native-picker",
     "react-native-playing-bar",
