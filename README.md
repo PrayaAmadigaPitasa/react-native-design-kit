@@ -13,6 +13,7 @@
 - Button
 - ButtonGroup
 - Chip
+- Header
 - Input
 - InputOTP
 - Modal
@@ -29,14 +30,13 @@
 
 #### On Progress:
 
-- Header
+- Marquee
 
 #### List Todo:
 
 - Web Documentation
 - Checkbox
 - Drawer
-- Marquee
 - Swiper
 - Tab
 
