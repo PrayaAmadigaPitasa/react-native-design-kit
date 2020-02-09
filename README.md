@@ -47,6 +47,8 @@
 - Input Error Position Absolute not accurate on dynamic screen due to event onLayout not triggered after transform
 
 ## Author
+
 **Praya Amadiga Pitasa**
+
 - LinkedIn: https://www.linkedin.com/in/praya-amadiga-pitasa/
-- Github: https://github.com/iamshadmirza)
+- Github: https://github.com/PrayaAmadigaPitasa
