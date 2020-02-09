@@ -8,6 +8,7 @@ export interface InputAdvancedStoryProps extends InputStoryProps {}
 export default function InputAdvancedStory({
   label = 'Email',
   rightIconAction = 'delete',
+  placeholder = 'yourname@example.com',
   error = {
     regex: REGEX_EMAIL,
     error: 'Please enter your email address in format: yourname@example.com',
@@ -19,6 +20,7 @@ export default function InputAdvancedStory({
       {...props}
       clearErrorOnFocus
       label={label}
+      placeholder={placeholder}
       error={error}
       rightIconAction={rightIconAction}
     />
