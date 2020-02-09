@@ -9,6 +9,7 @@ export interface StepperProps {
   buttonDisabledContainerStyle?: ViewStyle;
   buttonDisabledTitleStyle?: TextStyle;
   inputStyle?: TextStyle;
+  inputContainerStyle?: ViewStyle;
   directEdit?: boolean;
   value?: number;
   defaultValue?: number;
@@ -25,6 +26,7 @@ export default function Stepper({
   buttonDisabledContainerStyle,
   buttonDisabledTitleStyle,
   inputStyle,
+  inputContainerStyle,
   value,
   minValue,
   maxValue,
@@ -59,9 +61,15 @@ export default function Stepper({
           setInputValue(minValue !== undefined ? Math.max(minValue, val) : val);
         }}
       />
-      <Text style={StyleSheet.flatten([styles.input, inputStyle])}>
-        {inputValue}
-      </Text>
+      <View
+        style={StyleSheet.flatten([
+          styles.inputContainer,
+          inputContainerStyle,
+        ])}>
+        <Text style={StyleSheet.flatten([styles.input, inputStyle])}>
+          {inputValue}
+        </Text>
+      </View>
       <Button
         containerStyle={StyleSheet.flatten([
           styles.buttonContainer,
@@ -93,14 +101,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  inputContainer: {
+    height: 24,
+    width: 36,
+    paddingVertical: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonTitle: {
     fontSize: 16,
   },
   input: {
-    height: 24,
-    width: 36,
     textAlign: 'center',
     textAlignVertical: 'center',
-    paddingVertical: 0,
   },
 });
