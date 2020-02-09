@@ -3,16 +3,22 @@ import {View, StyleSheet, ViewStyle} from 'react-native';
 
 export interface HeaderProps {
   containerStyle?: ViewStyle;
+  leftComponent?: JSX.Element;
   leftContainerStyle?: ViewStyle;
+  centerComponent?: JSX.Element;
   centerContainerStyle?: ViewStyle;
+  rightComponent?: JSX.Element;
   rightContainerStyle?: ViewStyle;
   sectionContainerStyle?: ViewStyle;
 }
 
 export default function Header({
   containerStyle,
+  leftComponent,
   leftContainerStyle,
+  centerComponent,
   centerContainerStyle,
+  rightComponent,
   rightContainerStyle,
   sectionContainerStyle,
 }: HeaderProps) {
@@ -24,24 +30,27 @@ export default function Header({
           styles.leftContainer,
           sectionContainerStyle,
           leftContainerStyle,
-        ])}
-      />
+        ])}>
+        {leftComponent}
+      </View>
       <View
         style={StyleSheet.flatten([
           styles.sectionContainer,
           styles.centerContainer,
           sectionContainerStyle,
           centerContainerStyle,
-        ])}
-      />
+        ])}>
+        {centerComponent}
+      </View>
       <View
         style={StyleSheet.flatten([
           styles.sectionContainer,
           styles.rightContainer,
           sectionContainerStyle,
           rightContainerStyle,
-        ])}
-      />
+        ])}>
+        {rightComponent}
+      </View>
     </View>
   );
 }
