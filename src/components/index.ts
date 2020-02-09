@@ -3,6 +3,7 @@ import Badge from './Badge';
 import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 import Chip from './Chip';
+import Header from './Header';
 import Input from './Input';
 import InputOTP from './InputOTP';
 import Modal from './Modal';
@@ -18,6 +19,7 @@ export * from './Badge';
 export * from './Button';
 export * from './ButtonGroup';
 export * from './Chip';
+export * from './Header';
 export * from './Input';
 export * from './InputOTP';
 export * from './Modal';
@@ -27,12 +29,14 @@ export * from './Radio';
 export * from './Slider';
 export * from './Stepper';
 export * from './SwitchableText';
+
 export {
   Avatar,
   Badge,
   Button,
   ButtonGroup,
   Chip,
+  Header,
   Input,
   Modal,
   InputOTP,
