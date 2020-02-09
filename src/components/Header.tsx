@@ -73,11 +73,17 @@ const styles = StyleSheet.create({
   },
   leftContainer: {
     flex: 1,
+    paddingLeft: 16,
+    justifyContent: 'flex-start',
   },
   centerContainer: {
     flex: 6,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
   },
   rightContainer: {
     flex: 1,
+    paddingRight: 16,
+    justifyContent: 'flex-end',
   },
 });
