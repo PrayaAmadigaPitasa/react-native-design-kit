@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ViewStyle, TextStyle} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  Platform,
+} from 'react-native';
 
 export interface SwitchableTextProps {
   containerStyle?: ViewStyle;
@@ -31,8 +38,9 @@ export default function SwitchableText({
         setProgress(0);
       } else {
         const period = 1000 / Math.max(1, Math.min(1000, tps));
+        const scale = Platform.select({android: 1.5, default: 1});
         const timeout = setTimeout(() => {
-          setProgress(progress + period / duration);
+          setProgress(progress + (period / duration) * scale);
         }, period);
 
         return () => clearTimeout(timeout);

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, ViewProps, StyleSheet, ViewStyle} from 'react-native';
+import {View, ViewProps, StyleSheet, ViewStyle, Platform} from 'react-native';
 
 export interface PlayingBarItemBaseProps {
   barStyle?: ViewProps;
@@ -44,7 +44,8 @@ export default function PlayingBar({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setProgress(progress + (increment % 1));
+      const scale = Platform.select({android: 1.5, default: 1});
+      setProgress(progress + ((increment * scale) % 1));
     }, period);
 
     return () => {

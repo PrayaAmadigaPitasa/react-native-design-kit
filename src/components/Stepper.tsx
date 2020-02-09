@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TextInput, ViewStyle, TextStyle} from 'react-native';
+import {View, StyleSheet, ViewStyle, TextStyle, Text} from 'react-native';
 import Button from './Button';
 
 export interface StepperProps {
@@ -59,11 +59,9 @@ export default function Stepper({
           setInputValue(minValue !== undefined ? Math.max(minValue, val) : val);
         }}
       />
-      <TextInput
-        editable={false}
-        style={StyleSheet.flatten([styles.input, inputStyle])}
-        value={inputValue.toString()}
-      />
+      <Text style={StyleSheet.flatten([styles.input, inputStyle])}>
+        {inputValue}
+      </Text>
       <Button
         containerStyle={StyleSheet.flatten([
           styles.buttonContainer,

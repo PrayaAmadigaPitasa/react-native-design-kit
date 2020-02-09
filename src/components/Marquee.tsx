@@ -10,7 +10,7 @@ export interface MarqueeProps {
 
 export default function Marquee({
   containerStyle,
-  speed = Platform.select({android: 1.5, default: 1}),
+  speed = 1,
   cooldown = 1000,
   children,
 }: MarqueeProps) {
@@ -20,11 +20,14 @@ export default function Marquee({
 
   useEffect(() => {
     if (offset !== undefined) {
-      if (offset <= -length - (cooldown / 10) * speed) {
+      const scale = Platform.select({android: 1.5, default: 1});
+      const speedScaled = speed * scale;
+
+      if (offset <= -length - (cooldown / 10) * speedScaled) {
         setOffset(width);
       } else {
         const timeout = setTimeout(() => {
-          setOffset(offset - speed);
+          setOffset(offset - speedScaled);
         }, 10);
 
         return () => clearTimeout(timeout);

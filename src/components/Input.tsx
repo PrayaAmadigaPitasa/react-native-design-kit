@@ -287,7 +287,9 @@ export default function Input({
             return () => {
               ref?.clear();
               onChangeText && onChangeText('');
-              typeof error === 'object' && setErrorMessage(getErrorMessage(''));
+              typeof error === 'object' &&
+                errorMessage !== undefined &&
+                setErrorMessage(getErrorMessage(''));
               setFillStatus('empty');
             };
           }
@@ -456,8 +458,7 @@ export default function Input({
                   }}
                   onBlur={event => {
                     onBlur && onBlur(event);
-                    inputValue !== undefined &&
-                      setErrorMessage(getErrorMessage(inputValue));
+                    setErrorMessage(getErrorMessage(inputValue || ''));
                     setFocus(false);
                   }}
                 />
