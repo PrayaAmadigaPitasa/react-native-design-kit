@@ -6,40 +6,6 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>04AE7127-F72E-42F8-902A-3FC2E050D4D7</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>04AE7127-F72E-42F8-902A-3FC2E050D4D7.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>DesignKit project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>DesignKit</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>602865402.26875901</real>
-			<key>timeStoppedRecording</key>
-			<real>602865403.45209396</real>
-			<key>title</key>
-			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>04AE7127-F72E-42F8-902A-3FC2E050D4D7</string>
-		</dict>
 		<key>D47BAF08-C702-4657-AC59-0BCFA49E56DC</key>
 		<dict>
 			<key>className</key>
@@ -73,6 +39,40 @@
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>uniqueIdentifier</key>
 			<string>D47BAF08-C702-4657-AC59-0BCFA49E56DC</string>
+		</dict>
+		<key>E8535B21-3E73-4735-BCF2-3ECD02508757</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E8535B21-3E73-4735-BCF2-3ECD02508757.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>DesignKit project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>DesignKit</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>602913901.06691599</real>
+			<key>timeStoppedRecording</key>
+			<real>602913902.16722202</real>
+			<key>title</key>
+			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>E8535B21-3E73-4735-BCF2-3ECD02508757</string>
 		</dict>
 	</dict>
 </dict>
