@@ -64,6 +64,8 @@ export interface InputProps extends TextInputProps {
   errorLeftIconContainerStyle?: ViewStyle;
   errorRightIconContainerStyle?: ViewStyle;
   clearErrorOnFocus?: boolean;
+  searchTimeout?: number;
+  onSearch?(text: string): void;
 }
 
 export default function Input({
@@ -97,6 +99,8 @@ export default function Input({
   errorLeftIconContainerStyle,
   errorRightIconContainerStyle,
   clearErrorOnFocus = false,
+  searchTimeout = 500,
+  onSearch,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -156,6 +160,14 @@ export default function Input({
       toValue: inputValue !== undefined && inputValue !== '' ? 1 : 0,
       bounciness: 0,
     }).start();
+
+    if (onSearch !== undefined) {
+      const timeout = setTimeout(() => {
+        onSearch(inputValue || '');
+      }, searchTimeout);
+
+      return () => clearTimeout(timeout);
+    }
   }, [inputValue]);
 
   useEffect(() => {
