@@ -11,16 +11,25 @@ import {
   Platform,
   TouchableWithoutFeedback,
   LayoutRectangle,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Layout} from '../layout';
 
 export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
-export type InputIconAction = 'delete' | 'toggle-visibility' | (() => void);
+export type InputIconAction =
+  | 'delete'
+  | 'search'
+  | 'toggle-visibility'
+  | (() => void);
 export type InputFillStatus = 'empty' | 'filled';
 export type InputVisibilityStatus = 'visibile' | 'hidden';
 export type InputSearchStatus = 'empty' | 'loading' | 'forbidden' | 'allowed';
-export type InputStatus = 'normal' | InputFillStatus | InputVisibilityStatus;
+export type InputStatus =
+  | 'normal'
+  | InputFillStatus
+  | InputVisibilityStatus
+  | InputSearchStatus;
 export type InputError = string | InputValidation | InputValidation[];
 
 export interface InputValidation {
@@ -317,6 +326,43 @@ export default function Input({
         ) : (
           undefined
         );
+      } else if (inputIconAction === 'search') {
+        const iconSearch =
+          typeof inputIcon === 'function' ? inputIcon(searchStatus) : inputIcon;
+
+        if (iconSearch !== undefined) {
+          return iconSearch;
+        }
+
+        if (searchStatus === 'loading') {
+          return <ActivityIndicator />;
+        }
+
+        if (searchStatus === 'allowed') {
+          return (
+            <Icon
+              style={StyleSheet.flatten([
+                styles.icon,
+                styles.iconSearchAllowed,
+              ])}
+              name="check"
+            />
+          );
+        }
+
+        if (searchStatus === 'forbidden') {
+          return (
+            <Icon
+              style={StyleSheet.flatten([
+                styles.icon,
+                styles.iconSearchForbidden,
+              ])}
+              name="close"
+            />
+          );
+        }
+
+        return undefined;
       } else if (inputIconAction === 'toggle-visibility') {
         const iconVisibility =
           typeof inputIcon === 'function'
@@ -692,6 +738,12 @@ const styles = StyleSheet.create({
     color: 'darkgray',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  iconSearchAllowed: {
+    color: 'green',
+  },
+  iconSearchForbidden: {
+    color: 'crimson',
   },
   error: {
     color: 'red',

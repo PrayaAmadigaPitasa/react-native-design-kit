@@ -3,10 +3,12 @@ import InputStory, {InputStoryProps} from './InputStory';
 
 export interface InputIconActionSearchStoryProps extends InputStoryProps {
   blocked?: string[];
+  latency?: number;
 }
 
 export default function InputIconActionSearchStory({
   blocked = ['Aludra', 'Freya', 'Dimura', 'Celdric'],
+  latency = 250,
   ...props
 }: InputIconActionSearchStoryProps) {
   async function check(
@@ -21,12 +23,13 @@ export default function InputIconActionSearchStory({
           setState(text, true);
         }
       } catch (error) {}
-    }, 3000);
+    }, latency);
   }
   return (
     <InputStory
       {...props}
       onSearch={(text, setState) => check(text, setState)}
+      rightIconAction="search"
     />
   );
 }
