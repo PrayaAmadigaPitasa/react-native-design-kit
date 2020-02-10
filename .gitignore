@@ -1,9 +1,10 @@
 # OSX
-#
 .DS_Store
 
+# Storybook
+.out/
+
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -23,7 +24,6 @@ DerivedData
 project.xcworkspace
 
 # Android/IntelliJ
-#
 build/
 .idea
 .gradle
@@ -31,11 +31,9 @@ local.properties
 *.iml
 
 # Visual Studio Code
-#
 # .vscode/
 
 # node.js
-#
 node_modules/
 dist/
 npm-debug.log
