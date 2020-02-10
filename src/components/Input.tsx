@@ -19,6 +19,7 @@ export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
 export type InputIconAction = 'delete' | 'toggle-visibility' | (() => void);
 export type InputFillStatus = 'empty' | 'filled';
 export type InputVisibilityStatus = 'visibile' | 'hidden';
+export type InputSearchStatus = 'empty' | 'loading' | 'forbidden' | 'allowed';
 export type InputStatus = 'normal' | InputFillStatus | InputVisibilityStatus;
 export type InputError = string | InputValidation | InputValidation[];
 
@@ -26,6 +27,11 @@ export interface InputValidation {
   regex?: RegExp;
   validation?(text: string): boolean;
   error: string;
+}
+
+export interface InputSearch {
+  search?: string;
+  searchStatus: InputSearchStatus;
 }
 
 export interface InputProps extends TextInputProps {
@@ -65,7 +71,10 @@ export interface InputProps extends TextInputProps {
   errorRightIconContainerStyle?: ViewStyle;
   clearErrorOnFocus?: boolean;
   searchTimeout?: number;
-  onSearch?(text: string): void;
+  onSearch?(
+    text: string,
+    setState: (text: string, allowed: boolean) => void,
+  ): void;
 }
 
 export default function Input({
@@ -124,11 +133,17 @@ export default function Input({
   const [fillStatus, setFillStatus] = useState<InputFillStatus>(
     inputValue !== undefined && inputValue.length > 0 ? 'filled' : 'empty',
   );
+  const [inputSearch, setInputSearch] = useState<InputSearch>({
+    search: inputValue,
+    searchStatus:
+      inputValue !== undefined && inputValue.length ? 'loading' : 'empty',
+  });
   const [layout, setLayout] = useState<Layout>();
   const [layoutBorder, setLayoutBorder] = useState<LayoutRectangle>();
   const [ref, setRef] = useState<TextInput>();
   const [refBorder, setRefBorder] = useState<View>();
   const [refContainer, setRefContainer] = useState<View>();
+  const {search, searchStatus} = inputSearch;
   const themeBorderActive = inputValue !== undefined && inputValue !== '';
   const animation = useState(new Animated.Value(themeBorderActive ? 1 : 0))[0];
   const inputLeftIcon = getIcon(leftIcon, leftIconAction);
@@ -162,8 +177,18 @@ export default function Input({
     }).start();
 
     if (onSearch !== undefined) {
+      if (inputValue !== undefined && inputValue.length > 0) {
+        if (searchStatus !== 'loading') {
+          setInputSearch({search: undefined, searchStatus: 'loading'});
+        }
+      } else {
+        setInputSearch({search: undefined, searchStatus: 'empty'});
+      }
+
       const timeout = setTimeout(() => {
-        onSearch(inputValue || '');
+        if (inputValue !== undefined && inputValue.length > 0) {
+          onSearch(inputValue, handleSearch);
+        }
       }, searchTimeout);
 
       return () => clearTimeout(timeout);
@@ -190,6 +215,28 @@ export default function Input({
     focusLabelContainerStyle,
     errorLabelContainerStyle,
   ]);
+
+  useEffect(() => {
+    if (
+      (searchStatus === 'allowed' || searchStatus === 'forbidden') &&
+      search !== inputValue
+    ) {
+      setInputSearch({
+        search: undefined,
+        searchStatus:
+          inputValue !== undefined && inputValue.length > 0
+            ? 'loading'
+            : 'empty',
+      });
+    }
+  }, [inputSearch]);
+
+  function handleSearch(text: string, allowed: boolean) {
+    setInputSearch({
+      search: text,
+      searchStatus: allowed ? 'allowed' : 'forbidden',
+    });
+  }
 
   function getErrorMessage(text?: string) {
     if (error !== undefined) {
