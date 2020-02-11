@@ -6,40 +6,6 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>0D905635-648C-4FF7-8242-4FD79378486E</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>0D905635-648C-4FF7-8242-4FD79378486E.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>DesignKit project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>DesignKit</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>603040390.95524001</real>
-			<key>timeStoppedRecording</key>
-			<real>603040392.83545995</real>
-			<key>title</key>
-			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>0D905635-648C-4FF7-8242-4FD79378486E</string>
-		</dict>
 		<key>97217AE1-E37D-497A-8929-E97BC9B89CF2</key>
 		<dict>
 			<key>className</key>

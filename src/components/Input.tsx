@@ -81,8 +81,8 @@ export interface InputProps extends TextInputProps {
   clearErrorOnFocus?: boolean;
   searchTimeout?: number;
   onSearch?(
-    text: string,
-    setState: (text: string, allowed: boolean) => void,
+    search: string,
+    setSearchStatus: (text: string, allowed: boolean) => void,
   ): void;
 }
 

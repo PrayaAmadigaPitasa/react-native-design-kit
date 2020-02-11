@@ -12,23 +12,24 @@ export default function InputIconActionSearchStory({
   ...props
 }: InputIconActionSearchStoryProps) {
   async function check(
-    text: string,
-    setState: (text: string, allowed: boolean) => void,
+    search: string,
+    setSearchStatus: (text: string, allowed: boolean) => void,
   ) {
     setTimeout(() => {
       try {
-        if (blocked.includes(text)) {
-          setState(text, false);
+        if (blocked.includes(search)) {
+          setSearchStatus(search, false);
         } else {
-          setState(text, true);
+          setSearchStatus(search, true);
         }
       } catch (error) {}
     }, latency);
   }
+
   return (
     <InputStory
       {...props}
-      onSearch={(text, setState) => check(text, setState)}
+      onSearch={(search, setSearchStatus) => check(search, setSearchStatus)}
       rightIconAction="search"
     />
   );
