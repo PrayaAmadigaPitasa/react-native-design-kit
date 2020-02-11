@@ -18,12 +18,11 @@ export interface CheckboxInfo {
 export interface CheckboxBaseProps extends TouchableOpacityProps {
   checkboxIconContainerStyle?: ViewStyle;
   checkboxComponentContainerStyle?: ViewStyle;
-  selectedCheckbox?: JSX.Element;
   selectedCheckboxStyle?: ViewStyle;
+  selectedCheckboxIcon?: JSX.Element;
   selectedCheckboxIconContainerStyle?: ViewStyle;
   selectedCheckboxComponentContainerStyle?: ViewStyle;
   selectedCheckboxTitleStyle?: ViewStyle;
-  disabledCheckbox?: JSX.Element;
 }
 
 export interface CheckboxItemProps extends CheckboxBaseProps {
@@ -38,7 +37,7 @@ export interface CheckboxProps extends CheckboxBaseProps {
   checkboxIds: string[];
   checkboxComponent?(info: CheckboxInfo): string | JSX.Element;
   defaultIds?: string[];
-  onSelect(id: string, selected: string[]): void;
+  onSelect(id: string, toggle: boolean, selected: string[]): void;
 }
 
 export function CheckboxItem({
@@ -46,8 +45,8 @@ export function CheckboxItem({
   style,
   title,
   titleStyle,
-  selectedCheckbox = <Icon style={styles.defaultSelectedIcon} name="check" />,
   selectedCheckboxStyle,
+  selectedCheckboxIcon,
   selectedCheckboxIconContainerStyle,
   selectedCheckboxComponentContainerStyle,
   selectedCheckboxTitleStyle,
@@ -75,7 +74,12 @@ export function CheckboxItem({
               selectedCheckboxIconContainerStyle,
             ]),
         ])}>
-        {isSelected && selectedCheckbox}
+        {isSelected &&
+          (selectedCheckboxIcon !== undefined ? (
+            selectedCheckboxIcon
+          ) : (
+            <Icon style={styles.defaultSelectedIcon} name="check" />
+          ))}
       </View>
       <View
         style={StyleSheet.flatten([
@@ -162,12 +166,13 @@ export default function Checkbox({
 
           if (isSelected(id)) {
             selection.splice(selection.indexOf(id), 1);
+            onSelect(id, false, selection);
           } else {
             selection.push(id);
+            onSelect(id, true, selection);
           }
 
           setSelected(selection);
-          onSelect(id, selection);
         }}>
         {component !== undefined && typeof component !== 'string' && component}
       </CheckboxItem>
