@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     textAlignVertical: 'center',
+    includeFontPadding: false,
   },
   titleNoBackground: {
     color: 'dodgerblue',
