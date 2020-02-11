@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {CheckboxProps, Checkbox} from '../../../src';
 
 export interface CheckboxStoryProps extends CheckboxProps {}
 
 export default function CheckboxStory({
   checkboxIds = ['Banana', 'Melon', 'Apple', 'Orange'],
-  onSelect = (id, selected) => Alert.alert(`id: ${id}, selected: ${selected}`),
+  onSelect = () => {},
   ...props
 }: CheckboxStoryProps) {
   return (
