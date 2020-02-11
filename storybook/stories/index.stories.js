@@ -6,6 +6,7 @@ configure(
     require('./badge/index.stories'),
     require('./button/index.stories'),
     require('./button-group/index.stories'),
+    require('./checkbox/index.stories'),
     require('./chip/index.stories'),
     require('./header/index.stories'),
     require('./input/index.stories'),

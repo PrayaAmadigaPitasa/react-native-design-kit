@@ -12,6 +12,7 @@
 - Badge
 - Button
 - ButtonGroup
+- Checkbox
 - Chip
 - Header
 - Input
@@ -31,7 +32,8 @@
 
 #### On Progress:
 
-- Checkbox
+- Swiper
+- Tab
 
 #### List Todo:
 
@@ -40,8 +42,6 @@
 - ExpansionPanel
 - FAB
 - ParsedText
-- Swiper
-- Tab
 - Tooltip
 
 #### Known Bugs:
