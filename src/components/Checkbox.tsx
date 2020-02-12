@@ -10,20 +10,35 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+export type CheckboxIdentifier = string | CheckboxIndeterminateInfo;
+export type CheckboxIndeterminateStatus =
+  | 'selected'
+  | 'not-selected'
+  | 'part-selected';
+
 export interface CheckboxInfo {
   id: string;
   isSelected: boolean;
 }
 
+export interface CheckboxIndeterminateInfo {
+  title: string;
+  checkboxIds: CheckboxIdentifier[];
+}
+
+export interface CheckboxPartialProps {
+  selectedPartialCheckboxIcon?: JSX.Element;
+  selectedPartialCheckboxIconContainerStyle?: ViewStyle;
+}
+
 export interface CheckboxBaseProps extends TouchableOpacityProps {
   checkboxIconContainerStyle?: ViewStyle;
   checkboxComponentContainerStyle?: ViewStyle;
-  selectedCheckbox?: JSX.Element;
   selectedCheckboxStyle?: ViewStyle;
+  selectedCheckboxIcon?: JSX.Element;
   selectedCheckboxIconContainerStyle?: ViewStyle;
   selectedCheckboxComponentContainerStyle?: ViewStyle;
   selectedCheckboxTitleStyle?: ViewStyle;
-  disabledCheckbox?: JSX.Element;
 }
 
 export interface CheckboxItemProps extends CheckboxBaseProps {
@@ -33,12 +48,23 @@ export interface CheckboxItemProps extends CheckboxBaseProps {
   children?: ReactNode;
 }
 
-export interface CheckboxProps extends CheckboxBaseProps {
+export interface CheckboxIndeterminateProps
+  extends CheckboxBaseProps,
+    CheckboxPartialProps {
+  title?: string;
+  titleStyle?: TextStyle;
+  checkboxIds: CheckboxIdentifier[];
+  status?: CheckboxIndeterminateStatus;
+  children?: ReactNode;
+}
+
+export interface CheckboxProps extends CheckboxBaseProps, CheckboxPartialProps {
   containerStyle?: ViewStyle;
-  checkboxIds: string[];
+  checkboxIds: CheckboxIdentifier[];
   checkboxComponent?(info: CheckboxInfo): string | JSX.Element;
+  checkboxIndeterminateContainerStyle?: ViewStyle;
   defaultIds?: string[];
-  onSelect(id: string, selected: string[]): void;
+  onSelect(id: string, toggle: boolean, selected: string[]): void;
 }
 
 export function CheckboxItem({
@@ -46,8 +72,8 @@ export function CheckboxItem({
   style,
   title,
   titleStyle,
-  selectedCheckbox = <Icon style={styles.defaultSelectedIcon} name="check" />,
   selectedCheckboxStyle,
+  selectedCheckboxIcon,
   selectedCheckboxIconContainerStyle,
   selectedCheckboxComponentContainerStyle,
   selectedCheckboxTitleStyle,
@@ -75,7 +101,12 @@ export function CheckboxItem({
               selectedCheckboxIconContainerStyle,
             ]),
         ])}>
-        {isSelected && selectedCheckbox}
+        {isSelected &&
+          (selectedCheckboxIcon !== undefined ? (
+            selectedCheckboxIcon
+          ) : (
+            <Icon style={styles.defaultIcon} name="check" />
+          ))}
       </View>
       <View
         style={StyleSheet.flatten([
@@ -100,10 +131,96 @@ export function CheckboxItem({
   );
 }
 
+export function CheckboxIndeterminate({
+  status = 'not-selected',
+  style,
+  title,
+  titleStyle,
+  selectedCheckboxStyle,
+  selectedCheckboxIcon,
+  selectedCheckboxIconContainerStyle,
+  selectedCheckboxComponentContainerStyle,
+  selectedCheckboxTitleStyle,
+  selectedPartialCheckboxIcon,
+  selectedPartialCheckboxIconContainerStyle,
+  checkboxIconContainerStyle,
+  checkboxComponentContainerStyle,
+  children,
+  ...props
+}: CheckboxIndeterminateProps) {
+  function getIcon() {
+    switch (status) {
+      case 'selected':
+        return (
+          selectedCheckboxIcon || (
+            <Icon style={styles.defaultIcon} name="check" />
+          )
+        );
+      case 'part-selected':
+        return (
+          selectedPartialCheckboxIcon || (
+            <Icon style={styles.defaultIcon} name="minus" />
+          )
+        );
+      default:
+        return undefined;
+    }
+  }
+
+  return (
+    <TouchableOpacity
+      {...props}
+      style={[
+        styles.checkboxContainer,
+        style,
+        status === 'selected' && selectedCheckboxStyle,
+      ]}
+      activeOpacity={0.75}>
+      <View
+        style={StyleSheet.flatten([
+          styles.checkboxIconContainer,
+          checkboxIconContainerStyle,
+          status === 'selected' &&
+            StyleSheet.flatten([
+              styles.selectedCheckboxIconContainer,
+              selectedCheckboxIconContainerStyle,
+            ]),
+          status === 'part-selected' &&
+            StyleSheet.flatten([
+              styles.selectedPartialCheckboxIconContainer,
+              selectedPartialCheckboxIconContainerStyle,
+            ]),
+        ])}>
+        {getIcon()}
+      </View>
+      <View
+        style={StyleSheet.flatten([
+          styles.checkboxComponentContainer,
+          checkboxComponentContainerStyle,
+          status === 'selected' && selectedCheckboxComponentContainerStyle,
+        ])}>
+        {typeof children === 'object' ? (
+          children
+        ) : (
+          <Text
+            style={StyleSheet.flatten([
+              styles.title,
+              titleStyle,
+              status === 'selected' && selectedCheckboxTitleStyle,
+            ])}>
+            {title}
+          </Text>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 export default function Checkbox({
   containerStyle,
   checkboxIds,
   checkboxComponent,
+  checkboxIndeterminateContainerStyle,
   defaultIds,
   onSelect,
   onPress,
@@ -113,8 +230,72 @@ export default function Checkbox({
     defaultIds !== undefined ? filterId(defaultIds) : [],
   );
 
-  function checkId(id: string) {
-    return checkboxIds.indexOf(id) >= 0;
+  function checkIndeterminateStatus(
+    checkboxIdenfitifer: CheckboxIdentifier[],
+    checked: boolean,
+    hasEmpty?: boolean,
+  ): CheckboxIndeterminateStatus {
+    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
+      const indeterminate = checkboxIdenfitifer[index];
+
+      if (typeof indeterminate === 'string') {
+        if (!hasEmpty && !isSelected(indeterminate)) {
+          hasEmpty = true;
+        } else if (!checked && isSelected(indeterminate)) {
+          checked = true;
+        }
+      } else {
+        return checkIndeterminateStatus(
+          indeterminate.checkboxIds,
+          checked,
+          hasEmpty,
+        );
+      }
+    }
+
+    return checked ? (hasEmpty ? 'part-selected' : 'selected') : 'not-selected';
+  }
+
+  function checkId(id: string, checkboxIdenfitifer: CheckboxIdentifier[]) {
+    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
+      const value = checkboxIdenfitifer[index];
+
+      if (typeof value === 'string') {
+        if (value === id) {
+          return true;
+        }
+      } else {
+        checkId(id, value.checkboxIds);
+      }
+    }
+
+    return false;
+  }
+
+  function filterSelection(
+    base: string[],
+    checkboxIdentifier: CheckboxIdentifier[],
+    toggle: boolean,
+  ): string[] {
+    const selection = [...base];
+
+    for (let index = 0; index < checkboxIdentifier.length; index++) {
+      const identifier = checkboxIdentifier[index];
+
+      if (typeof identifier === 'string') {
+        const select = selection.indexOf(identifier) >= 0;
+
+        if (select && !toggle) {
+          selection.splice(selection.indexOf(identifier), 1);
+        } else if (!select && toggle) {
+          selection.push(identifier);
+        }
+      } else {
+        return filterSelection(selection, identifier.checkboxIds, toggle);
+      }
+    }
+
+    return selection;
   }
 
   function isSelected(id: string) {
@@ -128,7 +309,7 @@ export default function Checkbox({
       for (let indexId = 0; indexId < id.length; indexId++) {
         const check = id[indexId];
 
-        if (checkId(check)) {
+        if (checkId(check, checkboxIds)) {
           selection.push(check);
         }
       }
@@ -162,32 +343,90 @@ export default function Checkbox({
 
           if (isSelected(id)) {
             selection.splice(selection.indexOf(id), 1);
+            onSelect(id, false, selection);
           } else {
             selection.push(id);
+            onSelect(id, true, selection);
           }
 
           setSelected(selection);
-          onSelect(id, selection);
         }}>
         {component !== undefined && typeof component !== 'string' && component}
       </CheckboxItem>
     );
   }
 
-  function getListCheckboxItem() {
-    const list: ReactNode[] = [];
+  function getCheckboxIndeterminate(
+    key: string,
+    title: string,
+    identifier: CheckboxIdentifier[],
+  ) {
+    const status = checkIndeterminateStatus(identifier, false);
 
-    for (let index = 0; index < checkboxIds.length; index++) {
-      const id = checkboxIds[index];
-      const item = getCheckboxItem(id);
+    return (
+      <CheckboxIndeterminate
+        {...props}
+        key={key}
+        title={title}
+        checkboxIds={identifier}
+        status={status}
+        onPress={event => {
+          onPress !== undefined && onPress(event);
+          const selection = filterSelection(
+            selected,
+            identifier,
+            status === 'not-selected' || status === 'part-selected',
+          );
 
-      list.push(item);
-    }
-
-    return list;
+          setSelected(selection);
+        }}
+      />
+    );
   }
 
-  return <View style={containerStyle}>{getListCheckboxItem()}</View>;
+  function getListCheckboxItem(
+    checkboxIdenfitifer: CheckboxIdentifier[],
+    category?: string,
+  ) {
+    const list: ReactNode[] = [];
+
+    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
+      const value = checkboxIdenfitifer[index];
+
+      if (typeof value === 'string') {
+        const item = getCheckboxItem(value);
+
+        list.push(item);
+      } else {
+        const title = value.title;
+        const identifier = value.checkboxIds;
+        const key = category !== undefined ? `${category}:${title}` : title;
+        const checkboxIndeterminate = getCheckboxIndeterminate(
+          key,
+          title,
+          identifier,
+        );
+
+        list.push(checkboxIndeterminate);
+        list.push(getListCheckboxItem(value.checkboxIds, key));
+      }
+    }
+
+    return category !== undefined ? (
+      <View
+        key={`category: ${category}`}
+        style={StyleSheet.flatten([
+          styles.checkboxIndeterminateContainer,
+          checkboxIndeterminateContainerStyle,
+        ])}>
+        {list}
+      </View>
+    ) : (
+      list
+    );
+  }
+
+  return <View style={containerStyle}>{getListCheckboxItem(checkboxIds)}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -195,6 +434,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 6,
+  },
+  checkboxIndeterminateContainer: {
+    marginLeft: 12,
   },
   checkboxIconContainer: {
     height: 18,
@@ -213,7 +455,11 @@ const styles = StyleSheet.create({
     borderColor: 'dodgerblue',
     backgroundColor: 'dodgerblue',
   },
-  defaultSelectedIcon: {
+  selectedPartialCheckboxIconContainer: {
+    borderColor: 'dodgerblue',
+    backgroundColor: 'dodgerblue',
+  },
+  defaultIcon: {
     color: 'white',
     textAlign: 'center',
     textAlignVertical: 'center',
