@@ -11,21 +11,36 @@ import {
   Platform,
   TouchableWithoutFeedback,
   LayoutRectangle,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Layout} from '../layout';
 
 export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
-export type InputIconAction = 'delete' | 'toggle-visibility' | (() => void);
+export type InputIconAction =
+  | 'delete'
+  | 'search'
+  | 'toggle-visibility'
+  | (() => void);
 export type InputFillStatus = 'empty' | 'filled';
 export type InputVisibilityStatus = 'visibile' | 'hidden';
-export type InputStatus = 'normal' | InputFillStatus | InputVisibilityStatus;
+export type InputSearchStatus = 'empty' | 'loading' | 'forbidden' | 'allowed';
+export type InputStatus =
+  | 'normal'
+  | InputFillStatus
+  | InputVisibilityStatus
+  | InputSearchStatus;
 export type InputError = string | InputValidation | InputValidation[];
 
 export interface InputValidation {
   regex?: RegExp;
   validation?(text: string): boolean;
   error: string;
+}
+
+export interface InputSearch {
+  search?: string;
+  searchStatus: InputSearchStatus;
 }
 
 export interface InputProps extends TextInputProps {
@@ -64,6 +79,11 @@ export interface InputProps extends TextInputProps {
   errorLeftIconContainerStyle?: ViewStyle;
   errorRightIconContainerStyle?: ViewStyle;
   clearErrorOnFocus?: boolean;
+  searchTimeout?: number;
+  onSearch?(
+    search: string,
+    setSearchStatus: (text: string, allowed: boolean) => void,
+  ): void;
 }
 
 export default function Input({
@@ -97,6 +117,8 @@ export default function Input({
   errorLeftIconContainerStyle,
   errorRightIconContainerStyle,
   clearErrorOnFocus = false,
+  searchTimeout = 500,
+  onSearch,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -120,11 +142,17 @@ export default function Input({
   const [fillStatus, setFillStatus] = useState<InputFillStatus>(
     inputValue !== undefined && inputValue.length > 0 ? 'filled' : 'empty',
   );
+  const [inputSearch, setInputSearch] = useState<InputSearch>({
+    search: inputValue,
+    searchStatus:
+      inputValue !== undefined && inputValue.length ? 'loading' : 'empty',
+  });
   const [layout, setLayout] = useState<Layout>();
   const [layoutBorder, setLayoutBorder] = useState<LayoutRectangle>();
   const [ref, setRef] = useState<TextInput>();
   const [refBorder, setRefBorder] = useState<View>();
   const [refContainer, setRefContainer] = useState<View>();
+  const {search, searchStatus} = inputSearch;
   const themeBorderActive = inputValue !== undefined && inputValue !== '';
   const animation = useState(new Animated.Value(themeBorderActive ? 1 : 0))[0];
   const inputLeftIcon = getIcon(leftIcon, leftIconAction);
@@ -156,6 +184,24 @@ export default function Input({
       toValue: inputValue !== undefined && inputValue !== '' ? 1 : 0,
       bounciness: 0,
     }).start();
+
+    if (onSearch !== undefined) {
+      if (inputValue !== undefined && inputValue.length > 0) {
+        if (searchStatus !== 'loading') {
+          setInputSearch({search: undefined, searchStatus: 'loading'});
+        }
+      } else {
+        setInputSearch({search: undefined, searchStatus: 'empty'});
+      }
+
+      const timeout = setTimeout(() => {
+        if (inputValue !== undefined && inputValue.length > 0) {
+          onSearch(inputValue, handleSearch);
+        }
+      }, searchTimeout);
+
+      return () => clearTimeout(timeout);
+    }
   }, [inputValue]);
 
   useEffect(() => {
@@ -178,6 +224,28 @@ export default function Input({
     focusLabelContainerStyle,
     errorLabelContainerStyle,
   ]);
+
+  useEffect(() => {
+    if (
+      (searchStatus === 'allowed' || searchStatus === 'forbidden') &&
+      search !== inputValue
+    ) {
+      setInputSearch({
+        search: undefined,
+        searchStatus:
+          inputValue !== undefined && inputValue.length > 0
+            ? 'loading'
+            : 'empty',
+      });
+    }
+  }, [inputSearch]);
+
+  function handleSearch(text: string, allowed: boolean) {
+    setInputSearch({
+      search: text,
+      searchStatus: allowed ? 'allowed' : 'forbidden',
+    });
+  }
 
   function getErrorMessage(text?: string) {
     if (error !== undefined) {
@@ -258,6 +326,43 @@ export default function Input({
         ) : (
           undefined
         );
+      } else if (inputIconAction === 'search') {
+        const iconSearch =
+          typeof inputIcon === 'function' ? inputIcon(searchStatus) : inputIcon;
+
+        if (iconSearch !== undefined) {
+          return iconSearch;
+        }
+
+        if (searchStatus === 'loading') {
+          return <ActivityIndicator />;
+        }
+
+        if (searchStatus === 'allowed') {
+          return (
+            <Icon
+              style={StyleSheet.flatten([
+                styles.icon,
+                styles.iconSearchAllowed,
+              ])}
+              name="check"
+            />
+          );
+        }
+
+        if (searchStatus === 'forbidden') {
+          return (
+            <Icon
+              style={StyleSheet.flatten([
+                styles.icon,
+                styles.iconSearchForbidden,
+              ])}
+              name="close"
+            />
+          );
+        }
+
+        return undefined;
       } else if (inputIconAction === 'toggle-visibility') {
         const iconVisibility =
           typeof inputIcon === 'function'
@@ -287,6 +392,9 @@ export default function Input({
             return () => {
               ref?.clear();
               onChangeText && onChangeText('');
+              typeof error === 'object' &&
+                errorMessage !== undefined &&
+                setErrorMessage(getErrorMessage(''));
               setFillStatus('empty');
             };
           }
@@ -454,10 +562,8 @@ export default function Input({
                     setFocus(true);
                   }}
                   onBlur={event => {
-                    const text = event.nativeEvent.text;
-
                     onBlur && onBlur(event);
-                    text.length > 0 && setErrorMessage(getErrorMessage(text));
+                    setErrorMessage(getErrorMessage(inputValue || ''));
                     setFocus(false);
                   }}
                 />
@@ -632,6 +738,12 @@ const styles = StyleSheet.create({
     color: 'darkgray',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  iconSearchAllowed: {
+    color: 'green',
+  },
+  iconSearchForbidden: {
+    color: 'crimson',
   },
   error: {
     color: 'red',

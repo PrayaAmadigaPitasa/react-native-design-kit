@@ -1,23 +1,13 @@
-import Avatar from './Avatar';
-import Button from './Button';
-import ButtonGroup from './ButtonGroup';
-import Chip from './Chip';
-import Input from './Input';
-import InputOTP from './InputOTP';
-import Modal from './Modal';
-import Picker from './Picker';
-import PlayingBar from './PlayingBar';
-import Radio from './Radio';
-import Slider from './Slider';
-import Stepper from './Stepper';
-import SwitchableText from './SwitchableText';
-
 export * from './Avatar';
+export * from './Badge';
 export * from './Button';
 export * from './ButtonGroup';
+export * from './Checkbox';
 export * from './Chip';
+export * from './Header';
 export * from './Input';
 export * from './InputOTP';
+export * from './Marquee';
 export * from './Modal';
 export * from './Picker';
 export * from './PlayingBar';
@@ -25,18 +15,21 @@ export * from './Radio';
 export * from './Slider';
 export * from './Stepper';
 export * from './SwitchableText';
-export {
-  Avatar,
-  Button,
-  ButtonGroup,
-  Chip,
-  Input,
-  Modal,
-  InputOTP,
-  Picker,
-  PlayingBar,
-  Radio,
-  Slider,
-  Stepper,
-  SwitchableText,
-};
+
+export {default as Avatar} from './Avatar';
+export {default as Badge} from './Badge';
+export {default as Button} from './Button';
+export {default as ButtonGroup} from './ButtonGroup';
+export {default as Checkbox} from './Checkbox';
+export {default as Chip} from './Chip';
+export {default as Header} from './Header';
+export {default as Input} from './Input';
+export {default as InputOTP} from './InputOTP';
+export {default as Marquee} from './Marquee';
+export {default as Modal} from './Modal';
+export {default as Picker} from './Picker';
+export {default as PlayingBar} from './PlayingBar';
+export {default as Radio} from './Radio';
+export {default as Slider} from './Slider';
+export {default as Stepper} from './Stepper';
+export {default as SwitchableText} from './SwitchableText';

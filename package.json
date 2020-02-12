@@ -1,6 +1,6 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.46",
+  "version": "1.0.61",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,10 @@
     "build": "tsc",
     "test": "jest",
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
-    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./"
+    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
+    "server": "http-server .out",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "build-storybook": "build-storybook -c .storybook -o .out"
   },
   "repository": {
     "type": "git",
@@ -35,12 +38,15 @@
     "react-native-ui",
     "react-native-design-kit",
     "react-native-avatar",
+    "react-native-badge",
     "react-native-button",
     "react-native-button group",
     "react-native-chip",
+    "react-native-header",
     "react-native-input",
     "react-native-input-otp",
     "react-native-otp",
+    "react-native-marquee",
     "react-native-modal",
     "react-native-picker",
     "react-native-playing-bar",
@@ -57,6 +63,7 @@
     "@storybook/addon-actions": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
     "@storybook/addons": "^5.3.12",
+    "@storybook/react": "^5.3.12",
     "@storybook/react-native": "^5.3.12",
     "@types/jest": "^24.0.25",
     "@types/react-native": "^0.60.22",

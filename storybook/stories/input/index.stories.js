@@ -8,6 +8,7 @@ import {
   InputIconActionDeleteStory,
   InputIconActionToggleVisibilityStory,
   InputAdvancedStory,
+  InputIconActionSearchStory,
 } from '.';
 
 storiesOf('Input', module)
@@ -15,6 +16,7 @@ storiesOf('Input', module)
   .add('input advanced', () => <InputAdvancedStory />)
   .add('input error', () => <InputErrorStory />)
   .add('input icon action delete', () => <InputIconActionDeleteStory />)
+  .add('input icon action search', () => <InputIconActionSearchStory />)
   .add('input icon action toggle visibility', () => (
     <InputIconActionToggleVisibilityStory />
   ))

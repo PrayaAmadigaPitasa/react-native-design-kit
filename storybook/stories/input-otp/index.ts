@@ -1,5 +1,3 @@
-import InputOTPStory from './InputOTPStory';
-
 export * from './InputOTPStory';
 
-export {InputOTPStory};
+export {default as InputOTPStory} from './InputOTPStory';

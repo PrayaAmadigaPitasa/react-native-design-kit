@@ -9,11 +9,15 @@
 #### Available Components:
 
 - Avatar
+- Badge
 - Button
 - ButtonGroup
+- Checkbox
 - Chip
+- Header
 - Input
 - InputOTP
+- Marquee
 - Modal
 - Picker
 - PlayingBar
@@ -28,19 +32,26 @@
 
 #### On Progress:
 
-- Badge (WIP)
+- Tab
 
 #### List Todo:
 
 - Web Documentation
-- Checkbox
 - Drawer
-- Header
-- Marquee
+- ExpansionPanel
+- FAB
+- ParsedText
 - Swiper
-- Tab
+- Tooltip
 
 #### Known Bugs:
 
 - Input Label Position Border not accurate on dynamic screen due to event onLayout not triggered after transform
 - Input Error Position Absolute not accurate on dynamic screen due to event onLayout not triggered after transform
+
+## Author
+
+**Praya Amadiga Pitasa**
+
+- LinkedIn: https://www.linkedin.com/in/praya-amadiga-pitasa/
+- Github: https://github.com/PrayaAmadigaPitasa
