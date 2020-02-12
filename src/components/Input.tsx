@@ -408,6 +408,7 @@ export default function Input({
               typeof error === 'object' &&
                 errorMessage !== undefined &&
                 setErrorMessage(getErrorMessage(''));
+              setInputValue('');
               setFillStatus('empty');
             };
           }
@@ -845,6 +846,6 @@ const styles = StyleSheet.create({
   },
   strengthRightContainer: {
     height: '100%',
-    backgroundColor: 'grey',
+    backgroundColor: 'darkgray',
   },
 });
