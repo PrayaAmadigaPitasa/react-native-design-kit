@@ -1,9 +1,9 @@
 import React from 'react';
 import CheckboxStory, {CheckboxStoryProps} from './CheckboxStory';
 
-export interface CheckboxIndeterminateStoryProps extends CheckboxStoryProps {}
+export interface CheckboxNestedStoryProps extends CheckboxStoryProps {}
 
-export default function CheckboxIndeterminateStory({
+export default function CheckboxNestedStory({
   checkboxIds = [
     {
       title: 'Fruits',
@@ -17,6 +17,6 @@ export default function CheckboxIndeterminateStory({
     },
   ],
   ...props
-}: CheckboxIndeterminateStoryProps) {
+}: CheckboxNestedStoryProps) {
   return <CheckboxStory {...props} checkboxIds={checkboxIds} />;
 }

@@ -10,25 +10,25 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export type CheckboxIdentifier = string | CheckboxIndeterminateInfo;
-export type CheckboxIndeterminateStatus =
+export type CheckboxIdentifier = string | CheckboxCategory;
+export type CheckboxCategoryStatus =
   | 'selected'
   | 'not-selected'
-  | 'part-selected';
+  | 'indeterminate';
 
 export interface CheckboxInfo {
   id: string;
   isSelected: boolean;
 }
 
-export interface CheckboxIndeterminateInfo {
+export interface CheckboxCategory {
   title: string;
   checkboxIds: CheckboxIdentifier[];
 }
 
-export interface CheckboxPartialProps {
-  selectedPartialCheckboxIcon?: JSX.Element;
-  selectedPartialCheckboxIconContainerStyle?: ViewStyle;
+export interface CheckboxIndeterminateProps {
+  indeterminateCheckboxIcon?: JSX.Element;
+  indeterminateCheckboxIconContainerStyle?: ViewStyle;
 }
 
 export interface CheckboxBaseProps extends TouchableOpacityProps {
@@ -48,17 +48,19 @@ export interface CheckboxItemProps extends CheckboxBaseProps {
   children?: ReactNode;
 }
 
-export interface CheckboxIndeterminateProps
+export interface CheckboxNestedProps
   extends CheckboxBaseProps,
-    CheckboxPartialProps {
+    CheckboxIndeterminateProps {
   title?: string;
   titleStyle?: TextStyle;
   checkboxIds: CheckboxIdentifier[];
-  status?: CheckboxIndeterminateStatus;
+  status?: CheckboxCategoryStatus;
   children?: ReactNode;
 }
 
-export interface CheckboxProps extends CheckboxBaseProps, CheckboxPartialProps {
+export interface CheckboxProps
+  extends CheckboxBaseProps,
+    CheckboxIndeterminateProps {
   containerStyle?: ViewStyle;
   checkboxIds: CheckboxIdentifier[];
   checkboxComponent?(info: CheckboxInfo): string | JSX.Element;
@@ -131,7 +133,7 @@ export function CheckboxItem({
   );
 }
 
-export function CheckboxIndeterminate({
+export function CheckboxNested({
   status = 'not-selected',
   style,
   title,
@@ -141,13 +143,13 @@ export function CheckboxIndeterminate({
   selectedCheckboxIconContainerStyle,
   selectedCheckboxComponentContainerStyle,
   selectedCheckboxTitleStyle,
-  selectedPartialCheckboxIcon,
-  selectedPartialCheckboxIconContainerStyle,
+  indeterminateCheckboxIcon,
+  indeterminateCheckboxIconContainerStyle,
   checkboxIconContainerStyle,
   checkboxComponentContainerStyle,
   children,
   ...props
-}: CheckboxIndeterminateProps) {
+}: CheckboxNestedProps) {
   function getIcon() {
     switch (status) {
       case 'selected':
@@ -156,9 +158,9 @@ export function CheckboxIndeterminate({
             <Icon style={styles.defaultIcon} name="check" />
           )
         );
-      case 'part-selected':
+      case 'indeterminate':
         return (
-          selectedPartialCheckboxIcon || (
+          indeterminateCheckboxIcon || (
             <Icon style={styles.defaultIcon} name="minus" />
           )
         );
@@ -185,10 +187,10 @@ export function CheckboxIndeterminate({
               styles.selectedCheckboxIconContainer,
               selectedCheckboxIconContainerStyle,
             ]),
-          status === 'part-selected' &&
+          status === 'indeterminate' &&
             StyleSheet.flatten([
-              styles.selectedPartialCheckboxIconContainer,
-              selectedPartialCheckboxIconContainerStyle,
+              styles.indeterminateCheckboxIconContainer,
+              indeterminateCheckboxIconContainerStyle,
             ]),
         ])}>
         {getIcon()}
@@ -234,7 +236,7 @@ export default function Checkbox({
     checkboxIdenfitifer: CheckboxIdentifier[],
     checked: boolean,
     hasEmpty?: boolean,
-  ): CheckboxIndeterminateStatus {
+  ): CheckboxCategoryStatus {
     for (let index = 0; index < checkboxIdenfitifer.length; index++) {
       const indeterminate = checkboxIdenfitifer[index];
 
@@ -253,10 +255,13 @@ export default function Checkbox({
       }
     }
 
-    return checked ? (hasEmpty ? 'part-selected' : 'selected') : 'not-selected';
+    return checked ? (hasEmpty ? 'indeterminate' : 'selected') : 'not-selected';
   }
 
-  function checkId(id: string, checkboxIdenfitifer: CheckboxIdentifier[]) {
+  function checkId(
+    id: string,
+    checkboxIdenfitifer: CheckboxIdentifier[],
+  ): boolean {
     for (let index = 0; index < checkboxIdenfitifer.length; index++) {
       const value = checkboxIdenfitifer[index];
 
@@ -265,7 +270,7 @@ export default function Checkbox({
           return true;
         }
       } else {
-        checkId(id, value.checkboxIds);
+        return checkId(id, value.checkboxIds);
       }
     }
 
@@ -356,7 +361,7 @@ export default function Checkbox({
     );
   }
 
-  function getCheckboxIndeterminate(
+  function getCheckboxNested(
     key: string,
     title: string,
     identifier: CheckboxIdentifier[],
@@ -364,7 +369,7 @@ export default function Checkbox({
     const status = checkIndeterminateStatus(identifier, false);
 
     return (
-      <CheckboxIndeterminate
+      <CheckboxNested
         {...props}
         key={key}
         title={title}
@@ -375,7 +380,7 @@ export default function Checkbox({
           const selection = filterSelection(
             selected,
             identifier,
-            status === 'not-selected' || status === 'part-selected',
+            status === 'not-selected' || status === 'indeterminate',
           );
 
           setSelected(selection);
@@ -401,13 +406,9 @@ export default function Checkbox({
         const title = value.title;
         const identifier = value.checkboxIds;
         const key = category !== undefined ? `${category}:${title}` : title;
-        const checkboxIndeterminate = getCheckboxIndeterminate(
-          key,
-          title,
-          identifier,
-        );
+        const checkboxNested = getCheckboxNested(key, title, identifier);
 
-        list.push(checkboxIndeterminate);
+        list.push(checkboxNested);
         list.push(getListCheckboxItem(value.checkboxIds, key));
       }
     }
@@ -455,7 +456,7 @@ const styles = StyleSheet.create({
     borderColor: 'dodgerblue',
     backgroundColor: 'dodgerblue',
   },
-  selectedPartialCheckboxIconContainer: {
+  indeterminateCheckboxIconContainer: {
     borderColor: 'dodgerblue',
     backgroundColor: 'dodgerblue',
   },
@@ -463,6 +464,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     textAlignVertical: 'center',
+    includeFontPadding: false,
   },
   title: {
     fontSize: 15,

@@ -1,5 +1,5 @@
-export * from './CheckboxIndeterminateStory';
+export * from './CheckboxNestedStory';
 export * from './CheckboxStory';
 
-export {default as CheckboxIndeterminateStory} from './CheckboxIndeterminateStory';
+export {default as CheckboxNestedStory} from './CheckboxNestedStory';
 export {default as CheckboxStory} from './CheckboxStory';
