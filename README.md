@@ -33,6 +33,7 @@
 #### On Progress:
 
 - Tab
+- Swiper
 
 #### List Todo:
 
@@ -41,7 +42,6 @@
 - ExpansionPanel
 - FAB
 - ParsedText
-- Swiper
 - Tooltip
 
 #### Known Bugs:
