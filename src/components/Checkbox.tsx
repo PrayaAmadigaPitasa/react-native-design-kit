@@ -50,6 +50,7 @@ export interface CheckboxItemProps extends CheckboxBaseProps {
 export interface CheckboxTitleProps extends CheckboxBaseProps {
   title?: string;
   titleStyle?: TextStyle;
+  checkboxIds: CheckboxIdentifier[];
   status?: CheckboxIndeterminateStatus;
   children?: ReactNode;
 }
@@ -202,39 +203,20 @@ export default function Checkbox({
   const [selected, setSelected] = useState<string[]>(
     defaultIds !== undefined ? filterId(defaultIds) : [],
   );
-  const indeterminate = useState<CheckboxIndeterminateHandler[]>([])[0];
-
-  function getInterminateStatus(
-    key: string,
-  ): CheckboxIndeterminateStatus | undefined {
-    for (let index = 0; index < indeterminate.length; index++) {
-      const value = indeterminate[index];
-
-      if (value.key === key) {
-        return checkIndeterminateStatus(value.checkboxIds, false);
-      }
-    }
-
-    return undefined;
-  }
 
   function checkIndeterminateStatus(
-    listIdentifier: CheckboxIdentifier[],
+    checkboxIdenfitifer: CheckboxIdentifier[],
     checked: boolean,
   ): CheckboxIndeterminateStatus {
-    for (let index = 0; index < listIdentifier.length; index++) {
-      const identifier = listIdentifier[index];
+    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
+      const indeterminate = checkboxIdenfitifer[index];
 
-      if (typeof identifier === 'string') {
-        if (isSelected(identifier)) {
-          if (checked) {
-            return 'part-selected';
-          } else {
-            checked = true;
-          }
+      if (typeof indeterminate === 'string') {
+        if (checked && !isSelected(indeterminate)) {
+          return 'part-selected';
         }
       } else {
-        return checkIndeterminateStatus(identifier.checkboxIds, checked);
+        return checkIndeterminateStatus(indeterminate.checkboxIds, checked);
       }
     }
 
@@ -246,7 +228,7 @@ export default function Checkbox({
       const value = checkboxIdenfitifer[index];
 
       if (typeof value === 'string') {
-        if (value === 'id') {
+        if (value === id) {
           return true;
         }
       } else {
@@ -255,6 +237,32 @@ export default function Checkbox({
     }
 
     return false;
+  }
+
+  function filterSelection(
+    base: string[],
+    checkboxIdentifier: CheckboxIdentifier[],
+    toggle: boolean,
+  ): string[] {
+    const selection = [...base];
+
+    for (let index = 0; index < checkboxIdentifier.length; index++) {
+      const identifier = checkboxIdentifier[index];
+
+      if (typeof identifier === 'string') {
+        const select = selection.indexOf(identifier) >= 0;
+
+        if (select && !toggle) {
+          selection.splice(selection.indexOf(identifier), 1);
+        } else if (!select && toggle) {
+          selection.push(identifier);
+        }
+      } else {
+        return filterSelection(selection, identifier.checkboxIds, toggle);
+      }
+    }
+
+    return selection;
   }
 
   function isSelected(id: string) {
@@ -315,17 +323,32 @@ export default function Checkbox({
     );
   }
 
-  function getCheckboxTitleItem(key: string, title: string) {
-    const status = getInterminateStatus(key);
+  function getCheckboxTitleItem(
+    key: string,
+    title: string,
+    identifier: CheckboxIdentifier[],
+  ) {
+    const status = checkIndeterminateStatus(identifier, false);
 
     return (
       <CheckboxTitle
         {...props}
         key={key}
         title={`${title} [${status}]`}
+        checkboxIds={identifier}
         status={status}
         onPress={event => {
           onPress !== undefined && onPress(event);
+          const selection = filterSelection(
+            selected,
+            identifier,
+            status === 'not-selected' || status === 'part-selected',
+          );
+
+          console.log(`selected: ${selected}`);
+          console.log(`selection: ${selection}`);
+
+          setSelected(selection);
         }}
       />
     );
@@ -346,8 +369,9 @@ export default function Checkbox({
         list.push(item);
       } else {
         const title = value.title;
+        const identifier = value.checkboxIds;
         const key = category !== undefined ? `${category}:${title}` : title;
-        const itemTitle = getCheckboxTitleItem(key, title); // CheckBoxTitle
+        const itemTitle = getCheckboxTitleItem(key, title, identifier);
 
         list.push(itemTitle);
         list.push(getListCheckboxItem(value.checkboxIds, key));
