@@ -32,8 +32,7 @@
 
 #### On Progress:
 
-- Swiper
-- Tab
+- Update: Checkbox Indeterminate
 
 #### List Todo:
 
@@ -42,6 +41,8 @@
 - ExpansionPanel
 - FAB
 - ParsedText
+- Swiper
+- Tab
 - Tooltip
 
 #### Known Bugs:
