@@ -48,7 +48,7 @@ export interface CheckboxItemProps extends CheckboxBaseProps {
   children?: ReactNode;
 }
 
-export interface CheckboxTitleProps
+export interface CheckboxIndeterminateProps
   extends CheckboxBaseProps,
     CheckboxPartialProps {
   title?: string;
@@ -147,7 +147,7 @@ export function CheckboxIndeterminate({
   checkboxComponentContainerStyle,
   children,
   ...props
-}: CheckboxTitleProps) {
+}: CheckboxIndeterminateProps) {
   function getIcon() {
     switch (status) {
       case 'selected':
