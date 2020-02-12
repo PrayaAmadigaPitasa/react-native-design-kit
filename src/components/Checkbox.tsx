@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export type CheckboxIdentifier = string | CheckboxIndeterminate;
+export type CheckboxIdentifier = string | CheckboxIndeterminateInfo;
 export type CheckboxIndeterminateStatus =
   | 'selected'
   | 'not-selected'
@@ -21,13 +21,14 @@ export interface CheckboxInfo {
   isSelected: boolean;
 }
 
-export interface CheckboxIndeterminate {
+export interface CheckboxIndeterminateInfo {
   title: string;
   checkboxIds: CheckboxIdentifier[];
 }
 
-export interface CheckboxIndeterminateHandler extends CheckboxIndeterminate {
-  key: string;
+export interface CheckboxPartialProps {
+  selectedPartialCheckboxIcon?: JSX.Element;
+  selectedPartialCheckboxIconContainerStyle?: ViewStyle;
 }
 
 export interface CheckboxBaseProps extends TouchableOpacityProps {
@@ -47,7 +48,9 @@ export interface CheckboxItemProps extends CheckboxBaseProps {
   children?: ReactNode;
 }
 
-export interface CheckboxTitleProps extends CheckboxBaseProps {
+export interface CheckboxTitleProps
+  extends CheckboxBaseProps,
+    CheckboxPartialProps {
   title?: string;
   titleStyle?: TextStyle;
   checkboxIds: CheckboxIdentifier[];
@@ -55,10 +58,11 @@ export interface CheckboxTitleProps extends CheckboxBaseProps {
   children?: ReactNode;
 }
 
-export interface CheckboxProps extends CheckboxBaseProps {
+export interface CheckboxProps extends CheckboxBaseProps, CheckboxPartialProps {
   containerStyle?: ViewStyle;
   checkboxIds: CheckboxIdentifier[];
   checkboxComponent?(info: CheckboxInfo): string | JSX.Element;
+  checkboxIndeterminateContainerStyle?: ViewStyle;
   defaultIds?: string[];
   onSelect(id: string, toggle: boolean, selected: string[]): void;
 }
@@ -101,7 +105,7 @@ export function CheckboxItem({
           (selectedCheckboxIcon !== undefined ? (
             selectedCheckboxIcon
           ) : (
-            <Icon style={styles.defaultSelectedIcon} name="check" />
+            <Icon style={styles.defaultIcon} name="check" />
           ))}
       </View>
       <View
@@ -127,7 +131,7 @@ export function CheckboxItem({
   );
 }
 
-export function CheckboxTitle({
+export function CheckboxIndeterminate({
   status = 'not-selected',
   style,
   title,
@@ -137,11 +141,32 @@ export function CheckboxTitle({
   selectedCheckboxIconContainerStyle,
   selectedCheckboxComponentContainerStyle,
   selectedCheckboxTitleStyle,
+  selectedPartialCheckboxIcon,
+  selectedPartialCheckboxIconContainerStyle,
   checkboxIconContainerStyle,
   checkboxComponentContainerStyle,
   children,
   ...props
 }: CheckboxTitleProps) {
+  function getIcon() {
+    switch (status) {
+      case 'selected':
+        return (
+          selectedCheckboxIcon || (
+            <Icon style={styles.defaultIcon} name="check" />
+          )
+        );
+      case 'part-selected':
+        return (
+          selectedPartialCheckboxIcon || (
+            <Icon style={styles.defaultIcon} name="minus" />
+          )
+        );
+      default:
+        return undefined;
+    }
+  }
+
   return (
     <TouchableOpacity
       {...props}
@@ -160,13 +185,13 @@ export function CheckboxTitle({
               styles.selectedCheckboxIconContainer,
               selectedCheckboxIconContainerStyle,
             ]),
+          status === 'part-selected' &&
+            StyleSheet.flatten([
+              styles.selectedPartialCheckboxIconContainer,
+              selectedPartialCheckboxIconContainerStyle,
+            ]),
         ])}>
-        {status === 'selected' &&
-          (selectedCheckboxIcon !== undefined ? (
-            selectedCheckboxIcon
-          ) : (
-            <Icon style={styles.defaultSelectedIcon} name="check" />
-          ))}
+        {getIcon()}
       </View>
       <View
         style={StyleSheet.flatten([
@@ -195,6 +220,7 @@ export default function Checkbox({
   containerStyle,
   checkboxIds,
   checkboxComponent,
+  checkboxIndeterminateContainerStyle,
   defaultIds,
   onSelect,
   onPress,
@@ -330,7 +356,7 @@ export default function Checkbox({
     );
   }
 
-  function getCheckboxTitleItem(
+  function getCheckboxIndeterminate(
     key: string,
     title: string,
     identifier: CheckboxIdentifier[],
@@ -338,7 +364,7 @@ export default function Checkbox({
     const status = checkIndeterminateStatus(identifier, false);
 
     return (
-      <CheckboxTitle
+      <CheckboxIndeterminate
         {...props}
         key={key}
         title={title}
@@ -375,9 +401,13 @@ export default function Checkbox({
         const title = value.title;
         const identifier = value.checkboxIds;
         const key = category !== undefined ? `${category}:${title}` : title;
-        const itemTitle = getCheckboxTitleItem(key, title, identifier);
+        const checkboxIndeterminate = getCheckboxIndeterminate(
+          key,
+          title,
+          identifier,
+        );
 
-        list.push(itemTitle);
+        list.push(checkboxIndeterminate);
         list.push(getListCheckboxItem(value.checkboxIds, key));
       }
     }
@@ -385,7 +415,10 @@ export default function Checkbox({
     return category !== undefined ? (
       <View
         key={`category: ${category}`}
-        style={styles.checkboxIndeterminateContainer}>
+        style={StyleSheet.flatten([
+          styles.checkboxIndeterminateContainer,
+          checkboxIndeterminateContainerStyle,
+        ])}>
         {list}
       </View>
     ) : (
@@ -422,7 +455,11 @@ const styles = StyleSheet.create({
     borderColor: 'dodgerblue',
     backgroundColor: 'dodgerblue',
   },
-  defaultSelectedIcon: {
+  selectedPartialCheckboxIconContainer: {
+    borderColor: 'dodgerblue',
+    backgroundColor: 'dodgerblue',
+  },
+  defaultIcon: {
     color: 'white',
     textAlign: 'center',
     textAlignVertical: 'center',

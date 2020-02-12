@@ -32,7 +32,7 @@
 
 #### On Progress:
 
-- Update: Checkbox Indeterminate
+- Tab
 
 #### List Todo:
 
@@ -42,7 +42,6 @@
 - FAB
 - ParsedText
 - Swiper
-- Tab
 - Tooltip
 
 #### Known Bugs:
