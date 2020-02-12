@@ -31,6 +31,7 @@ export type InputStatus =
   | InputVisibilityStatus
   | InputSearchStatus;
 export type InputError = string | InputValidation | InputValidation[];
+export type InputStrengthValidation = RegExp | ((text: string) => boolean);
 
 export interface InputValidation {
   regex?: RegExp;
@@ -84,6 +85,12 @@ export interface InputProps extends TextInputProps {
     search: string,
     setSearchStatus: (text: string, allowed: boolean) => void,
   ): void;
+  strength?: boolean;
+  strengthValidation?: InputStrengthValidation | InputStrengthValidation[];
+  strengthColor?(count: number): string;
+  strengthContainerStyle?: ViewStyle;
+  strengthLeftContainerStyle?: ViewStyle;
+  strengthRightContainerStyle?: ViewStyle;
 }
 
 export default function Input({
@@ -119,6 +126,12 @@ export default function Input({
   clearErrorOnFocus = false,
   searchTimeout = 500,
   onSearch,
+  strength,
+  strengthValidation = [/.{4}/, /.{8}/, /.{12}/],
+  strengthColor,
+  strengthContainerStyle,
+  strengthLeftContainerStyle,
+  strengthRightContainerStyle,
   labelBoxStandBySize = 15,
   labelBoxStandByOffset = 14,
   labelBoxActiveSize = 12,
@@ -409,6 +422,52 @@ export default function Input({
     return undefined;
   }
 
+  function passwordStrengthEstimator() {
+    let count = 0;
+
+    if (inputValue !== undefined && strengthValidation !== undefined) {
+      if (Array.isArray(strengthValidation)) {
+        for (let index = 0; index < strengthValidation.length; index++) {
+          const validation = strengthValidation[index];
+
+          if (typeof validation === 'function') {
+            if (validation(inputValue)) {
+              count++;
+            }
+          } else if (validation.test(inputValue)) {
+            count++;
+          }
+        }
+      } else {
+        if (typeof strengthValidation === 'function') {
+          strengthValidation(inputValue) && count++;
+        } else {
+          strengthValidation.test(inputValue) && count++;
+        }
+      }
+    }
+
+    return count;
+  }
+
+  function getStrengthColor() {
+    return strengthColor !== undefined
+      ? strengthColor(passwordStrengthEstimator())
+      : 'green';
+  }
+
+  function getStrengthDeviation() {
+    if (strengthValidation !== undefined) {
+      if (Array.isArray(strengthValidation)) {
+        return strengthValidation.length - passwordStrengthEstimator();
+      } else {
+        return 1 - passwordStrengthEstimator();
+      }
+    }
+
+    return 1;
+  }
+
   return (
     <>
       <View
@@ -607,6 +666,33 @@ export default function Input({
             </View>
           </View>
         </View>
+        {strength && (
+          <View
+            style={StyleSheet.flatten([
+              styles.strengthContainer,
+              strengthContainerStyle,
+            ])}>
+            <View
+              style={StyleSheet.flatten([
+                styles.strengthLeftContainer,
+                strengthLeftContainerStyle,
+                {
+                  flex: passwordStrengthEstimator(),
+                  backgroundColor: getStrengthColor(),
+                },
+              ])}
+            />
+            <View
+              style={StyleSheet.flatten([
+                styles.strengthRightContainer,
+                strengthRightContainerStyle,
+                {
+                  flex: getStrengthDeviation(),
+                },
+              ])}
+            />
+          </View>
+        )}
         {errorMessage !== undefined && errorPosition === 'relative' && (
           <View
             style={StyleSheet.flatten([
@@ -747,5 +833,18 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+  },
+  strengthContainer: {
+    flexDirection: 'row',
+    height: 5,
+    width: '100%',
+    backgroundColor: 'red',
+  },
+  strengthLeftContainer: {
+    height: '100%',
+  },
+  strengthRightContainer: {
+    height: '100%',
+    backgroundColor: 'grey',
   },
 });
