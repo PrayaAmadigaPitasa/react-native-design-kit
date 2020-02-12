@@ -207,20 +207,27 @@ export default function Checkbox({
   function checkIndeterminateStatus(
     checkboxIdenfitifer: CheckboxIdentifier[],
     checked: boolean,
+    hasEmpty?: boolean,
   ): CheckboxIndeterminateStatus {
     for (let index = 0; index < checkboxIdenfitifer.length; index++) {
       const indeterminate = checkboxIdenfitifer[index];
 
       if (typeof indeterminate === 'string') {
-        if (checked && !isSelected(indeterminate)) {
-          return 'part-selected';
+        if (!hasEmpty && !isSelected(indeterminate)) {
+          hasEmpty = true;
+        } else if (!checked && isSelected(indeterminate)) {
+          checked = true;
         }
       } else {
-        return checkIndeterminateStatus(indeterminate.checkboxIds, checked);
+        return checkIndeterminateStatus(
+          indeterminate.checkboxIds,
+          checked,
+          hasEmpty,
+        );
       }
     }
 
-    return checked ? 'selected' : 'not-selected';
+    return checked ? (hasEmpty ? 'part-selected' : 'selected') : 'not-selected';
   }
 
   function checkId(id: string, checkboxIdenfitifer: CheckboxIdentifier[]) {
@@ -334,7 +341,7 @@ export default function Checkbox({
       <CheckboxTitle
         {...props}
         key={key}
-        title={`${title} [${status}]`}
+        title={title}
         checkboxIds={identifier}
         status={status}
         onPress={event => {
@@ -344,9 +351,6 @@ export default function Checkbox({
             identifier,
             status === 'not-selected' || status === 'part-selected',
           );
-
-          console.log(`selected: ${selected}`);
-          console.log(`selection: ${selection}`);
 
           setSelected(selection);
         }}
