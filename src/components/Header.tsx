@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, ViewStyle} from 'react-native';
+import {View, StyleSheet, ViewStyle, TextStyle, Text} from 'react-native';
 
 export type HeaderPlacement = 'left' | 'center' | 'right';
 
 export interface HeaderProps {
   placement?: HeaderPlacement;
+  title?: string;
+  titleStyle?: TextStyle;
   containerStyle?: ViewStyle;
   leftComponent?: JSX.Element;
   leftContainerStyle?: ViewStyle;
@@ -17,6 +19,8 @@ export interface HeaderProps {
 
 export default function Header({
   placement,
+  title,
+  titleStyle,
   containerStyle,
   leftComponent,
   leftContainerStyle,
@@ -60,7 +64,8 @@ export default function Header({
           centerContainerStyle,
           placement !== undefined && {justifyContent: getPlacement()},
         ])}>
-        {centerComponent}
+        {centerComponent ||
+          (title !== undefined && <Text style={titleStyle}>{title}</Text>)}
       </View>
       <View
         style={StyleSheet.flatten([
