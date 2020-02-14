@@ -208,9 +208,7 @@ export default function Input({
       }
 
       const timeout = setTimeout(() => {
-        if (inputValue !== undefined && inputValue.length > 0) {
-          onSearch(inputValue, handleSearch);
-        }
+        onSearch(inputValue || '', handleSearch);
       }, searchTimeout);
 
       return () => clearTimeout(timeout);
