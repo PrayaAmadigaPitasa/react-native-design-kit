@@ -64,12 +64,13 @@ export default function Header({
           centerContainerStyle,
           placement !== undefined && {justifyContent: getPlacement()},
         ])}>
-        {centerComponent ||
-          (title !== undefined && (
-            <Text style={StyleSheet.flatten([styles.title, titleStyle])}>
-              {title}
-            </Text>
-          ))}
+        {centerComponent !== undefined ? (
+          centerComponent
+        ) : (
+          <Text style={StyleSheet.flatten([styles.title, titleStyle])}>
+            {title}
+          </Text>
+        )}
       </View>
       <View
         style={StyleSheet.flatten([
