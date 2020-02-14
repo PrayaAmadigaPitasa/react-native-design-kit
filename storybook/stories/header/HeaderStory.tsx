@@ -7,7 +7,6 @@ export interface HeaderStoryProps extends HeaderProps {}
 
 export default function HeaderStory({
   title = 'TITLE',
-  titleStyle,
   leftComponent,
   rightComponent,
   ...props
@@ -17,7 +16,6 @@ export default function HeaderStory({
       <Header
         {...props}
         title={title}
-        titleStyle={StyleSheet.flatten([styles.title, titleStyle])}
         leftComponent={
           leftComponent || <Icon style={styles.icon} name="th-list" />
         }
@@ -35,11 +33,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 20,
-    color: 'white',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
   },
 });

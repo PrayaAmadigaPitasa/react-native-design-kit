@@ -65,7 +65,11 @@ export default function Header({
           placement !== undefined && {justifyContent: getPlacement()},
         ])}>
         {centerComponent ||
-          (title !== undefined && <Text style={titleStyle}>{title}</Text>)}
+          (title !== undefined && (
+            <Text style={StyleSheet.flatten([styles.title, titleStyle])}>
+              {title}
+            </Text>
+          ))}
       </View>
       <View
         style={StyleSheet.flatten([
@@ -109,5 +113,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: 16,
     justifyContent: 'flex-end',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
   },
 });
