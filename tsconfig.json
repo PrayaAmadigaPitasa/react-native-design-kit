@@ -5,18 +5,12 @@
     "declaration": true,
     "jsx": "react",
     "lib": ["es6"],
+    "target": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "./dist",
     "strict": true,
-    "target": "esnext"
+    "noImplicitAny": true
   },
-  "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "babel.config.js",
-    "metro.config.js",
-    "jest.config.js",
-    "__tests__/**/*-test.ts"
-  ]
+  "include": ["src/**/*"]
 }
