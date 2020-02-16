@@ -1,6 +1,9 @@
-import StoryBook from './storybook';
+import React, {useMemo} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import StoryBook from './storybook';
 
-Icon.loadFont();
+export default function App() {
+  useMemo(() => Icon.loadFont(), []);
 
-export default StoryBook;
+  return <StoryBook />;
+}
