@@ -40,40 +40,6 @@
 			<key>uniqueIdentifier</key>
 			<string>66A9AD09-9120-4BAB-AE1B-A869308C52BA</string>
 		</dict>
-		<key>9F825F39-7194-42B6-A744-1347AFE7808F</key>
-		<dict>
-			<key>className</key>
-			<string>IDECommandLineBuildLog</string>
-			<key>documentTypeString</key>
-			<string>&lt;nil&gt;</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
-			<key>fileName</key>
-			<string>9F825F39-7194-42B6-A744-1347AFE7808F.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>W</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>DesignKit project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>DesignKit</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
-			<key>timeStartedRecording</key>
-			<real>603526339.10640395</real>
-			<key>timeStoppedRecording</key>
-			<real>603526422.32479</real>
-			<key>title</key>
-			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
-			<key>uniqueIdentifier</key>
-			<string>9F825F39-7194-42B6-A744-1347AFE7808F</string>
-		</dict>
 	</dict>
 </dict>
 </plist>
