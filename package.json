@@ -20,7 +20,7 @@
     "build": "tsc",
     "test": "jest",
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
-    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./",
     "server": "npx http-server .out",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook -c .storybook -o .out"
