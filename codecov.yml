@@ -1,2 +1,4 @@
 codecov:
   token: 2cbccbba-44db-491d-8e43-0d081203e166
+fixes:
+  - 'src/**/*'
