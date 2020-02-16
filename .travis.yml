@@ -3,4 +3,4 @@ node_js:
   - 'stable'
 script:
   - npm install
-  - npm run android
+  - npm run start
