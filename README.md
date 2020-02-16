@@ -33,6 +33,7 @@
 
 #### On Progress:
 
+- ExpansionPanel
 - Tab
 - Swiper
 
@@ -40,7 +41,6 @@
 
 - Web Documentation
 - Drawer
-- ExpansionPanel
 - FAB
 - ParsedText
 - Tooltip
