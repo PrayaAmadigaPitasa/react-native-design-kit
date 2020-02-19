@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>7FE8706B-B79C-4439-8532-0A7891FEC25C</key>
+		<key>7B8B2DF0-F042-4016-9B29-937E0147A6C0</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>7FE8706B-B79C-4439-8532-0A7891FEC25C.xcactivitylog</string>
+			<string>7B8B2DF0-F042-4016-9B29-937E0147A6C0.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -32,13 +32,47 @@
 			<key>signature</key>
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>603636244.71744204</real>
+			<real>603693086.064165</real>
 			<key>timeStoppedRecording</key>
-			<real>603636252.935781</real>
+			<real>603693087.36849594</real>
 			<key>title</key>
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>7FE8706B-B79C-4439-8532-0A7891FEC25C</string>
+			<string>7B8B2DF0-F042-4016-9B29-937E0147A6C0</string>
+		</dict>
+		<key>BE9D1DE6-B5DF-4302-82E0-50415BC0AECA</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>BE9D1DE6-B5DF-4302-82E0-50415BC0AECA.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>DesignKit project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>DesignKit</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>603774231.38599396</real>
+			<key>timeStoppedRecording</key>
+			<real>603774232.87929201</real>
+			<key>title</key>
+			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>BE9D1DE6-B5DF-4302-82E0-50415BC0AECA</string>
 		</dict>
 	</dict>
 </dict>
