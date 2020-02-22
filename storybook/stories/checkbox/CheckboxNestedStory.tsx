@@ -12,7 +12,14 @@ export default function CheckboxNestedStory({
         'Melon',
         'Apple',
         'Orange',
-        {title: 'Rare', checkboxIds: ['Durian', 'Rambutan']},
+        {
+          title: 'Rare',
+          checkboxIds: [
+            'Durian',
+            'Rambutan',
+            {title: 'Super Rare', checkboxIds: ['Super Fruit']},
+          ],
+        },
       ],
     },
   ],

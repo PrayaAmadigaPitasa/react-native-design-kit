@@ -11,16 +11,18 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+export type AvatarIcon =
+  | JSX.Element
+  | 'edit'
+  | 'status-online'
+  | 'status-offline'
+  | 'status-standby';
+
 export interface AvatarProps extends ImageProps {
   containerStyle?: ViewStyle;
   rounded?: boolean;
   size?: number;
-  icon?:
-    | JSX.Element
-    | 'edit'
-    | 'status-online'
-    | 'status-offline'
-    | 'status-standby';
+  icon?: AvatarIcon;
   iconSize?: number;
   iconContainerStyle?: ViewStyle;
   onPress?(event: GestureResponderEvent): void;
@@ -43,42 +45,38 @@ export default function Avatar({
   const iconSizeComponent = iconSize !== undefined ? iconSize : (size * 5) / 15;
 
   function getIcon() {
-    if (icon !== undefined) {
-      if (typeof icon === 'string') {
-        if (icon === 'edit') {
-          return (
-            <Icon
-              style={styles.iconEdit}
-              name="pencil"
-              size={iconSizeComponent}
-            />
-          );
-        }
-
-        let statusColor;
-
-        if (icon === 'status-online') {
-          statusColor = 'green';
-        } else if (icon === 'status-offline') {
-          statusColor = 'red';
-        } else {
-          statusColor = 'gold';
-        }
-
+    if (typeof icon === 'string') {
+      if (icon === 'edit') {
         return (
-          <View
-            style={StyleSheet.flatten([
-              styles.iconStatus,
-              {backgroundColor: statusColor},
-            ])}
+          <Icon
+            style={styles.iconEdit}
+            name="pencil"
+            size={iconSizeComponent}
           />
         );
       }
 
-      return icon;
+      let statusColor;
+
+      if (icon === 'status-online') {
+        statusColor = 'green';
+      } else if (icon === 'status-offline') {
+        statusColor = 'red';
+      } else {
+        statusColor = 'gold';
+      }
+
+      return (
+        <View
+          style={StyleSheet.flatten([
+            styles.iconStatus,
+            {backgroundColor: statusColor},
+          ])}
+        />
+      );
     }
 
-    return undefined;
+    return icon;
   }
 
   return (
@@ -90,7 +88,7 @@ export default function Avatar({
           {...props}
           style={StyleSheet.flatten([
             {height: size, width: size},
-            rounded ? {borderRadius: size / 2} : {},
+            rounded && {borderRadius: size / 2},
             style,
           ])}
           source={source}
@@ -111,7 +109,7 @@ export default function Avatar({
                 borderRadius: iconSizeComponent / 2,
               },
             ])}>
-            {getIcon()}
+            {icon !== undefined && getIcon()}
           </View>
         </TouchableWithoutFeedback>
       )}
