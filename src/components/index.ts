@@ -15,6 +15,7 @@ export * from './Radio';
 export * from './Slider';
 export * from './Stepper';
 export * from './SwitchableText';
+export * from './ExpansionPanel';
 
 export {default as Badge} from './Badge';
 export {default as Button} from './Button';
@@ -32,3 +33,4 @@ export {default as Radio} from './Radio';
 export {default as Slider} from './Slider';
 export {default as Stepper} from './Stepper';
 export {default as SwitchableText} from './SwitchableText';
+export {default as ExpansionPanel} from './ExpansionPanel';

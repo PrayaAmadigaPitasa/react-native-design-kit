@@ -19,6 +19,7 @@ configure(
     require('./slider/index.stories'),
     require('./stepper/index.stories'),
     require('./switchable-text/index.stories'),
+    require('./expansion-panel/index.stories'),
   ],
   module,
 );

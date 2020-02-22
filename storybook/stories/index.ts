@@ -15,3 +15,4 @@ export * from './radio';
 export * from './slider';
 export * from './stepper';
 export * from './switchable-text';
+export * from './expansion-panel';
