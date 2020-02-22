@@ -1,15 +1,19 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {ExpansionPanel} from '../../../src';
 
 export default function ExpansionPanelStory() {
   return (
     <View style={styles.container}>
-      <ExpansionPanel
-        title="General Settings"
-        subtitle="Nisi id ex dolor"
-        content="Deserunt ipsum id magna ut culpa ipsum deserunt non irure ut. Laboris fugiat commodo quis ea velit aliquip Lorem nulla adipisicing adipisicing culpa occaecat proident. Consequat fugiat sint nulla elit aliquip labore ullamco dolor. Commodo consectetur ullamco eiusmod eiusmod proident id. Nulla sit nisi ex ex anim esse est incididunt duis nulla nisi esse deserunt."
-      />
+      <ExpansionPanel title="General Settings" subtitle="Nisi id ex dolor">
+        <Text>
+          Et pariatur ut labore culpa nisi fugiat Lorem cupidatat nulla. Aliquip
+          voluptate ut laboris ex dolore laborum excepteur ullamco in velit
+          velit. Non enim enim sit proident duis voluptate officia labore sunt
+          anim excepteur aliqua adipisicing. Aliquip ipsum quis quis consequat
+          tempor adipisicing cupidatat nulla officia.
+        </Text>
+      </ExpansionPanel>
     </View>
   );
 }

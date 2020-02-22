@@ -7,27 +7,32 @@ import {
   Easing,
   ViewStyle,
   View,
+  TextStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Modal from './Modal';
 import {Layout} from '../layout';
 
 export interface ExpansionPanelProps<ItemT> {
   title?: string;
+  titleStyle?: TextStyle;
   icon?: JSX.Element;
   animationRotation?: string;
   subtitle?: string;
+  subtitleStyle?: TextStyle;
   content?: string;
   containerStyle?: ViewStyle;
+  children?: React.ReactNode;
 }
 
 export default function ExpansionPanel<ItemT>({
   title,
+  titleStyle,
   animationRotation = '-180deg',
   icon,
   subtitle,
-  content,
+  subtitleStyle,
   containerStyle,
+  children,
 }: ExpansionPanelProps<ItemT>) {
   const animation = useState(new Animated.Value(0))[0];
   const containerListAnimation = useState(new Animated.Value(0))[0];
@@ -72,8 +77,12 @@ export default function ExpansionPanel<ItemT>({
           setToggle(!toggle);
         }}
         activeOpacity={1}>
-        <Text>{title}</Text>
-        {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+        <Text style={StyleSheet.flatten([titleStyle])}>{title}</Text>
+        {subtitle ? (
+          <Text style={StyleSheet.flatten([styles.subtitle, subtitleStyle])}>
+            {subtitle}
+          </Text>
+        ) : null}
         <Animated.View
           style={StyleSheet.flatten([
             styles.iconContainer,
@@ -91,25 +100,16 @@ export default function ExpansionPanel<ItemT>({
           {icon || <Icon name={'chevron-down'} />}
         </Animated.View>
       </TouchableOpacity>
-      {layout !== undefined && (
-        <Modal
-          transparent
-          visible={toggle}
-          onPressBackdrop={() => setToggle(!toggle)}>
-          <View
-            style={StyleSheet.flatten([
-              styles.listContainer,
-              {
-                position: 'absolute',
-                width: layout.width,
-                left: layout.pageX,
-                top: layout.pageY + layout.height,
-                zIndex: 1,
-              },
-            ])}>
-            <Text>{content}</Text>
-          </View>
-        </Modal>
+      {layout !== undefined && toggle && (
+        <View
+          style={StyleSheet.flatten([
+            styles.listContainer,
+            {
+              width: layout.width,
+            },
+          ])}>
+          {children}
+        </View>
       )}
     </>
   );
