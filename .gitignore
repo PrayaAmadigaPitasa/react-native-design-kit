@@ -2,7 +2,10 @@
 .DS_Store
 
 # Storybook
-.out/
+.web
+
+# Jest
+__snapshots__
 
 # Xcode
 build/

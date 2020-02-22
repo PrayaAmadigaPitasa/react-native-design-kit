@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1582382595743" clover="3.2.0">
-  <project timestamp="1582382595744" name="All files">
+<coverage generated="1582384626593" clover="3.2.0">
+  <project timestamp="1582384626593" name="All files">
     <metrics statements="13" coveredstatements="13" conditionals="18" coveredconditionals="16" methods="2" coveredmethods="2" elements="33" coveredelements="31" complexity="0" loc="13" ncloc="13" packages="1" files="2" classes="2"/>
     <file name="Avatar.tsx" path="/Users/macbook/Praya/Project/DesignKit/src/components/Avatar/Avatar.tsx">
       <metrics statements="13" coveredstatements="13" conditionals="18" coveredconditionals="16" methods="2" coveredmethods="2"/>
