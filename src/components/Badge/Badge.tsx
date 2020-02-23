@@ -30,6 +30,7 @@ export default function Badge({
 
   return (
     <View
+      testID="badge-container"
       style={StyleSheet.flatten([
         styles.container,
         containerStyle,

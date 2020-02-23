@@ -15,7 +15,7 @@ const defaultProps = {
 describe('Avatar', () => {
   afterEach(cleanup);
 
-  test('base', () => {
+  test('default', () => {
     const props = {
       ...defaultProps,
     };
@@ -30,10 +30,10 @@ describe('Avatar', () => {
       rounded: false,
     };
     const {baseElement, getByTestId} = render(<Avatar {...props} />);
-    const avatarContainer = getByTestId('avatar-image-container');
+    const avatarImageContainer = getByTestId('avatar-image-container');
 
     expect(baseElement);
-    expect(avatarContainer).toHaveStyle({height: 48, width: 48});
+    expect(avatarImageContainer).toHaveStyle({height: 48, width: 48});
   });
 
   test('size', () => {

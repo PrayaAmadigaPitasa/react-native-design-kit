@@ -31,6 +31,8 @@ export interface AvatarProps extends ImageProps {
 
 export default function Avatar({
   containerStyle,
+  rounded = true,
+  size = 48,
   icon,
   iconSize,
   iconContainerStyle,
@@ -40,8 +42,6 @@ export default function Avatar({
   source,
   ...props
 }: AvatarProps) {
-  const rounded = props.rounded !== undefined ? props.rounded : true;
-  const size = props.size !== undefined ? props.size : 48;
   const iconSizeComponent = iconSize !== undefined ? iconSize : size / 3;
 
   function getIcon() {
