@@ -5,6 +5,7 @@
 .web
 
 # Jest
+coverage
 __snapshots__
 
 # Xcode

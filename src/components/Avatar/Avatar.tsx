@@ -31,6 +31,8 @@ export interface AvatarProps extends ImageProps {
 
 export default function Avatar({
   containerStyle,
+  rounded = true,
+  size = 48,
   icon,
   iconSize,
   iconContainerStyle,
@@ -40,8 +42,6 @@ export default function Avatar({
   source,
   ...props
 }: AvatarProps) {
-  const rounded = props.rounded !== undefined ? props.rounded : true;
-  const size = props.size !== undefined ? props.size : 48;
   const iconSizeComponent = iconSize !== undefined ? iconSize : size / 3;
 
   function getIcon() {
@@ -80,12 +80,13 @@ export default function Avatar({
   }
 
   return (
-    <View style={containerStyle}>
+    <View testID="avatar-container" style={containerStyle}>
       <TouchableWithoutFeedback
         disabled={onPress === undefined}
         onPress={onPress}>
         <Image
           {...props}
+          testID="avatar-image-container"
           style={StyleSheet.flatten([
             {height: size, width: size},
             rounded && {borderRadius: size / 2},
@@ -99,6 +100,7 @@ export default function Avatar({
           disabled={onPressIcon === undefined}
           onPress={onPressIcon}>
           <View
+            testID="avatar-icon-container"
             style={StyleSheet.flatten([
               styles.iconContainer,
               iconContainerStyle,

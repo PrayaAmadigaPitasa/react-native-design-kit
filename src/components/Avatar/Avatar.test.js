@@ -1,6 +1,9 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
+import {render, cleanup} from '@testing-library/react-native';
+import {toHaveStyle} from '@testing-library/jest-native';
 import {Avatar} from '.';
+
+expect.extend({toHaveStyle});
 
 const defaultProps = {
   source: {
@@ -9,88 +12,94 @@ const defaultProps = {
   },
 };
 
-test('base', async () => {
-  const props = {
-    ...defaultProps,
-  };
-  const {baseElement} = render(<Avatar {...props} />);
+describe('Avatar', () => {
+  afterEach(cleanup);
 
-  expect(baseElement);
-});
+  test('default', () => {
+    const props = {
+      ...defaultProps,
+    };
+    const {baseElement} = render(<Avatar {...props} />);
 
-test('not rounded', async () => {
-  const props = {
-    ...defaultProps,
-    rounded: false,
-  };
-  const {baseElement} = render(<Avatar {...props} />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
-});
+  test('not rounded', () => {
+    const props = {
+      ...defaultProps,
+      rounded: false,
+    };
+    const {baseElement, getByTestId} = render(<Avatar {...props} />);
+    const avatarImageContainer = getByTestId('avatar-image-container');
 
-test('size', async () => {
-  const props = {
-    ...defaultProps,
-    size: 48,
-  };
-  const {baseElement} = render(<Avatar {...props} />);
+    expect(baseElement);
+    expect(avatarImageContainer).toHaveStyle({height: 48, width: 48});
+  });
 
-  expect(baseElement);
-});
+  test('size', () => {
+    const props = {
+      ...defaultProps,
+      size: 48,
+    };
+    const {baseElement} = render(<Avatar {...props} />);
 
-test('icon size', async () => {
-  const props = {
-    ...defaultProps,
-    iconSize: 16,
-  };
-  const {baseElement} = render(<Avatar {...props} />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
-});
+  test('icon size', () => {
+    const props = {
+      ...defaultProps,
+      iconSize: 16,
+    };
+    const {baseElement} = render(<Avatar {...props} />);
 
-test('icon edit', async () => {
-  const props = {
-    ...defaultProps,
-    icon: 'edit',
-  };
-  const {baseElement} = render(<Avatar {...props} />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
-});
+  test('icon edit', () => {
+    const props = {
+      ...defaultProps,
+      icon: 'edit',
+    };
+    const {baseElement} = render(<Avatar {...props} />);
 
-test('icon status-offline', async () => {
-  const props = {
-    ...defaultProps,
-    icon: 'status-offline',
-  };
-  const {baseElement} = render(<Avatar {...props} />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
-});
+  test('icon status-offline', () => {
+    const props = {
+      ...defaultProps,
+      icon: 'status-offline',
+    };
+    const {baseElement} = render(<Avatar {...props} />);
 
-test('icon status-online', async () => {
-  const props = {
-    ...defaultProps,
-  };
-  const {baseElement} = render(<Avatar {...props} icon="status-online" />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
-});
+  test('icon status-online', () => {
+    const props = {
+      ...defaultProps,
+    };
+    const {baseElement} = render(<Avatar {...props} icon="status-online" />);
 
-test('icon status-standby', async () => {
-  const props = {
-    ...defaultProps,
-  };
-  const {baseElement} = render(<Avatar {...props} icon="status-standby" />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
-});
+  test('icon status-standby', () => {
+    const props = {
+      ...defaultProps,
+    };
+    const {baseElement} = render(<Avatar {...props} icon="status-standby" />);
 
-test('icon custom', async () => {
-  const props = {
-    ...defaultProps,
-  };
-  const {baseElement} = render(<Avatar {...props} icon={<></>} />);
+    expect(baseElement);
+  });
 
-  expect(baseElement);
+  test('icon custom', () => {
+    const props = {
+      ...defaultProps,
+    };
+    const {baseElement} = render(<Avatar {...props} icon={<></>} />);
+
+    expect(baseElement);
+  });
 });
