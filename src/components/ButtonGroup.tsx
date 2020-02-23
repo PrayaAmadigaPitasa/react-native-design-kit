@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {ButtonBaseProps, ButtonTypeProps} from './Button';
+import {ButtonBaseProps, ButtonTypeProps} from './Button/Button';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   TextStyle,
   TouchableOpacityProps,
 } from 'react-native';
-import Button from './Button';
+import Button from './Button/Button';
 
 export interface ButtonGroupInfo {
   id: string;

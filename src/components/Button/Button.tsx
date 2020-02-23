@@ -83,6 +83,7 @@ export default function Button({
   return (
     <TouchableOpacity
       {...props}
+      testID="button-container"
       disabled={disabled}
       style={StyleSheet.flatten([
         styles.container,

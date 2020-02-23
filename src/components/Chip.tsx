@@ -3,7 +3,7 @@ import Button, {
   ButtonBaseProps,
   ButtonIconProps,
   ButtonTitleProps,
-} from './Button';
+} from './Button/Button';
 import {
   StyleSheet,
   View,
