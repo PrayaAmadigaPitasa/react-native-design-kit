@@ -3,12 +3,6 @@ import {render} from '@testing-library/react-native';
 import {Avatar} from '.';
 
 const defaultProps = {
-  containerStyle: {},
-  rounded: false,
-  iconSize: 12,
-  iconContainerStyle: {},
-  onPress: () => {},
-  onPressIcon: () => {},
   source: {
     uri:
       'https://i.pinimg.com/originals/70/3a/26/703a26fc83ced438ac13db8ce92f12a1.jpg',
@@ -24,10 +18,10 @@ test('base', async () => {
   expect(baseElement);
 });
 
-test('rounded', async () => {
+test('not rounded', async () => {
   const props = {
     ...defaultProps,
-    rounded: true,
+    rounded: false,
   };
   const {baseElement} = render(<Avatar {...props} />);
 
@@ -44,10 +38,10 @@ test('size', async () => {
   expect(baseElement);
 });
 
-test('not rounded', async () => {
+test('icon size', async () => {
   const props = {
     ...defaultProps,
-    rounded: false,
+    iconSize: 16,
   };
   const {baseElement} = render(<Avatar {...props} />);
 
