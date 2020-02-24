@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {ButtonBaseProps, ButtonTypeProps} from './Button/Button';
 import {
   View,
   StyleSheet,
@@ -7,7 +6,7 @@ import {
   TextStyle,
   TouchableOpacityProps,
 } from 'react-native';
-import Button from './Button/Button';
+import Button, {ButtonBaseProps, ButtonTypeProps} from '../Button/Button';
 
 export interface ButtonGroupInfo {
   id: string;
@@ -100,6 +99,7 @@ export default function ButtonGroup({
     return (
       <Button
         {...props}
+        testID="button"
         key={id}
         type={type}
         raised={isSelected(id) ? selectedButtonRaised : standbyButtonRaised}
@@ -128,14 +128,11 @@ export default function ButtonGroup({
         title={title}
         titleStyle={StyleSheet.flatten([
           buttonTitleStyle,
-          isSelected(id)
-            ? type !== 'solid'
-              ? StyleSheet.flatten([
-                  styles.selectedTitle,
-                  selectedButtonTitleStyle,
-                ])
-              : selectedButtonTitleStyle
-            : {},
+          isSelected(id) &&
+            StyleSheet.flatten([
+              type !== 'solid' && styles.selectedTitle,
+              selectedButtonTitleStyle,
+            ]),
         ])}
         onPress={event => {
           onPress !== undefined && onPress(event);
