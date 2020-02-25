@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>315413CD-81EF-43FD-AF00-0BFD9E302170</key>
+		<key>5064E798-B267-4D0F-89C5-B0EFAF1960FF</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>315413CD-81EF-43FD-AF00-0BFD9E302170.xcactivitylog</string>
+			<string>5064E798-B267-4D0F-89C5-B0EFAF1960FF.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -32,15 +32,15 @@
 			<key>signature</key>
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>604075002.57909203</real>
+			<real>604330037.07276797</real>
 			<key>timeStoppedRecording</key>
-			<real>604075004.145208</real>
+			<real>604330038.318699</real>
 			<key>title</key>
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>315413CD-81EF-43FD-AF00-0BFD9E302170</string>
+			<string>5064E798-B267-4D0F-89C5-B0EFAF1960FF</string>
 		</dict>
-		<key>5FD638A1-7730-4529-B551-60F11EF817EB</key>
+		<key>D46033B5-A17D-4F09-852C-B23FEBFEA756</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -49,7 +49,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>5FD638A1-7730-4529-B551-60F11EF817EB.xcactivitylog</string>
+			<string>D46033B5-A17D-4F09-852C-B23FEBFEA756.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -66,13 +66,13 @@
 			<key>signature</key>
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>604203736.69391501</real>
+			<real>604331007.73353398</real>
 			<key>timeStoppedRecording</key>
-			<real>604203752.40223098</real>
+			<real>604331017.59327805</real>
 			<key>title</key>
 			<string>Building workspace DesignKit with scheme DesignKit and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>5FD638A1-7730-4529-B551-60F11EF817EB</string>
+			<string>D46033B5-A17D-4F09-852C-B23FEBFEA756</string>
 		</dict>
 	</dict>
 </dict>

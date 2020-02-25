@@ -1,6 +1,6 @@
 import React from 'react';
-import {BadgeProps, Badge} from '../../../src';
 import {StyleSheet, View} from 'react-native';
+import {BadgeProps, Badge} from '../../../src';
 
 export interface BadgeStoryProps extends BadgeProps {}
 

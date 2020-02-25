@@ -10,11 +10,11 @@
 		</data>
 		<key>Base.lproj/LaunchScreen.nib/objects-13.0+.nib</key>
 		<data>
-		NwBOpOUu/nfwyHXho8nmfWh6ZJU=
+		SAtfUbMmqLCHWYH42FMRfUPgUgs=
 		</data>
 		<key>Base.lproj/LaunchScreen.nib/runtime.nib</key>
 		<data>
-		0EVYjyDlGMJML/KC1G0bUjjHAfQ=
+		QcI3PlNq/xSYEezAg0Gskneli80=
 		</data>
 		<key>Entypo.ttf</key>
 		<data>
@@ -103,7 +103,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		iFJgXlI/DXLgPBiMAnYsyzF270c=
+		uiivy+LDPQoIBh3/i/v7sHRHnSo=
 		</data>
 		<key>Ionicons.ttf</key>
 		<data>
@@ -135,15 +135,15 @@
 		</data>
 		<key>PlugIns/DesignKitTests.xctest/DesignKitTests</key>
 		<data>
-		1y7mYWovPgZfFKzAPQFYleOlFL8=
+		/IYu7Jc18YKUR9cSHgUbUOmTIVA=
 		</data>
 		<key>PlugIns/DesignKitTests.xctest/Info.plist</key>
 		<data>
-		N2Q69cyA3oTNnSCMKhDuq8nP0Lg=
+		5X+8HopSVrC3vGH6pgESVv0a6Q0=
 		</data>
 		<key>PlugIns/DesignKitTests.xctest/_CodeSignature/CodeResources</key>
 		<data>
-		BcWw6RHOE7TG+Aoxztv1AIcwbHw=
+		+/UvHmEWwWCxWYlPWKe7u/NAp58=
 		</data>
 		<key>SimpleLineIcons.ttf</key>
 		<data>
@@ -171,22 +171,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			NwBOpOUu/nfwyHXho8nmfWh6ZJU=
+			SAtfUbMmqLCHWYH42FMRfUPgUgs=
 			</data>
 			<key>hash2</key>
 			<data>
-			Fms8gyxpnQ/xcOOAGIrPoNl4Akf2XlPMuTlJ6+PoNEk=
+			4EWiGsoflvpuuP3YCViQBVR6JjBdz0TRnphLd2JbUoA=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.nib/runtime.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0EVYjyDlGMJML/KC1G0bUjjHAfQ=
+			QcI3PlNq/xSYEezAg0Gskneli80=
 			</data>
 			<key>hash2</key>
 			<data>
-			avsID+cuQARlD8qe1uaMVg8iWTC9ABrWdTwV+KLr5sQ=
+			nThudZo5ljiAEQk9F4AslO3s2M9k6wF5bqC9mbFj5Uk=
 			</data>
 		</dict>
 		<key>Entypo.ttf</key>
@@ -481,33 +481,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1y7mYWovPgZfFKzAPQFYleOlFL8=
+			/IYu7Jc18YKUR9cSHgUbUOmTIVA=
 			</data>
 			<key>hash2</key>
 			<data>
-			R2wewNxHGwn/qaAG7+IfUCMv++OrLsz/tFRJQ9LA//8=
+			cnMeM5VrRCA3RbDCvAvlzmJu+ZijODNMOBcfeRo90dE=
 			</data>
 		</dict>
 		<key>PlugIns/DesignKitTests.xctest/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			N2Q69cyA3oTNnSCMKhDuq8nP0Lg=
+			5X+8HopSVrC3vGH6pgESVv0a6Q0=
 			</data>
 			<key>hash2</key>
 			<data>
-			z5QCqJlcHig8j1tSN5Rmv7Im3U/Byf/tIehHSHpxsWI=
+			ua+9wPK1WvM6xUvJzb5I7EUvjpEXTXutNzZMtTYjqCU=
 			</data>
 		</dict>
 		<key>PlugIns/DesignKitTests.xctest/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			BcWw6RHOE7TG+Aoxztv1AIcwbHw=
+			+/UvHmEWwWCxWYlPWKe7u/NAp58=
 			</data>
 			<key>hash2</key>
 			<data>
-			C7DESpTR66H5IksuojdOj+UA00KX7Ju/gb4OVrUDsMk=
+			Z7UigaZ7DhDh+KDksyHnSDwqZtvqKVkea7QQ4WH1dDs=
 			</data>
 		</dict>
 		<key>SimpleLineIcons.ttf</key>

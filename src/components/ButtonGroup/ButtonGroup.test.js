@@ -1,9 +1,9 @@
 import React from 'react';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
-import {toBeDisabled, toBeEnabled} from '@testing-library/jest-native';
+import {toBeEnabled} from '@testing-library/jest-native';
 import {ButtonGroup} from '.';
 
-expect.extend({toBeDisabled, toBeEnabled});
+expect.extend({toBeEnabled});
 
 const props = {
   buttonIds: ['Male', 'Female', 'Other'],
@@ -19,6 +19,7 @@ describe('Button Group', () => {
     const buttonContainer = getAllByTestId('button-container')[0];
 
     expect(baseElement);
+    expect(buttonContainer).toBeEnabled();
     fireEvent.press(buttonContainer);
   });
 
