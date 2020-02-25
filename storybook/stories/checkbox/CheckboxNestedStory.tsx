@@ -23,7 +23,14 @@ export default function CheckboxNestedStory({
       ],
     },
   ],
+  defaultIds = ['Melon', 'Rambutan'],
   ...props
 }: CheckboxNestedStoryProps) {
-  return <CheckboxStory {...props} checkboxIds={checkboxIds} />;
+  return (
+    <CheckboxStory
+      {...props}
+      checkboxIds={checkboxIds}
+      defaultIds={defaultIds}
+    />
+  );
 }
