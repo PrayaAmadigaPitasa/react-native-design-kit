@@ -39,6 +39,30 @@ describe('Checkbox', () => {
     fireEvent.press(checkboxItemContainer);
   });
 
+  test('selected checkbox icon', () => {
+    const {baseElement} = render(
+      <Checkbox
+        {...props}
+        defaultIds={['Apple', 'Bear']}
+        selectedCheckboxIcon={<></>}
+      />,
+    );
+
+    expect(baseElement);
+  });
+
+  test('indeterminate checkbox icon', () => {
+    const {baseElement} = render(
+      <Checkbox
+        {...props}
+        defaultIds={['Apple', 'Bear']}
+        indeterminateCheckboxIcon={<></>}
+      />,
+    );
+
+    expect(baseElement);
+  });
+
   test('nested', () => {
     const {baseElement, getAllByTestId} = render(
       <Checkbox
