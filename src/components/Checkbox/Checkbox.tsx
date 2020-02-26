@@ -288,7 +288,9 @@ export default function Checkbox({
 
         if (select && !toggle) {
           selection.splice(selection.indexOf(identifier), 1);
-        } else {
+        }
+
+        if (!select && toggle) {
           selection.push(identifier);
         }
       } else {
