@@ -10,7 +10,7 @@ import {
   TextStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Layout} from '../layout';
+import {Layout} from '../../layout';
 
 export interface ExpansionPanelProps<ItemT> {
   title?: string;
@@ -53,21 +53,23 @@ export default function ExpansionPanel<ItemT>({
   }, [toggle]);
 
   function updateLayout() {
-    buttonRef?.measure((x, y, width, height, pageX, pageY) =>
-      setLayout({
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        pageX: pageX,
-        pageY: pageY,
-      }),
-    );
+    buttonRef?.measure((x, y, width, height, pageX, pageY) => {
+      console.log(x, y, width, height, pageX, pageY);
+      return setLayout({
+        x,
+        y,
+        width,
+        height,
+        pageX,
+        pageY,
+      });
+    });
   }
 
   return (
     <>
       <TouchableOpacity
+        testID="press-here"
         ref={instance =>
           instance && buttonRef !== instance && setButtonRef(instance)
         }

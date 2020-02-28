@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {ExpansionPanel} from '../../../src';
+import {ExpansionPanel} from '../../../src/components/ExpansionPanel';
 
 export default function ExpansionPanelStory() {
   return (

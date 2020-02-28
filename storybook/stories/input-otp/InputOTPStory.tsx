@@ -1,12 +1,15 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {InputOTP, InputOTPProps} from '../../../src';
+import {InputOTP, InputOTPProps} from '../../../src/components';
 
 export interface InputOTPStoryProps extends InputOTPProps {}
 
 export default function InputOTPStory({
   focusInputContainerStyle,
   onChangeOTP = () => {},
+  separatorComponent = (
+    <View style={{height: 5, width: 20, backgroundColor: 'black'}} />
+  ),
 }: InputOTPStoryProps) {
   return (
     <View style={styles.container}>
@@ -16,6 +19,7 @@ export default function InputOTPStory({
           focusInputContainerStyle,
         ])}
         onChangeOTP={onChangeOTP}
+        separatorComponent={separatorComponent}
       />
     </View>
   );

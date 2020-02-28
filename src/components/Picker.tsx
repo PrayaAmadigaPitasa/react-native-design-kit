@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Modal from './Modal';
 import {Layout} from '../layout';
+import {Modal} from './Modal';
 
 export interface PickerDataSelection {
   key: string;
