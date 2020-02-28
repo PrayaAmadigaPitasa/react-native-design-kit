@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  FlatList,
-  Image,
-  StyleSheet,
-  Dimensions,
-  Alert,
-} from 'react-native';
+import {View, FlatList, Image, StyleSheet, Dimensions} from 'react-native';
 
 const screenWidth = Math.round(Dimensions.get('screen').width);
 
