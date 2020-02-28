@@ -1,6 +1,6 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.0.72",
+  "version": "1.0.74",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "build": "tsc",
-    "test": "NODE_PATH=src jest --coverage",
+    "test": "jest --coverage",
     "test:watch": "npm run test -- --watch",
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",

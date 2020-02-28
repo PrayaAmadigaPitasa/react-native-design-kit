@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
 import {toBeEnabled} from '@testing-library/jest-native';
-import {ButtonGroup} from '.';
+import ButtonGroup from './ButtonGroup';
 
 expect.extend({toBeEnabled});
 

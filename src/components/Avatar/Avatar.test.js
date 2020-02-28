@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, cleanup} from '@testing-library/react-native';
 import {toHaveStyle} from '@testing-library/jest-native';
-import {Avatar} from '.';
+import Avatar from './Avatar';
 
 expect.extend({toHaveStyle});
 

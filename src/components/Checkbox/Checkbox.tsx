@@ -54,8 +54,7 @@ export interface CheckboxNestedProps
   title?: string;
   titleStyle?: TextStyle;
   checkboxIds: CheckboxIdentifier[];
-  status?: CheckboxCategoryStatus;
-  children?: ReactNode;
+  status: CheckboxCategoryStatus;
 }
 
 export interface CheckboxProps
@@ -135,7 +134,7 @@ export function CheckboxItem({
 }
 
 export function CheckboxNested({
-  status = 'not-selected',
+  status,
   style,
   title,
   titleStyle,
@@ -148,7 +147,6 @@ export function CheckboxNested({
   indeterminateCheckboxIconContainerStyle,
   checkboxIconContainerStyle,
   checkboxComponentContainerStyle,
-  children,
   ...props
 }: CheckboxNestedProps) {
   function getIcon() {
@@ -203,18 +201,14 @@ export function CheckboxNested({
           checkboxComponentContainerStyle,
           status === 'selected' && selectedCheckboxComponentContainerStyle,
         ])}>
-        {typeof children === 'object' ? (
-          children
-        ) : (
-          <Text
-            style={StyleSheet.flatten([
-              styles.title,
-              titleStyle,
-              status === 'selected' && selectedCheckboxTitleStyle,
-            ])}>
-            {title}
-          </Text>
-        )}
+        <Text
+          style={StyleSheet.flatten([
+            styles.title,
+            titleStyle,
+            status === 'selected' && selectedCheckboxTitleStyle,
+          ])}>
+          {title}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -292,13 +286,11 @@ export default function Checkbox({
       if (typeof identifier === 'string') {
         const select = selection.indexOf(identifier) >= 0;
 
-        console.log(
-          `select: ${select} | toggle: ${toggle} | identifier: ${identifier}`,
-        );
-
         if (select && !toggle) {
           selection.splice(selection.indexOf(identifier), 1);
-        } else if (!select && toggle) {
+        }
+
+        if (!select && toggle) {
           selection.push(identifier);
         }
       } else {

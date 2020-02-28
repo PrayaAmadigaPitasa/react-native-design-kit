@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, cleanup} from '@testing-library/react-native';
 import {toBeDisabled, toBeEnabled} from '@testing-library/jest-native';
-import {Button} from '.';
+import Button from './Button';
 
 expect.extend({toBeDisabled, toBeEnabled});
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
-import {Checkbox} from '.';
+import Checkbox from './Checkbox';
 
 const props = {
   checkboxIds: ['Banana', 'Apple', 'Grape'],
@@ -37,6 +37,30 @@ describe('Checkbox', () => {
 
     expect(baseElement);
     fireEvent.press(checkboxItemContainer);
+  });
+
+  test('selected checkbox icon', () => {
+    const {baseElement} = render(
+      <Checkbox
+        {...props}
+        defaultIds={['Apple', 'Bear']}
+        selectedCheckboxIcon={<></>}
+      />,
+    );
+
+    expect(baseElement);
+  });
+
+  test('indeterminate checkbox icon', () => {
+    const {baseElement} = render(
+      <Checkbox
+        {...props}
+        defaultIds={['Apple', 'Bear']}
+        indeterminateCheckboxIcon={<></>}
+      />,
+    );
+
+    expect(baseElement);
   });
 
   test('nested', () => {
