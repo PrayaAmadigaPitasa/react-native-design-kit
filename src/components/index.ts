@@ -17,8 +17,6 @@ export * from './Stepper';
 export * from './SwitchableText';
 export * from './ExpansionPanel';
 
-export {default as Input} from './Input';
-export {default as Picker} from './Picker';
 export {default as PlayingBar} from './PlayingBar';
 export {default as Radio} from './Radio';
 export {default as Slider} from './Slider';

@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Layout} from '../layout';
-import {Modal} from './Modal';
+import {Layout} from '../../layout';
+import {Modal} from '../Modal';
 
 export interface PickerDataSelection {
   key: string;
@@ -121,6 +121,7 @@ export default function Picker<ItemT>({
   return (
     <>
       <TouchableOpacity
+        testID="button-container"
         ref={instance =>
           instance && buttonRef !== instance && setButtonRef(instance)
         }
@@ -188,6 +189,7 @@ export default function Picker<ItemT>({
 
                 return (
                   <TouchableOpacity
+                    testID="selection-container"
                     activeOpacity={0.5}
                     style={StyleSheet.flatten([
                       styles.listItemContainer,
