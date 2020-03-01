@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {HeaderProps, Header} from '../../../src';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {Header, HeaderProps} from '../../../src/components';
 
 export interface HeaderStoryProps extends HeaderProps {}
 

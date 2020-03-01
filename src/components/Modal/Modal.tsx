@@ -38,6 +38,7 @@ export default function Modal({
       <View style={StyleSheet.flatten([styles.container, containerStyle])}>
         {hasBackdrop && (
           <TouchableWithoutFeedback
+            testID="button-container"
             onPress={event => {
               onPressBackdrop !== undefined && onPressBackdrop(event);
               setToggle(!toggle);

@@ -14,7 +14,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Layout} from '../layout';
+import {Layout} from '../../layout';
 
 export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
 export type InputIconAction =

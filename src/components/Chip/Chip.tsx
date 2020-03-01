@@ -3,7 +3,7 @@ import Button, {
   ButtonBaseProps,
   ButtonIconProps,
   ButtonTitleProps,
-} from './Button/Button';
+} from '../Button/Button';
 import {
   StyleSheet,
   View,
@@ -337,6 +337,7 @@ export default function Chip({
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
       {horizontalScrollButton && (
         <TouchableOpacity
+          testID="chip-scroll-left-icon-container"
           activeOpacity={activeOpacity}
           disabled={!allowScrollLeft()}
           style={StyleSheet.flatten([
@@ -373,6 +374,7 @@ export default function Chip({
       />
       {horizontalScrollButton && (
         <TouchableOpacity
+          testID="chip-scroll-right-icon-container"
           activeOpacity={activeOpacity}
           disabled={!allowScrollRight()}
           style={StyleSheet.flatten([

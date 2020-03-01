@@ -31,18 +31,14 @@ export default function Header({
   sectionContainerStyle,
 }: HeaderProps) {
   function getPlacement() {
-    if (placement !== undefined) {
-      switch (placement) {
-        case 'left':
-          return 'flex-start';
-        case 'right':
-          return 'flex-end';
-        default:
-          return 'center';
-      }
+    switch (placement) {
+      case 'left':
+        return 'flex-start';
+      case 'right':
+        return 'flex-end';
+      default:
+        return 'center';
     }
-
-    return undefined;
   }
 
   return (
