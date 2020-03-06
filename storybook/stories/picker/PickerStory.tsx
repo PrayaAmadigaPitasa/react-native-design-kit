@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {Picker, PickerProps} from '../../../src/components/';
+import {Picker, PickerProps} from '../../../src/components';
 
 export interface PickerStoryProps extends PickerProps<any> {}
 
