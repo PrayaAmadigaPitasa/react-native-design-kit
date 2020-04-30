@@ -3,6 +3,7 @@ export * from './Badge';
 export * from './Button';
 export * from './ButtonGroup';
 export * from './Checkbox';
+export * from './Swiper';
 export * from './Chip';
 export * from './Header';
 export * from './Input';
