@@ -2,12 +2,12 @@ import React, {useState, createRef, useEffect} from 'react';
 import {
   FlatList,
   View,
-  PanResponder,
-  GestureResponderEvent,
-  PanResponderGestureState,
   FlatListProps,
   ViewStyle,
   StyleSheet,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  Platform,
 } from 'react-native';
 
 interface SwiperState {
@@ -28,16 +28,17 @@ export default function Swiper<ItemT>({
   horizontal = true,
   height,
   width,
+  initialScrollIndex = 0,
   containerStyle,
   scaleMoveTrigger = 0.35,
   scaleVelocityTrigger = 1,
   showsHorizontalScrollIndicator = false,
+  onScrollEndDrag,
   ...props
 }: SwiperProps<ItemT>) {
   const refSwiper = createRef<FlatList<ItemT>>();
-  const [state, setState] = useState<SwiperState>({index: 0});
+  const [state, setState] = useState<SwiperState>({index: initialScrollIndex});
   const {index} = state;
-  const panResponder = createPanResponder();
   const length = data?.length || 0;
 
   useEffect(() => {
@@ -45,50 +46,39 @@ export default function Swiper<ItemT>({
   }, [state]);
 
   /**
-   * @description
-   * create handler for
-   * pan responder event
-   */
-  function createPanResponder() {
-    return PanResponder.create({
-      onPanResponderRelease: handleSwiperRelease,
-    });
-  }
-
-  /**
-   *
-   * @param e gesture responder event
-   * @param gestureState gesture state event
+   * @param event scroll event
    *
    * @description
-   * called when swiper
-   * start to release
+   * called when scroll
+   * list end dragged
    */
-  function handleSwiperRelease(
-    e: GestureResponderEvent,
-    gestureState: PanResponderGestureState,
-  ) {
-    const {dx, vx} = gestureState;
-    let newIndex = index;
+  function handleScrollEndDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
+    const velocity = event.nativeEvent.velocity?.x || 0;
+    const velocityPlatform = Platform.select({android: -1, default: 1});
+    const previousOffset = width * index;
+    const difOffset = previousOffset - event.nativeEvent.contentOffset.x;
+    let nextIndex = index;
 
-    if (Math.abs(vx) > scaleVelocityTrigger) {
-      newIndex = index + (vx < 0 ? 1 : -1);
-    } else if (Math.abs(dx) > width * scaleMoveTrigger) {
-      newIndex = index + (dx < 0 ? 1 : -1);
+    if (Math.abs(velocity) >= scaleVelocityTrigger) {
+      nextIndex = index + (velocity > 0 ? 1 : -1) * velocityPlatform;
+    } else if (Math.abs(difOffset) >= scaleMoveTrigger * width) {
+      nextIndex = index + (velocity > 0 ? 1 : -1);
     }
 
-    setState({...state, index: Math.max(0, Math.min(length - 1, newIndex))});
+    onScrollEndDrag && onScrollEndDrag(event);
+    setState({index: Math.max(0, Math.min(length - 1, nextIndex))});
   }
 
   return (
     <View style={StyleSheet.flatten([containerStyle, {height, width}])}>
       <FlatList
         {...props}
-        {...panResponder.panHandlers}
         data={data}
+        initialScrollIndex={initialScrollIndex}
         horizontal={horizontal}
         showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
         ref={refSwiper}
+        onScrollEndDrag={handleScrollEndDrag}
         renderItem={info => (
           <View style={{height, width}}>{renderItem(info)}</View>
         )}
