@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Modal, ModalProps} from '../../../src';
+import {Modal, ModalProps} from '../../../src/components/Modal';
+import {Button} from '../../../src/components/Button';
 
 export interface ModalStoryProps extends ModalProps {
   title?: string;

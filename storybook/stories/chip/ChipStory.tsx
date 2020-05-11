@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Chip, ChipProps} from '../../../src';
+import {Chip, ChipProps} from '../../../src/components/Chip';
 
 export interface ChipStoryProps extends ChipProps {}
 

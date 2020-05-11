@@ -19,16 +19,8 @@ export * from './Stepper';
 export * from './SwitchableText';
 export * from './ExpansionPanel';
 
-export {default as Chip} from './Chip';
-export {default as Header} from './Header';
-export {default as Input} from './Input';
-export {default as InputOTP} from './InputOTP';
-export {default as Marquee} from './Marquee';
-export {default as Modal} from './Modal';
-export {default as Picker} from './Picker';
 export {default as PlayingBar} from './PlayingBar';
 export {default as Radio} from './Radio';
 export {default as Slider} from './Slider';
 export {default as Stepper} from './Stepper';
 export {default as SwitchableText} from './SwitchableText';
-export {default as ExpansionPanel} from './ExpansionPanel';
