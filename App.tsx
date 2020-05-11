@@ -1,9 +1,31 @@
-import React, {useMemo} from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import StoryBook from './storybook';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+
+export interface ItemData {
+  id: string;
+  author: string;
+  width: number;
+  height: number;
+  url: string;
+  download_url: string;
+}
 
 export default function App() {
-  useMemo(() => Icon.loadFont(), []);
-
-  return <StoryBook />;
+  return <View style={styles.container}></View>;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemContainer: {
+    margin: 2.5,
+  },
+  item: {
+    height: 200,
+    width: 200,
+    backgroundColor: 'black',
+  },
+});

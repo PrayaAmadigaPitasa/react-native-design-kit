@@ -24,7 +24,8 @@
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
     "storybook": "start-storybook -p 9001 -c storybook",
     "storybook:build": "build-storybook -c storybook -o .web",
-    "storybook:server": "npx http-server .web"
+    "storybook:server": "npx http-server .web",
+    "postinstall": "npx jetify"
   },
   "repository": {
     "type": "git",
@@ -57,6 +58,11 @@
     "react-native-stepper",
     "react-native-switchable-text"
   ],
+  "dependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.62.2",
+    "react-native-gesture-handler": "^1.6.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
@@ -72,7 +78,7 @@
     "@testing-library/react-native": "^5.0.3",
     "@types/events": "^3.0.0",
     "@types/jest": "^24.0.25",
-    "@types/react-native": "^0.60.22",
+    "@types/react-native": "^0.60.31",
     "@types/react-native-vector-icons": "^6.4.5",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "babel-jest": "^24.9.0",
@@ -86,11 +92,10 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^4.2.3",
     "jest": "^24.9.0",
+    "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "^1.19.1",
-    "react": "^16.9.0",
     "react-dom": "^16.12.0",
-    "react-native": "^0.61.4",
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "^0.12.1",
     "react-test-renderer": "^16.9.0",
