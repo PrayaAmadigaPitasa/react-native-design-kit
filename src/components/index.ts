@@ -1,4 +1,4 @@
-export * from './Avatar';
+export * from './avatar';
 export * from './Badge';
 export * from './Button';
 export * from './ButtonGroup';
