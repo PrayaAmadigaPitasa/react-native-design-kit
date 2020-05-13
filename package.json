@@ -57,6 +57,13 @@
     "react-native-stepper",
     "react-native-switchable-text"
   ],
+  "dependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.12.0",
+    "react-native": "^0.62.2",
+    "react-native-vector-icons": "^6.6.0",
+    "react-native-web": "^0.12.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
@@ -87,12 +94,8 @@
     "husky": "^4.2.3",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
+    "minimist": "^1.2.5",
     "prettier": "^1.19.1",
-    "react": "^16.9.0",
-    "react-dom": "^16.12.0",
-    "react-native": "^0.61.4",
-    "react-native-vector-icons": "^6.6.0",
-    "react-native-web": "^0.12.1",
     "react-test-renderer": "^16.9.0",
     "typescript": "^3.6.3"
   },
