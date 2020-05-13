@@ -1,17 +1,40 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-
-export interface ItemData {
-  id: string;
-  author: string;
-  width: number;
-  height: number;
-  url: string;
-  download_url: string;
-}
+import React, {useRef, createRef, useState, useMemo} from 'react';
+import {StyleSheet, View, TextInput, Text, Button} from 'react-native';
 
 export default function App() {
-  return <View style={styles.container}></View>;
+  const ref = createRef<TextInput>();
+  const refCopy = createRef<TextInput>();
+  const refRender = useRef(0);
+  const [counter, setCounter] = useState(0);
+  const render = useMemo(() => refRender.current++, []);
+
+  function handlePress() {
+    const time = new Date().toString();
+    ref.current?.setNativeProps({
+      placeholder: `Time: ${time}`,
+    });
+  }
+
+  function handleChangeText(text: string) {
+    setCounter(counter + 1);
+    refCopy.current?.setNativeProps({text});
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.sectionInput}>
+        <TextInput ref={refCopy} />
+        <TextInput
+          ref={ref}
+          style={styles.input}
+          onChangeText={handleChangeText}
+        />
+      </View>
+      <Text>{`Counter: ${counter}`}</Text>
+      <Text>{`Render: ${render}`}</Text>
+      <Button title="Click Me" onPress={handlePress} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -20,12 +43,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  itemContainer: {
-    margin: 2.5,
+  sectionInput: {
+    width: '100%',
   },
-  item: {
-    height: 200,
-    width: 200,
-    backgroundColor: 'black',
+  input: {
+    height: 48,
+    borderWidth: 1,
   },
 });
