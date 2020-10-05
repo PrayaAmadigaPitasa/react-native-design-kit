@@ -7,7 +7,7 @@ export interface AvatarStoryProps extends AvatarProps {}
 export default function AvatarStory({
   size = 240,
   source = {
-    uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png:large',
+    uri: 'https://pbs.twimg.com/media/DgEJnDkXkAIBqGH.png',
   },
   ...props
 }: AvatarStoryProps) {
