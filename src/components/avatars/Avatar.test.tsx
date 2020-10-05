@@ -1,14 +1,15 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
+import {ObjectPartial} from '../../types';
 import Avatar, {AvatarProps} from './Avatar';
 
 const defaultProps: AvatarProps = {
   source: {uri: ''},
 };
 
-function runTest(name: string) {
+function runTest(name: string, props?: ObjectPartial<AvatarProps>) {
   test(name, async () => {
-    render(<Avatar {...defaultProps} />);
+    render(<Avatar {...defaultProps} {...props} />);
   });
 }
 
