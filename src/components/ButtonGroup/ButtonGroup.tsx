@@ -6,7 +6,7 @@ import {
   TextStyle,
   TouchableOpacityProps,
 } from 'react-native';
-import Button, {ButtonBaseProps, ButtonTypeProps} from '../Button/Button';
+import {Button, ButtonBaseProps, ButtonTypeProps} from '../buttons';
 
 export interface ButtonGroupInfo {
   id: string;

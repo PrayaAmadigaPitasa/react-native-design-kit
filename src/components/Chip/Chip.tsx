@@ -1,9 +1,4 @@
 import React, {useState, useEffect, ReactNode} from 'react';
-import Button, {
-  ButtonBaseProps,
-  ButtonIconProps,
-  ButtonTitleProps,
-} from '../Button/Button';
 import {
   StyleSheet,
   View,
@@ -15,7 +10,13 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Icon} from '../icon';
+import {
+  Button,
+  ButtonBaseProps,
+  ButtonIconProps,
+  ButtonTitleProps,
+} from '../buttons';
 
 export type ChipIcon = (info: ChipInfo) => JSX.Element;
 export type ChipIconAction = (

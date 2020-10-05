@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactElement, ReactNode} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -12,16 +12,16 @@ import {
 } from 'react-native';
 
 export interface ButtonIconProps {
-  topIcon?: JSX.Element;
+  topIcon?: ReactElement;
   topIconContainerStyle?: ViewStyle;
   topIconAction?(): void;
-  leftIcon?: JSX.Element;
+  leftIcon?: ReactElement;
   leftIconContainerStyle?: ViewStyle;
   leftIconAction?(): void;
-  rightIcon?: JSX.Element;
+  rightIcon?: ReactElement;
   rightIconContainerStyle?: ViewStyle;
   rightIconAction?(): void;
-  bottomIcon?: JSX.Element;
+  bottomIcon?: ReactElement;
   bottomIconContainerStyle?: ViewStyle;
   bottomIconAction?(): void;
 }

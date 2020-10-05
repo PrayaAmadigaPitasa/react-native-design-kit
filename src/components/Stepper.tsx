@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, ViewStyle, TextStyle, Text} from 'react-native';
-import Button from './Button/Button';
+import {Button} from './buttons';
 
 export interface StepperProps {
   containerStyle?: ViewStyle;
