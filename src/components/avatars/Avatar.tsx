@@ -50,7 +50,11 @@ export default function Avatar({
   const renderIcon = useMemo(() => {
     if (typeof icon === 'string') {
       return icon === 'edit' ? (
-        <Icon style={styles.iconEdit} name="pencil" size={iconSizeComponent} />
+        <Icon
+          style={styles.iconEdit}
+          name="pencil"
+          size={iconSizeComponent / 1.25}
+        />
       ) : (
         <View
           style={StyleSheet.flatten([
@@ -91,28 +95,30 @@ export default function Avatar({
     [size, style, rounded, source, onPress],
   );
 
-  const handleRenderIcon = useMemo(() => {
-    icon && (
-      <TouchableWithoutFeedback
-        disabled={onPressIcon === undefined}
-        onPress={onPressIcon}>
-        <View
-          testID="avatar-icon-container"
-          style={StyleSheet.flatten([
-            styles.iconContainer,
-            iconContainerStyle,
-            styles.sectionIcon,
-            {
-              width: iconSizeComponent,
-              height: iconSizeComponent,
-              borderRadius: iconSizeComponent / 2,
-            },
-          ])}>
-          {renderIcon}
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  }, [icon, iconContainerStyle, iconSizeComponent, renderIcon, onPressIcon]);
+  const handleRenderIcon = useMemo(
+    () =>
+      icon && (
+        <TouchableWithoutFeedback
+          disabled={onPressIcon === undefined}
+          onPress={onPressIcon}>
+          <View
+            testID="avatar-icon-container"
+            style={StyleSheet.flatten([
+              styles.iconContainer,
+              iconContainerStyle,
+              styles.sectionIcon,
+              {
+                width: iconSizeComponent,
+                aspectRatio: 1,
+                borderRadius: iconSizeComponent / 2,
+              },
+            ])}>
+            {renderIcon}
+          </View>
+        </TouchableWithoutFeedback>
+      ),
+    [icon, iconContainerStyle, iconSizeComponent, renderIcon, onPressIcon],
+  );
 
   return (
     <View testID="avatar-container" style={containerStyle}>

@@ -15,4 +15,9 @@ function runTest(name: string, props?: ObjectPartial<AvatarProps>) {
 
 describe('Avatar', () => {
   runTest('default');
+  runTest('iconSize', {iconSize: 20});
+  runTest('icon edit', {icon: 'edit'});
+  runTest('icon status-online', {icon: 'status-online'});
+  runTest('icon status-offline', {icon: 'status-offline'});
+  runTest('icon status-standby', {icon: 'status-standby'});
 });
