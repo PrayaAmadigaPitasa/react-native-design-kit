@@ -10,13 +10,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-export type AvatarIcon =
-  | JSX.Element
-  | 'edit'
-  | 'status-online'
-  | 'status-offline'
-  | 'status-standby';
+import {AvatarIcon} from '../../types';
 
 export interface AvatarProps extends ImageProps {
   containerStyle?: ViewStyle;
