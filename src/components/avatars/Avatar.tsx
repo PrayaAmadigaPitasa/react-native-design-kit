@@ -42,42 +42,34 @@ export default function Avatar({
   source,
   ...props
 }: AvatarProps) {
-  const iconSizeComponent = iconSize !== undefined ? iconSize : size / 3;
+  const iconSizeComponent = useMemo(
+    () => (iconSize !== undefined ? iconSize : size / 3),
+    [iconSize, size],
+  );
 
-  function getIcon() {
+  const renderIcon = useMemo(() => {
     if (typeof icon === 'string') {
-      if (icon === 'edit') {
-        return (
-          <Icon
-            style={styles.iconEdit}
-            name="pencil"
-            size={iconSizeComponent}
-          />
-        );
-      }
-
-      let statusColor;
-
-      if (icon === 'status-online') {
-        statusColor = 'green';
-      } else if (icon === 'status-offline') {
-        statusColor = 'red';
-      } else {
-        statusColor = 'gold';
-      }
-
-      return (
+      return icon === 'edit' ? (
+        <Icon style={styles.iconEdit} name="pencil" size={iconSizeComponent} />
+      ) : (
         <View
           style={StyleSheet.flatten([
             styles.iconStatus,
-            {backgroundColor: statusColor},
+            {
+              backgroundColor:
+                icon === 'status-online'
+                  ? 'green'
+                  : icon === 'status-offline'
+                  ? 'red'
+                  : 'gold',
+            },
           ])}
         />
       );
     }
 
     return icon;
-  }
+  }, [icon, iconSizeComponent]);
 
   const handleRenderImage = useMemo(
     () => (
@@ -96,32 +88,36 @@ export default function Avatar({
         />
       </TouchableWithoutFeedback>
     ),
-    [size, rounded, source, onPress],
+    [size, style, rounded, source, onPress],
   );
+
+  const handleRenderIcon = useMemo(() => {
+    icon && (
+      <TouchableWithoutFeedback
+        disabled={onPressIcon === undefined}
+        onPress={onPressIcon}>
+        <View
+          testID="avatar-icon-container"
+          style={StyleSheet.flatten([
+            styles.iconContainer,
+            iconContainerStyle,
+            styles.sectionIcon,
+            {
+              width: iconSizeComponent,
+              height: iconSizeComponent,
+              borderRadius: iconSizeComponent / 2,
+            },
+          ])}>
+          {renderIcon}
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }, [icon, iconContainerStyle, iconSizeComponent, renderIcon, onPressIcon]);
 
   return (
     <View testID="avatar-container" style={containerStyle}>
       {handleRenderImage}
-      {icon !== undefined && (
-        <TouchableWithoutFeedback
-          disabled={onPressIcon === undefined}
-          onPress={onPressIcon}>
-          <View
-            testID="avatar-icon-container"
-            style={StyleSheet.flatten([
-              styles.iconContainer,
-              iconContainerStyle,
-              styles.sectionIcon,
-              {
-                width: iconSizeComponent,
-                height: iconSizeComponent,
-                borderRadius: iconSizeComponent / 2,
-              },
-            ])}>
-            {icon !== undefined && getIcon()}
-          </View>
-        </TouchableWithoutFeedback>
-      )}
+      {handleRenderIcon}
     </View>
   );
 }
