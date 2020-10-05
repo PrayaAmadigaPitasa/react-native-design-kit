@@ -9,8 +9,8 @@ import {
   GestureResponderEvent,
   TouchableWithoutFeedback,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {AvatarIcon} from '../../types';
+import {Icon} from '../icon';
 
 export interface AvatarProps extends ImageProps {
   containerStyle?: ViewStyle;

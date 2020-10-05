@@ -1,5 +1,6 @@
 export * from './avatar';
 export * from './swipers';
+export * from './icon';
 export * from './Badge';
 export * from './Button';
 export * from './ButtonGroup';
