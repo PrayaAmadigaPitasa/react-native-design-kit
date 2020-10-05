@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   View,
   Image,
@@ -79,8 +79,8 @@ export default function Avatar({
     return icon;
   }
 
-  return (
-    <View testID="avatar-container" style={containerStyle}>
+  const handleRenderImage = useMemo(
+    () => (
       <TouchableWithoutFeedback
         disabled={onPress === undefined}
         onPress={onPress}>
@@ -95,6 +95,13 @@ export default function Avatar({
           source={source}
         />
       </TouchableWithoutFeedback>
+    ),
+    [size, rounded, source, onPress],
+  );
+
+  return (
+    <View testID="avatar-container" style={containerStyle}>
+      {handleRenderImage}
       {icon !== undefined && (
         <TouchableWithoutFeedback
           disabled={onPressIcon === undefined}
