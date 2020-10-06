@@ -1,4 +1,4 @@
-import React, {ReactElement, ReactNode} from 'react';
+import React, {ReactElement, ReactNode, useMemo} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -80,6 +80,22 @@ export default function Button({
   children,
   ...props
 }: ButtonProps) {
+  const handleRenderTopIcon = useMemo(
+    () =>
+      topIcon && (
+        <View
+          style={StyleSheet.flatten([
+            styles.topIconContainer,
+            topIconContainerStyle,
+          ])}>
+          <TouchableWithoutFeedback onPress={topIconAction}>
+            {topIcon}
+          </TouchableWithoutFeedback>
+        </View>
+      ),
+    [topIcon, topIconContainerStyle, topIconAction],
+  );
+
   return (
     <TouchableOpacity
       {...props}
@@ -96,17 +112,7 @@ export default function Button({
         type === 'text' && styles.containerNoOutline,
       ])}
       activeOpacity={activeOpacity}>
-      {topIcon && (
-        <View
-          style={StyleSheet.flatten([
-            styles.topIconContainer,
-            topIconContainerStyle,
-          ])}>
-          <TouchableWithoutFeedback onPress={topIconAction}>
-            {topIcon}
-          </TouchableWithoutFeedback>
-        </View>
-      )}
+      {handleRenderTopIcon}
       <View style={styles.sectionMain}>
         {leftIcon && (
           <View
