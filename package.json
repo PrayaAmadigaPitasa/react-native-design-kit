@@ -61,7 +61,8 @@
   "dependencies": {
     "react": "^16.9.0",
     "react-native": "^0.62.2",
-    "react-native-gesture-handler": "^1.6.1"
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-vector-icons": "^6.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -104,12 +105,11 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*",
-    "react-native-vector-icons": "*"
+    "react-native": "*"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint && npm run test"
     }
   }
 }
