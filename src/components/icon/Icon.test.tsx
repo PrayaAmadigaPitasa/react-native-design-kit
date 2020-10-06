@@ -4,6 +4,6 @@ import Icon from './Icon';
 
 describe('Icon', () => {
   test('default', async () => {
-    render(<Icon name="" />);
+    render(<Icon name="glass" />);
   });
 });
