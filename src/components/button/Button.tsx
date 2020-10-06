@@ -152,6 +152,22 @@ export default function Button({
     [rightIcon, rightIconContainerStyle, rightIconAction],
   );
 
+  const handleRenderBottomIcon = useMemo(
+    () =>
+      bottomIcon && (
+        <View
+          style={StyleSheet.flatten([
+            styles.bottomIconContainer,
+            bottomIconContainerStyle,
+          ])}>
+          <TouchableWithoutFeedback onPress={bottomIconAction}>
+            {bottomIcon}
+          </TouchableWithoutFeedback>
+        </View>
+      ),
+    [bottomIcon, bottomIconContainerStyle, bottomIconAction],
+  );
+
   return (
     <TouchableOpacity
       {...props}
@@ -175,17 +191,7 @@ export default function Button({
         {children}
         {handleRenderRightIcon}
       </View>
-      {bottomIcon && (
-        <View
-          style={StyleSheet.flatten([
-            styles.bottomIconContainer,
-            bottomIconContainerStyle,
-          ])}>
-          <TouchableWithoutFeedback onPress={bottomIconAction}>
-            {bottomIcon}
-          </TouchableWithoutFeedback>
-        </View>
-      )}
+      {handleRenderBottomIcon}
     </TouchableOpacity>
   );
 }
