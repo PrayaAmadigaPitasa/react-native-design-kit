@@ -1,14 +1,16 @@
 /**
- *
  * @param size total item size
- * @param divider total items per page
+ * @param divider total items per page (must be higher than 0)
  */
 export function getTotalPage(size: number, divider: number) {
+  if (divider <= 0) {
+    throw Error('divider must be higher than 0');
+  }
+
   return Math.floor(size / divider) + (size % divider === 0 ? 0 : 1);
 }
 
 /**
- *
  * @param data item list data
  * @param limit total item per split
  */
