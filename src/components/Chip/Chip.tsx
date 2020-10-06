@@ -16,7 +16,7 @@ import {
   ButtonBaseProps,
   ButtonIconProps,
   ButtonTitleProps,
-} from '../buttons';
+} from '../button';
 
 export type ChipIcon = (info: ChipInfo) => JSX.Element;
 export type ChipIconAction = (

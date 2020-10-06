@@ -2,7 +2,7 @@ export * from './avatar';
 export * from './swipers';
 export * from './icon';
 export * from './Badge';
-export * from './buttons';
+export * from './button';
 export * from './ButtonGroup';
 export * from './Checkbox';
 export * from './cube';
