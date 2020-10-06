@@ -126,7 +126,30 @@ export default function Button({
         </Text>
       </View>
     ),
-    [title, titleStyle, titleContainerStyle, disabled],
+    [
+      type,
+      title,
+      titleStyle,
+      titleContainerStyle,
+      disabled,
+      disabledTitleStyle,
+    ],
+  );
+
+  const handleRenderRightIcon = useMemo(
+    () =>
+      rightIcon && (
+        <View
+          style={StyleSheet.flatten([
+            styles.rightIconContainer,
+            rightIconContainerStyle,
+          ])}>
+          <TouchableWithoutFeedback onPress={rightIconAction}>
+            {rightIcon}
+          </TouchableWithoutFeedback>
+        </View>
+      ),
+    [rightIcon, rightIconContainerStyle, rightIconAction],
   );
 
   return (
@@ -150,17 +173,7 @@ export default function Button({
         {handleRenderLeftIcon}
         {handleRenderTitle}
         {children}
-        {rightIcon && (
-          <View
-            style={StyleSheet.flatten([
-              styles.rightIconContainer,
-              rightIconContainerStyle,
-            ])}>
-            <TouchableWithoutFeedback onPress={rightIconAction}>
-              {rightIcon}
-            </TouchableWithoutFeedback>
-          </View>
-        )}
+        {handleRenderRightIcon}
       </View>
       {bottomIcon && (
         <View
