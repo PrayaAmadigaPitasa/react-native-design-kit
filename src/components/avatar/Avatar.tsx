@@ -6,11 +6,11 @@ import {
   ViewStyle,
   StyleSheet,
   GestureResponderEvent,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {AvatarIcon} from '../../types';
 import {getStyleShadow} from '../../utilities';
 import {Icon} from '../icon';
+import {Touchable} from '../touchable';
 
 export interface AvatarProps extends ImageProps {
   containerStyle?: ViewStyle;
@@ -71,7 +71,8 @@ export default function Avatar({
 
   const handleRenderImage = useMemo(
     () => (
-      <TouchableWithoutFeedback
+      <Touchable
+        type="highlight"
         disabled={onPress === undefined}
         onPress={onPress}>
         <Image
@@ -84,7 +85,7 @@ export default function Avatar({
           ])}
           source={source}
         />
-      </TouchableWithoutFeedback>
+      </Touchable>
     ),
     [size, style, rounded, source, onPress],
   );
@@ -92,9 +93,7 @@ export default function Avatar({
   const handleRenderIcon = useMemo(
     () =>
       icon && (
-        <TouchableWithoutFeedback
-          disabled={onPressIcon === undefined}
-          onPress={onPressIcon}>
+        <Touchable disabled={onPressIcon === undefined} onPress={onPressIcon}>
           <View
             testID="avatar-icon-container"
             style={StyleSheet.flatten([
@@ -109,7 +108,7 @@ export default function Avatar({
             ])}>
             {renderIcon}
           </View>
-        </TouchableWithoutFeedback>
+        </Touchable>
       ),
     [icon, iconContainerStyle, iconSizeComponent, renderIcon, onPressIcon],
   );
