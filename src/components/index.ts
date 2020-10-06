@@ -5,7 +5,6 @@ export * from './Badge';
 export * from './button';
 export * from './ButtonGroup';
 export * from './Checkbox';
-export * from './cube';
 export * from './list';
 export * from './Chip';
 export * from './Header';
