@@ -1,16 +1,15 @@
 import React, {ReactElement, ReactNode, useMemo} from 'react';
 import {
   View,
-  TouchableOpacity,
   ViewStyle,
   Text,
   StyleSheet,
   TextStyle,
   TouchableOpacityProps,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {ButtonType} from '../../types';
 import {getStyleShadow} from '../../utilities';
+import {Touchable} from '../touchable';
 
 export interface ButtonIconProps {
   topIcon?: ReactElement;
@@ -77,7 +76,6 @@ export default function Button({
   bottomIcon,
   bottomIconContainerStyle,
   bottomIconAction,
-  activeOpacity = 0.5,
   children,
   ...props
 }: ButtonProps) {
@@ -89,9 +87,9 @@ export default function Button({
             styles.topIconContainer,
             topIconContainerStyle,
           ])}>
-          <TouchableWithoutFeedback onPress={topIconAction}>
+          <Touchable type="normal" onPress={topIconAction}>
             {topIcon}
-          </TouchableWithoutFeedback>
+          </Touchable>
         </View>
       ),
     [topIcon, topIconContainerStyle, topIconAction],
@@ -105,9 +103,9 @@ export default function Button({
             styles.leftIconContainer,
             leftIconContainerStyle,
           ])}>
-          <TouchableWithoutFeedback onPress={leftIconAction}>
+          <Touchable type="normal" onPress={leftIconAction}>
             {leftIcon}
-          </TouchableWithoutFeedback>
+          </Touchable>
         </View>
       ),
     [leftIcon, leftIconContainerStyle, leftIconAction],
@@ -145,9 +143,9 @@ export default function Button({
             styles.rightIconContainer,
             rightIconContainerStyle,
           ])}>
-          <TouchableWithoutFeedback onPress={rightIconAction}>
+          <Touchable type="normal" onPress={rightIconAction}>
             {rightIcon}
-          </TouchableWithoutFeedback>
+          </Touchable>
         </View>
       ),
     [rightIcon, rightIconContainerStyle, rightIconAction],
@@ -161,16 +159,16 @@ export default function Button({
             styles.bottomIconContainer,
             bottomIconContainerStyle,
           ])}>
-          <TouchableWithoutFeedback onPress={bottomIconAction}>
+          <Touchable type="normal" onPress={bottomIconAction}>
             {bottomIcon}
-          </TouchableWithoutFeedback>
+          </Touchable>
         </View>
       ),
     [bottomIcon, bottomIconContainerStyle, bottomIconAction],
   );
 
   return (
-    <TouchableOpacity
+    <Touchable
       {...props}
       testID="button-container"
       disabled={disabled}
@@ -183,8 +181,7 @@ export default function Button({
         raised && [styles.containerRaised, raisedStyle],
         type !== 'solid' && styles.containerNoBackground,
         type === 'text' && styles.containerNoOutline,
-      ])}
-      activeOpacity={activeOpacity}>
+      ])}>
       {handleRenderTopIcon}
       <View style={styles.sectionMain}>
         {handleRenderLeftIcon}
@@ -193,7 +190,7 @@ export default function Button({
         {handleRenderRightIcon}
       </View>
       {handleRenderBottomIcon}
-    </TouchableOpacity>
+    </Touchable>
   );
 }
 
