@@ -96,6 +96,22 @@ export default function Button({
     [topIcon, topIconContainerStyle, topIconAction],
   );
 
+  const handleRenderLeftIcon = useMemo(
+    () =>
+      leftIcon && (
+        <View
+          style={StyleSheet.flatten([
+            styles.leftIconContainer,
+            leftIconContainerStyle,
+          ])}>
+          <TouchableWithoutFeedback onPress={leftIconAction}>
+            {leftIcon}
+          </TouchableWithoutFeedback>
+        </View>
+      ),
+    [leftIcon, leftIconContainerStyle, leftIconAction],
+  );
+
   return (
     <TouchableOpacity
       {...props}
@@ -114,17 +130,7 @@ export default function Button({
       activeOpacity={activeOpacity}>
       {handleRenderTopIcon}
       <View style={styles.sectionMain}>
-        {leftIcon && (
-          <View
-            style={StyleSheet.flatten([
-              styles.leftIconContainer,
-              leftIconContainerStyle,
-            ])}>
-            <TouchableWithoutFeedback onPress={leftIconAction}>
-              {leftIcon}
-            </TouchableWithoutFeedback>
-          </View>
-        )}
+        {handleRenderLeftIcon}
         <View style={titleContainerStyle}>
           <Text
             style={[
