@@ -112,6 +112,23 @@ export default function Button({
     [leftIcon, leftIconContainerStyle, leftIconAction],
   );
 
+  const handleRenderTitle = useMemo(
+    () => (
+      <View style={titleContainerStyle}>
+        <Text
+          style={StyleSheet.flatten([
+            styles.title,
+            type !== 'solid' && styles.titleNoBackground,
+            titleStyle,
+            disabled && disabledTitleStyle,
+          ])}>
+          {title}
+        </Text>
+      </View>
+    ),
+    [title, titleStyle, titleContainerStyle, disabled],
+  );
+
   return (
     <TouchableOpacity
       {...props}
@@ -131,17 +148,7 @@ export default function Button({
       {handleRenderTopIcon}
       <View style={styles.sectionMain}>
         {handleRenderLeftIcon}
-        <View style={titleContainerStyle}>
-          <Text
-            style={[
-              styles.title,
-              type !== 'solid' && styles.titleNoBackground,
-              titleStyle,
-              disabled && disabledTitleStyle,
-            ]}>
-            {title}
-          </Text>
-        </View>
+        {handleRenderTitle}
         {children}
         {rightIcon && (
           <View
