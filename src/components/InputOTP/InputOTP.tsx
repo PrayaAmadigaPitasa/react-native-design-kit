@@ -7,7 +7,7 @@ import {
   TextInputProps,
   TextStyle,
 } from 'react-native';
-import {isNumber} from '../../utilities/RegexUtil';
+import {isNumber} from '../../utilities';
 
 export interface InputOTPBaseProps extends TextInputProps {
   inputContainerStyle?: ViewStyle;
