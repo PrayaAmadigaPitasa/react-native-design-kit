@@ -12,10 +12,19 @@ export interface TouchableProps extends TouchableOpacityProps {
   children?: ReactNode;
 }
 
-export default function Touchable({type, children, ...props}: TouchableProps) {
+export default function Touchable({
+  type = 'opacity',
+  activeOpacity = 0.75,
+  children,
+  ...props
+}: TouchableProps) {
   switch (type) {
     case 'opacity':
-      return <TouchableOpacity {...props}>{children}</TouchableOpacity>;
+      return (
+        <TouchableOpacity {...props} activeOpacity={activeOpacity}>
+          {children}
+        </TouchableOpacity>
+      );
     case 'highlight':
       return <TouchableHighlight {...props}>{children}</TouchableHighlight>;
     default:
