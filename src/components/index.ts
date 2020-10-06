@@ -1,8 +1,8 @@
 export * from './avatar';
+export * from './button';
 export * from './swipers';
 export * from './icon';
 export * from './Badge';
-export * from './button';
 export * from './ButtonGroup';
 export * from './Checkbox';
 export * from './list';
@@ -19,6 +19,7 @@ export * from './Slider';
 export * from './Stepper';
 export * from './SwitchableText';
 export * from './ExpansionPanel';
+export * from './touchable';
 
 export {default as PlayingBar} from './PlayingBar';
 export {default as Radio} from './Radio';
