@@ -1,5 +1,5 @@
 import {Errors} from '../../constants';
-import {getTotalPage} from './ListHelper';
+import {getTotalPage, splitList} from './ListHelper';
 
 describe('ListHelper', () => {
   test('getTotalPage', async () => {
@@ -14,7 +14,11 @@ describe('ListHelper', () => {
     expect(totalCase4).toThrow(Errors.ERROR_DIVIDER_MUST_BE_HIGHER_THAN_ZERO);
   });
 
-  // test('splitList', async () => {
+  test('splitList', async () => {
+    const valueCase1 = splitList(['a', 'b', 'c'], 2);
+    const valueCase2 = splitList(['a', 'b', 'c'], 3);
 
-  // })
+    expect(valueCase1).toEqual([['a', 'b'], ['c']]);
+    expect(valueCase2).toEqual([['a', 'b', 'c']]);
+  });
 });
