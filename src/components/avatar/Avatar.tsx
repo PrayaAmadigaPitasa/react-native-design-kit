@@ -5,11 +5,11 @@ import {
   ImageProps,
   ViewStyle,
   StyleSheet,
-  Platform,
   GestureResponderEvent,
   TouchableWithoutFeedback,
 } from 'react-native';
 import {AvatarIcon} from '../../types';
+import {getStyleShadow} from '../../utilities';
 import {Icon} from '../icon';
 
 export interface AvatarProps extends ImageProps {
@@ -135,17 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    ...Platform.select({
-      android: {
-        elevation: 4,
-      },
-      ios: {
-        shadowColor: 'darkgray',
-        shadowOffset: {height: 1, width: 1},
-        shadowOpacity: 1,
-        shadowRadius: 1,
-      },
-    }),
+    ...getStyleShadow(),
   },
   sectionIcon: {
     position: 'absolute',
