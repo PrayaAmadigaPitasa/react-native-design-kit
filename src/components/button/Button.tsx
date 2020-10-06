@@ -9,6 +9,7 @@ import {
   TouchableOpacityProps,
   TouchableWithoutFeedback,
 } from 'react-native';
+import {ButtonType} from '../../types';
 import {getStyleShadow} from '../../utilities';
 
 export interface ButtonIconProps {
@@ -27,7 +28,7 @@ export interface ButtonIconProps {
 }
 
 export interface ButtonTypeProps {
-  type?: 'solid' | 'outline' | 'text';
+  type?: ButtonType;
 }
 
 export interface ButtonTitleProps {
