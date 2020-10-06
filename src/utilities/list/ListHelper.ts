@@ -1,10 +1,14 @@
+import {Errors} from '../../constants';
+
 /**
- * @param size total item size
+ * @param size total item size (must be higher than 0)
  * @param divider total items per page (must be higher than 0)
  */
 export function getTotalPage(size: number, divider: number) {
-  if (divider <= 0) {
-    throw Error('divider must be higher than 0');
+  if (size <= 0) {
+    throw Errors.ERROR_VALUE_MUST_BE_HIGHER_THAN_ZERO;
+  } else if (divider <= 0) {
+    throw Errors.ERROR_DIVIDER_MUST_BE_HIGHER_THAN_ZERO;
   }
 
   return Math.floor(size / divider) + (size % divider === 0 ? 0 : 1);
