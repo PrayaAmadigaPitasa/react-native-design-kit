@@ -8,7 +8,7 @@ import {
   ViewStyle,
   TouchableOpacityProps,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Icon} from '../icon';
 
 export type CheckboxIdentifier = string | CheckboxCategory;
 export type CheckboxCategoryStatus =
