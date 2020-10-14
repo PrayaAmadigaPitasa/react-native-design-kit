@@ -4,7 +4,6 @@ import React, {
   ReactElement,
   useMemo,
   useCallback,
-  ReactNode,
 } from 'react';
 import {
   View,
@@ -33,7 +32,6 @@ export interface ButtonGroupProps
   selectedButtonContainerStyle?: ViewStyle;
   selectedButtonTitleStyle?: TextStyle;
   selectedId?: string | string[];
-  children?: ReactNode;
   onSelect(id: string, selected: string[]): void;
 }
 

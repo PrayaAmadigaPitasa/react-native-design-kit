@@ -72,7 +72,7 @@ export default function Avatar({
   const handleRenderImage = useMemo(
     () => (
       <Touchable
-        type="highlight"
+        touchableType="highlight"
         disabled={onPress === undefined}
         onPress={onPress}>
         <Image

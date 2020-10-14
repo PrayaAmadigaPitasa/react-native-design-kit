@@ -1,15 +1,8 @@
-import React, {ReactElement, ReactNode, useMemo} from 'react';
-import {
-  View,
-  ViewStyle,
-  Text,
-  StyleSheet,
-  TextStyle,
-  TouchableOpacityProps,
-} from 'react-native';
+import React, {ReactElement, useMemo} from 'react';
+import {View, ViewStyle, Text, StyleSheet, TextStyle} from 'react-native';
 import {ButtonType} from '../../types';
 import {getStyleShadow} from '../../utilities';
-import {Touchable} from '../touchable';
+import {Touchable, TouchableProps} from '../touchable';
 
 export interface ButtonIconProps {
   topIcon?: ReactElement;
@@ -43,14 +36,13 @@ export interface ButtonBaseProps {
 }
 
 export interface ButtonProps
-  extends TouchableOpacityProps,
+  extends TouchableProps,
     ButtonIconProps,
     ButtonTypeProps,
     ButtonTitleProps,
     ButtonBaseProps {
   raised?: boolean;
   raisedStyle?: ViewStyle;
-  children?: ReactNode;
 }
 
 export default function Button({
@@ -87,7 +79,7 @@ export default function Button({
             styles.topIconContainer,
             topIconContainerStyle,
           ])}>
-          <Touchable type="normal" onPress={topIconAction}>
+          <Touchable touchableType="normal" onPress={topIconAction}>
             {topIcon}
           </Touchable>
         </View>
@@ -103,7 +95,7 @@ export default function Button({
             styles.leftIconContainer,
             leftIconContainerStyle,
           ])}>
-          <Touchable type="normal" onPress={leftIconAction}>
+          <Touchable touchableType="normal" onPress={leftIconAction}>
             {leftIcon}
           </Touchable>
         </View>
@@ -143,7 +135,7 @@ export default function Button({
             styles.rightIconContainer,
             rightIconContainerStyle,
           ])}>
-          <Touchable type="normal" onPress={rightIconAction}>
+          <Touchable touchableType="normal" onPress={rightIconAction}>
             {rightIcon}
           </Touchable>
         </View>
@@ -159,7 +151,7 @@ export default function Button({
             styles.bottomIconContainer,
             bottomIconContainerStyle,
           ])}>
-          <Touchable type="normal" onPress={bottomIconAction}>
+          <Touchable touchableType="normal" onPress={bottomIconAction}>
             {bottomIcon}
           </Touchable>
         </View>

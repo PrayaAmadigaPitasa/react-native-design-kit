@@ -1,5 +1,5 @@
-import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
+import {fireEvent, render} from '@testing-library/react-native';
 import {ObjectPartial} from '../../types';
 import ButtonGroup, {ButtonGroupProps} from './ButtonGroup';
 

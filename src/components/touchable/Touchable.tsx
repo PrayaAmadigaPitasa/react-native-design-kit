@@ -4,33 +4,42 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import {TouchableType} from '../../types';
 
 export interface TouchableProps extends TouchableOpacityProps {
-  type?: TouchableType;
+  touchableType?: TouchableType;
   children?: ReactNode;
 }
 
 export default function Touchable({
-  type = 'opacity',
+  touchableType = 'opacity',
   activeOpacity = 0.75,
+  style,
   children,
   ...props
 }: TouchableProps) {
-  switch (type) {
+  switch (touchableType) {
     case 'opacity':
       return (
-        <TouchableOpacity {...props} activeOpacity={activeOpacity}>
+        <TouchableOpacity
+          {...props}
+          style={style}
+          activeOpacity={activeOpacity}>
           {children}
         </TouchableOpacity>
       );
     case 'highlight':
-      return <TouchableHighlight {...props}>{children}</TouchableHighlight>;
+      return (
+        <TouchableHighlight {...props} activeOpacity={activeOpacity}>
+          <View style={style}>{children}</View>
+        </TouchableHighlight>
+      );
     default:
       return (
         <TouchableWithoutFeedback {...props}>
-          {children}
+          <View style={style}>{children}</View>
         </TouchableWithoutFeedback>
       );
   }
