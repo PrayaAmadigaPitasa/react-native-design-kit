@@ -1,25 +1,28 @@
-import React, {useState, useEffect} from 'react';
+import React, {
+  useState,
+  useEffect,
+  ReactElement,
+  useMemo,
+  useCallback,
+} from 'react';
 import {
   View,
   StyleSheet,
   ViewStyle,
   TextStyle,
   TouchableOpacityProps,
+  GestureResponderEvent,
 } from 'react-native';
+import {ButtonGroupActionType, ButtonGroupInfo} from '../../types';
 import {Button, ButtonBaseProps, ButtonTypeProps} from '../button';
-
-export interface ButtonGroupInfo {
-  id: string;
-  isSelected: boolean;
-}
 
 export interface ButtonGroupProps
   extends TouchableOpacityProps,
     ButtonBaseProps,
     ButtonTypeProps {
-  actionType?: 'button' | 'radio' | 'checkbox';
+  actionType?: ButtonGroupActionType;
   buttonIds: string[];
-  buttonComponent?(info: ButtonGroupInfo): string | JSX.Element;
+  buttonComponent?(info: ButtonGroupInfo): string | ReactElement;
   buttonContainerStyle?: ViewStyle;
   buttonTitleStyle?: TextStyle;
   containerBorderRadius?: number;
@@ -53,10 +56,6 @@ export default function ButtonGroup({
     selectedId !== undefined ? filterId(selectedId, true) : [],
   );
 
-  useEffect(() => {
-    setSelected(selectedId !== undefined ? filterId(selectedId, true) : []);
-  }, [selectedId]);
-
   function checkId(id: string) {
     return buttonIds.indexOf(id) >= 0;
   }
@@ -87,99 +86,125 @@ export default function ButtonGroup({
     return selection;
   }
 
-  function getButtonGroupItem(id: string, index: number) {
-    const component =
-      buttonComponent && buttonComponent({id: id, isSelected: isSelected(id)});
-    const title =
-      typeof component === 'string'
-        ? component
-        : component === undefined
-        ? id
-        : undefined;
-    return (
-      <Button
-        {...props}
-        testID="button"
-        key={id}
-        type={type}
-        raised={isSelected(id) ? selectedButtonRaised : standbyButtonRaised}
-        containerStyle={StyleSheet.flatten([
-          styles.buttonContainer,
-          buttonContainerStyle,
-          isSelected(id)
-            ? StyleSheet.flatten([
-                styles.selectedButtonContainer,
-                selectedButtonContainerStyle,
-              ])
-            : {},
-          index === 0
-            ? {
-                borderTopLeftRadius: containerBorderRadius,
-                borderBottomLeftRadius: containerBorderRadius,
-              }
-            : {},
-          index === buttonIds.length - 1
-            ? {
-                borderTopRightRadius: containerBorderRadius,
-                borderBottomRightRadius: containerBorderRadius,
-              }
-            : {},
-        ])}
-        title={title}
-        titleStyle={StyleSheet.flatten([
-          buttonTitleStyle,
-          isSelected(id) &&
-            StyleSheet.flatten([
-              type !== 'solid' && styles.selectedTitle,
-              selectedButtonTitleStyle,
-            ]),
-        ])}
-        onPress={event => {
-          onPress !== undefined && onPress(event);
+  const handlePressButtonItem = useCallback(
+    (id: string, event: GestureResponderEvent) => {
+      onPress && onPress(event);
 
-          if (actionType !== 'button') {
-            if (actionType === 'checkbox') {
-              const selection = [...selected];
+      if (actionType !== 'button') {
+        if (actionType === 'checkbox') {
+          const selection = [...selected];
 
-              if (isSelected(id)) {
-                selection.splice(selection.indexOf(id), 1);
-              } else {
-                selection.push(id);
-              }
-
-              setSelected(selection);
-              onSelect(id, selection);
-            } else {
-              const selection = [id];
-
-              setSelected(selection);
-              onSelect(id, selection);
-            }
+          if (isSelected(id)) {
+            selection.splice(selection.indexOf(id), 1);
           } else {
-            onSelect(id, selected);
+            selection.push(id);
           }
-        }}>
-        {component !== undefined && typeof component !== 'string' && component}
-      </Button>
-    );
-  }
 
-  function getListButton() {
-    const list: JSX.Element[] = [];
+          setSelected(selection);
+          onSelect(id, selection);
+        } else {
+          const selection = [id];
+
+          setSelected(selection);
+          onSelect(id, selection);
+        }
+      } else {
+        onSelect(id, selected);
+      }
+    },
+    [actionType, selected, onSelect, onPress],
+  );
+
+  const handleRenderButtonItem = useCallback(
+    (id: string, index: number) => {
+      const component =
+        buttonComponent && buttonComponent({id, isSelected: isSelected(id)});
+      const title =
+        typeof component === 'string'
+          ? component
+          : component === undefined
+          ? id
+          : undefined;
+
+      return (
+        <Button
+          {...props}
+          testID="button"
+          key={id}
+          type={type}
+          raised={isSelected(id) ? selectedButtonRaised : standbyButtonRaised}
+          containerStyle={StyleSheet.flatten([
+            styles.buttonContainer,
+            buttonContainerStyle,
+            isSelected(id)
+              ? StyleSheet.flatten([
+                  styles.selectedButtonContainer,
+                  selectedButtonContainerStyle,
+                ])
+              : {},
+            index === 0
+              ? {
+                  borderTopLeftRadius: containerBorderRadius,
+                  borderBottomLeftRadius: containerBorderRadius,
+                }
+              : {},
+            index === buttonIds.length - 1
+              ? {
+                  borderTopRightRadius: containerBorderRadius,
+                  borderBottomRightRadius: containerBorderRadius,
+                }
+              : {},
+          ])}
+          title={title}
+          titleStyle={StyleSheet.flatten([
+            buttonTitleStyle,
+            isSelected(id) &&
+              StyleSheet.flatten([
+                type !== 'solid' && styles.selectedTitle,
+                selectedButtonTitleStyle,
+              ]),
+          ])}
+          onPress={event => handlePressButtonItem(id, event)}>
+          {component && typeof component !== 'string' && component}
+        </Button>
+      );
+    },
+    [
+      props,
+      type,
+      buttonIds,
+      buttonTitleStyle,
+      selectedButtonTitleStyle,
+      selectedButtonRaised,
+      standbyButtonRaised,
+      buttonContainerStyle,
+      selectedButtonContainerStyle,
+      containerBorderRadius,
+      buttonComponent,
+      handlePressButtonItem,
+    ],
+  );
+
+  const handleRenderListButton = useMemo(() => {
+    const list: ReactElement[] = [];
 
     for (let index = 0; index < buttonIds.length; index++) {
       const id = buttonIds[index];
-      const button = getButtonGroupItem(id, index);
+      const button = handleRenderButtonItem(id, index);
 
       list.push(button);
     }
 
     return list;
-  }
+  }, [buttonIds, handleRenderButtonItem]);
+
+  useEffect(() => {
+    setSelected(selectedId !== undefined ? filterId(selectedId, true) : []);
+  }, [selectedId]);
 
   return (
     <View style={StyleSheet.flatten([styles.container, containerStyle])}>
-      {getListButton()}
+      {handleRenderListButton}
     </View>
   );
 }
