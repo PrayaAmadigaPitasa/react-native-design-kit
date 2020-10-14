@@ -3,7 +3,7 @@ export * from './button';
 export * from './swipers';
 export * from './icon';
 export * from './badge';
-export * from './button_groups';
+export * from './button-group';
 export * from './Checkbox';
 export * from './list';
 export * from './Chip';
