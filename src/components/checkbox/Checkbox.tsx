@@ -8,23 +8,12 @@ import {
   ViewStyle,
   TouchableOpacityProps,
 } from 'react-native';
+import {
+  CheckboxCategoryStatus,
+  CheckboxIdentifier,
+  CheckboxInfo,
+} from '../../types';
 import {Icon} from '../icon';
-
-export type CheckboxIdentifier = string | CheckboxCategory;
-export type CheckboxCategoryStatus =
-  | 'selected'
-  | 'not-selected'
-  | 'indeterminate';
-
-export interface CheckboxInfo {
-  id: string;
-  isSelected: boolean;
-}
-
-export interface CheckboxCategory {
-  title: string;
-  checkboxIds: CheckboxIdentifier[];
-}
 
 export interface CheckboxIndeterminateProps {
   indeterminateCheckboxIcon?: JSX.Element;
