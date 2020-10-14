@@ -14,6 +14,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import {ButtonGroupActionType, ButtonGroupInfo} from '../../types';
+import {filterSelectList} from '../../utilities';
 import {Button, ButtonBaseProps, ButtonTypeProps} from '../button';
 
 export interface ButtonGroupProps
@@ -52,29 +53,12 @@ export default function ButtonGroup({
   onSelect,
   ...props
 }: ButtonGroupProps) {
+  const singleValue = useMemo(() => actionType === 'radio', [actionType]);
   const [selected, setSelected] = useState<string[]>(
-    selectedId !== undefined ? filterId(selectedId, true) : [],
+    selectedId !== undefined
+      ? filterSelectList(buttonIds, selectedId, singleValue)
+      : [],
   );
-
-  function filterId(id: string | string[], checkType?: boolean) {
-    const selection: string[] = [];
-
-    if (Array.isArray(id)) {
-      for (const check in id) {
-        if (buttonIds.indexOf(check) >= 0) {
-          selection.push(check);
-
-          if (checkType && actionType === 'radio') {
-            return selection;
-          }
-        }
-      }
-    } else {
-      selection.push(id);
-    }
-
-    return selection;
-  }
 
   const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
     selected,
@@ -193,7 +177,11 @@ export default function ButtonGroup({
   }, [buttonIds, handleRenderButtonItem]);
 
   useEffect(() => {
-    setSelected(selectedId !== undefined ? filterId(selectedId, true) : []);
+    setSelected(
+      selectedId !== undefined
+        ? filterSelectList(buttonIds, selectedId, true)
+        : [],
+    );
   }, [selectedId]);
 
   return (

@@ -41,3 +41,27 @@ export function splitList<ItemT>(data: ItemT[], limit: number) {
 
   return items;
 }
+
+export function filterSelectList(
+  list: string[],
+  input: string[] | string,
+  single?: boolean,
+) {
+  const selection: string[] = [];
+
+  if (Array.isArray(input)) {
+    for (const check in input) {
+      if (list.indexOf(check) >= 0) {
+        selection.push(check);
+
+        if (single) {
+          return selection;
+        }
+      }
+    }
+  } else if (list.indexOf(input) >= 0) {
+    selection.push(input);
+  }
+
+  return selection;
+}
