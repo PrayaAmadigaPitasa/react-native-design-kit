@@ -7,9 +7,7 @@ export interface InputOTPStoryProps extends InputOTPProps {}
 export default function InputOTPStory({
   focusInputContainerStyle,
   onChangeOTP = () => {},
-  separatorComponent = (
-    <View style={{height: 5, width: 20, backgroundColor: 'black'}} />
-  ),
+  separatorComponent = <View style={styles.separator} />,
 }: InputOTPStoryProps) {
   return (
     <View style={styles.container}>
@@ -35,4 +33,5 @@ const styles = StyleSheet.create({
   focusInputContainer: {
     borderColor: 'dodgerblue',
   },
+  separator: {height: 5, width: 20, backgroundColor: 'black'},
 });
