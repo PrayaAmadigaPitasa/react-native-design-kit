@@ -170,7 +170,6 @@ export default function Button({
   return (
     <Touchable
       {...props}
-      testID="button-container"
       disabled={disabled}
       style={StyleSheet.flatten([
         styles.container,
