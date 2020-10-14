@@ -50,7 +50,7 @@ export function filterSelectList(
   const selection: string[] = [];
 
   if (Array.isArray(input)) {
-    for (const check in input) {
+    for (const check of input) {
       if (list.indexOf(check) >= 0) {
         selection.push(check);
 
