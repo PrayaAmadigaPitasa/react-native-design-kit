@@ -4,7 +4,7 @@ export * from './swipers';
 export * from './icon';
 export * from './badge';
 export * from './button-group';
-export * from './checkboxs';
+export * from './checkbox';
 export * from './list';
 export * from './Chip';
 export * from './Header';
