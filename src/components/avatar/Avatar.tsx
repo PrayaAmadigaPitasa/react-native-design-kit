@@ -77,7 +77,6 @@ export default function Avatar({
         onPress={onPress}>
         <Image
           {...props}
-          testID="avatar-image-container"
           style={StyleSheet.flatten([
             {height: size, width: size},
             rounded && {borderRadius: size / 2},
@@ -95,7 +94,6 @@ export default function Avatar({
       icon && (
         <Touchable disabled={onPressIcon === undefined} onPress={onPressIcon}>
           <View
-            testID="avatar-icon-container"
             style={StyleSheet.flatten([
               styles.iconContainer,
               iconContainerStyle,
@@ -114,7 +112,7 @@ export default function Avatar({
   );
 
   return (
-    <View testID="avatar-container" style={containerStyle}>
+    <View style={containerStyle}>
       {handleRenderImage}
       {handleRenderIcon}
     </View>

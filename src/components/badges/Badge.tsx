@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet, View, Text, ViewStyle, TextStyle} from 'react-native';
 
 export interface BadgeProps {
@@ -18,26 +18,25 @@ export default function Badge({
   color = 'red',
   children,
 }: BadgeProps) {
-  function getComponent(input: ReactNode) {
-    if (typeof input === 'string' || typeof input === 'number') {
-      return (
-        <Text style={StyleSheet.flatten([styles.text, style])}>{input}</Text>
-      );
-    }
+  const handleRenderContent = useMemo(() => {
+    const content = value !== undefined ? value : children;
 
-    return input;
-  }
+    return typeof content === 'string' || typeof content === 'number' ? (
+      <Text style={StyleSheet.flatten([styles.text, style])}>{content}</Text>
+    ) : (
+      content
+    );
+  }, [value, children, style]);
 
   return (
     <View
-      testID="badge-container"
       style={StyleSheet.flatten([
         styles.container,
         containerStyle,
         {height: size, minWidth: size, borderRadius: size / 2},
         color !== undefined && {backgroundColor: 'red'},
       ])}>
-      {value !== undefined ? getComponent(value) : getComponent(children)}
+      {handleRenderContent}
     </View>
   );
 }
