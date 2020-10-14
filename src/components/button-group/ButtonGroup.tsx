@@ -56,22 +56,12 @@ export default function ButtonGroup({
     selectedId !== undefined ? filterId(selectedId, true) : [],
   );
 
-  function checkId(id: string) {
-    return buttonIds.indexOf(id) >= 0;
-  }
-
-  function isSelected(id: string) {
-    return selected.indexOf(id) >= 0;
-  }
-
   function filterId(id: string | string[], checkType?: boolean) {
     const selection: string[] = [];
 
     if (Array.isArray(id)) {
-      for (let indexId = 0; indexId < id.length; indexId++) {
-        const check = id[indexId];
-
-        if (checkId(check)) {
+      for (const check in id) {
+        if (buttonIds.indexOf(check) >= 0) {
           selection.push(check);
 
           if (checkType && actionType === 'radio') {
@@ -85,6 +75,10 @@ export default function ButtonGroup({
 
     return selection;
   }
+
+  const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
+    selected,
+  ]);
 
   const handlePressButtonItem = useCallback(
     (id: string, event: GestureResponderEvent) => {
