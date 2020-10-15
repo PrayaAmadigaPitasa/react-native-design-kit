@@ -4,6 +4,7 @@ import React, {
   ReactElement,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import {
   View,
@@ -55,10 +56,9 @@ export default function ButtonGroup({
 }: ButtonGroupProps) {
   const singleValue = useMemo(() => actionType === 'radio', [actionType]);
   const [selected, setSelected] = useState<string[]>(
-    selectedId !== undefined
-      ? filterSelectList(buttonIds, selectedId, singleValue)
-      : [],
+    filterSelectList(buttonIds, selectedId || [], singleValue),
   );
+  const initialize = useRef(false);
 
   const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
     selected,
@@ -177,12 +177,12 @@ export default function ButtonGroup({
   }, [buttonIds, handleRenderButtonItem]);
 
   useEffect(() => {
-    setSelected(
-      selectedId !== undefined
-        ? filterSelectList(buttonIds, selectedId, true)
-        : [],
-    );
-  }, [selectedId]);
+    if (initialize.current) {
+      setSelected(filterSelectList(buttonIds, selectedId || [], singleValue));
+    } else {
+      initialize.current = true;
+    }
+  }, [singleValue, buttonIds, selectedId]);
 
   return (
     <View style={StyleSheet.flatten([styles.container, containerStyle])}>
