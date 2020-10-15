@@ -39,7 +39,6 @@ export interface ChipProps extends ChipItemBaseProps {
 
 export default function Chip({
   actionType = 'chip',
-  rounded,
   containerStyle,
   chips,
   chipContainerStyle,
@@ -227,7 +226,6 @@ export default function Chip({
               : selectedChipTitleStyle
             : {},
         ])}
-        rounded={rounded}
         leftIcon={getIcon(id, leftIcon, leftIconAction)}
         leftIconAction={getIconAction(id, leftIconAction)}
         rightIcon={getIcon(id, rightIcon, rightIconAction)}
