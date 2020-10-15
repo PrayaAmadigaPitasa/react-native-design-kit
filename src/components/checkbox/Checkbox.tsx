@@ -1,4 +1,4 @@
-import React, {useState, ReactNode} from 'react';
+import React, {useState, ReactNode, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TextStyle,
   ViewStyle,
   TouchableOpacityProps,
+  GestureResponderEvent,
 } from 'react-native';
 import {
   CheckboxCategoryStatus,
@@ -14,6 +15,7 @@ import {
   CheckboxInfo,
 } from '../../types';
 import {Icon} from '../icon';
+import {Touchable} from '../touchable';
 
 export interface CheckboxIndeterminateProps {
   indeterminateCheckboxIcon?: JSX.Element;
@@ -73,15 +75,13 @@ export function CheckboxItem({
   ...props
 }: CheckboxItemProps) {
   return (
-    <TouchableOpacity
+    <Touchable
       {...props}
-      testID="checkbox-item-container"
       style={[
         styles.checkboxContainer,
         style,
         isSelected && selectedCheckboxStyle,
-      ]}
-      activeOpacity={0.75}>
+      ]}>
       <View
         style={StyleSheet.flatten([
           styles.checkboxIconContainer,
@@ -118,7 +118,7 @@ export function CheckboxItem({
           </Text>
         )}
       </View>
-    </TouchableOpacity>
+    </Touchable>
   );
 }
 
@@ -217,204 +217,229 @@ export default function Checkbox({
     defaultIds !== undefined ? filterId(defaultIds) : [],
   );
 
-  function checkIndeterminateStatus(
-    checkboxIdenfitifer: CheckboxIdentifier[],
-    checked: boolean,
-    hasEmpty?: boolean,
-  ): CheckboxCategoryStatus {
-    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
-      const indeterminate = checkboxIdenfitifer[index];
-
-      if (typeof indeterminate === 'string') {
-        if (!hasEmpty && !isSelected(indeterminate)) {
-          hasEmpty = true;
-        } else if (!checked && isSelected(indeterminate)) {
-          checked = true;
-        }
-      } else {
-        return checkIndeterminateStatus(
-          indeterminate.checkboxIds,
-          checked,
-          hasEmpty,
-        );
-      }
-    }
-
-    return checked ? (hasEmpty ? 'indeterminate' : 'selected') : 'not-selected';
-  }
-
-  function checkId(
-    id: string,
-    checkboxIdenfitifer: CheckboxIdentifier[],
-  ): boolean {
-    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
-      const value = checkboxIdenfitifer[index];
-
-      if (typeof value === 'string') {
-        if (value === id) {
-          return true;
-        }
-      } else {
-        return checkId(id, value.checkboxIds);
-      }
-    }
-
-    return false;
-  }
-
-  function filterSelection(
-    base: string[],
-    checkboxIdentifier: CheckboxIdentifier[],
-    toggle: boolean,
-  ): string[] {
-    const selection = [...base];
-
-    for (let index = 0; index < checkboxIdentifier.length; index++) {
-      const identifier = checkboxIdentifier[index];
-
-      if (typeof identifier === 'string') {
-        const select = selection.indexOf(identifier) >= 0;
-
-        if (select && !toggle) {
-          selection.splice(selection.indexOf(identifier), 1);
-        }
-
-        if (!select && toggle) {
-          selection.push(identifier);
-        }
-      } else {
-        return filterSelection(selection, identifier.checkboxIds, toggle);
-      }
-    }
-
-    return selection;
-  }
-
-  function isSelected(id: string) {
-    return selected.indexOf(id) >= 0;
-  }
-
   function filterId(id: string | string[]) {
     const selection: string[] = [];
 
     if (Array.isArray(id)) {
-      for (let indexId = 0; indexId < id.length; indexId++) {
-        const check = id[indexId];
-
+      for (const check of id) {
         if (checkId(check, checkboxIds)) {
           selection.push(check);
         }
       }
-    } else {
+    } else if (checkId(id, checkboxIds)) {
       selection.push(id);
     }
 
     return selection;
   }
 
-  function getCheckboxItem(id: string) {
-    const component =
-      checkboxComponent &&
-      checkboxComponent({id: id, isSelected: isSelected(id)});
-    const title =
-      typeof component === 'string'
-        ? component
-        : component === undefined
-        ? id
-        : undefined;
+  const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, []);
 
-    return (
-      <CheckboxItem
-        {...props}
-        key={id}
-        title={title}
-        isSelected={isSelected(id)}
-        onPress={event => {
-          onPress !== undefined && onPress(event);
-          const selection = [...selected];
+  const checkIndeterminateStatus = useCallback(
+    (
+      checkboxIdenfitifer: CheckboxIdentifier[],
+      checked: boolean,
+      hasEmpty?: boolean,
+    ): CheckboxCategoryStatus => {
+      for (const indeterminate of checkboxIdenfitifer) {
+        if (typeof indeterminate === 'string') {
+          if (!hasEmpty && !isSelected(indeterminate)) {
+            hasEmpty = true;
+          } else if (!checked && isSelected(indeterminate)) {
+            checked = true;
+          }
+        } else {
+          return checkIndeterminateStatus(
+            indeterminate.checkboxIds,
+            checked,
+            hasEmpty,
+          );
+        }
+      }
 
-          if (isSelected(id)) {
-            selection.splice(selection.indexOf(id), 1);
-            onSelect(id, false, selection);
-          } else {
-            selection.push(id);
-            onSelect(id, true, selection);
+      return checked
+        ? hasEmpty
+          ? 'indeterminate'
+          : 'selected'
+        : 'not-selected';
+    },
+    [],
+  );
+
+  const checkId = useCallback(
+    (id: string, checkboxIdenfitifer: CheckboxIdentifier[]): boolean => {
+      for (const value of checkboxIdenfitifer) {
+        if (typeof value === 'string') {
+          if (value === id) {
+            return true;
+          }
+        } else {
+          return checkId(id, value.checkboxIds);
+        }
+      }
+
+      return false;
+    },
+    [],
+  );
+
+  const filterSelection = useCallback(
+    (
+      base: string[],
+      checkboxIdentifier: CheckboxIdentifier[],
+      toggle: boolean,
+    ): string[] => {
+      const selection = [...base];
+
+      for (const identifier of checkboxIdentifier) {
+        if (typeof identifier === 'string') {
+          const select = selection.indexOf(identifier) >= 0;
+
+          if (select && !toggle) {
+            selection.splice(selection.indexOf(identifier), 1);
           }
 
-          setSelected(selection);
-        }}>
-        {component !== undefined && typeof component !== 'string' && component}
-      </CheckboxItem>
-    );
-  }
+          if (!select && toggle) {
+            selection.push(identifier);
+          }
+        } else {
+          return filterSelection(selection, identifier.checkboxIds, toggle);
+        }
+      }
 
-  function getCheckboxNested(
-    key: string,
-    title: string,
-    identifier: CheckboxIdentifier[],
-  ) {
-    const status = checkIndeterminateStatus(identifier, false);
+      return selection;
+    },
+    [],
+  );
 
-    return (
-      <CheckboxNested
-        {...props}
-        key={key}
-        title={title}
-        checkboxIds={identifier}
-        status={status}
-        onPress={event => {
-          onPress !== undefined && onPress(event);
-          const selection = filterSelection(
-            selected,
+  const handlePressCheckboxNested = useCallback(
+    (
+      status: CheckboxCategoryStatus,
+      identifier: CheckboxIdentifier[],
+      event: GestureResponderEvent,
+    ) => {
+      onPress && onPress(event);
+
+      const selection = filterSelection(
+        selected,
+        identifier,
+        status === 'not-selected' || status === 'indeterminate',
+      );
+
+      setSelected(selection);
+    },
+    [selected, onPress],
+  );
+
+  const handleRenderCheckboxNested = useCallback(
+    (key: string, title: string, identifier: CheckboxIdentifier[]) => {
+      const status = checkIndeterminateStatus(identifier, false);
+
+      return (
+        <CheckboxNested
+          {...props}
+          key={key}
+          title={title}
+          checkboxIds={identifier}
+          status={status}
+          onPress={event =>
+            handlePressCheckboxNested(status, identifier, event)
+          }
+        />
+      );
+    },
+    [props, handlePressCheckboxNested],
+  );
+
+  const handlePressCheckboxItem = useCallback(
+    (id: string, event: GestureResponderEvent) => {
+      onPress !== undefined && onPress(event);
+      const selection = [...selected];
+
+      if (isSelected(id)) {
+        selection.splice(selection.indexOf(id), 1);
+        onSelect(id, false, selection);
+      } else {
+        selection.push(id);
+        onSelect(id, true, selection);
+      }
+
+      setSelected(selection);
+    },
+    [selected, onPress, onSelect],
+  );
+
+  const handleRenderCheckboxItem = useCallback(
+    (id: string) => {
+      const isIdSelected = isSelected(id);
+      const component =
+        checkboxComponent && checkboxComponent({id, isSelected: isIdSelected});
+      const title =
+        typeof component === 'string'
+          ? component
+          : component === undefined
+          ? id
+          : undefined;
+
+      return (
+        <CheckboxItem
+          {...props}
+          key={id}
+          title={title}
+          isSelected={isIdSelected}
+          onPress={event => handlePressCheckboxItem(id, event)}>
+          {component && typeof component !== 'string' && component}
+        </CheckboxItem>
+      );
+    },
+    [props, checkboxComponent, handlePressCheckboxItem],
+  );
+
+  const handleRenderListCheckboxItem = useCallback(
+    (checkboxIdenfitifer: CheckboxIdentifier[], category?: string) => {
+      const list: ReactNode[] = [];
+
+      for (const value of checkboxIdenfitifer) {
+        if (typeof value === 'string') {
+          const item = handleRenderCheckboxItem(value);
+
+          list.push(item);
+        } else {
+          const title = value.title;
+          const identifier = value.checkboxIds;
+          const key = category !== undefined ? `${category}:${title}` : title;
+          const checkboxNested = handleRenderCheckboxNested(
+            key,
+            title,
             identifier,
-            status === 'not-selected' || status === 'indeterminate',
           );
 
-          setSelected(selection);
-        }}
-      />
-    );
-  }
-
-  function getListCheckboxItem(
-    checkboxIdenfitifer: CheckboxIdentifier[],
-    category?: string,
-  ) {
-    const list: ReactNode[] = [];
-
-    for (let index = 0; index < checkboxIdenfitifer.length; index++) {
-      const value = checkboxIdenfitifer[index];
-
-      if (typeof value === 'string') {
-        const item = getCheckboxItem(value);
-
-        list.push(item);
-      } else {
-        const title = value.title;
-        const identifier = value.checkboxIds;
-        const key = category !== undefined ? `${category}:${title}` : title;
-        const checkboxNested = getCheckboxNested(key, title, identifier);
-
-        list.push(checkboxNested);
-        list.push(getListCheckboxItem(value.checkboxIds, key));
+          list.push(checkboxNested);
+          list.push(handleRenderListCheckboxItem(value.checkboxIds, key));
+        }
       }
-    }
 
-    return category !== undefined ? (
-      <View
-        key={`category: ${category}`}
-        style={StyleSheet.flatten([
-          styles.checkboxIndeterminateContainer,
-          checkboxIndeterminateContainerStyle,
-        ])}>
-        {list}
-      </View>
-    ) : (
-      list
-    );
-  }
+      return category !== undefined ? (
+        <View
+          key={`category: ${category}`}
+          style={StyleSheet.flatten([
+            styles.checkboxIndeterminateContainer,
+            checkboxIndeterminateContainerStyle,
+          ])}>
+          {list}
+        </View>
+      ) : (
+        list
+      );
+    },
+    [checkboxIndeterminateContainerStyle, handleRenderCheckboxItem],
+  );
 
-  return <View style={containerStyle}>{getListCheckboxItem(checkboxIds)}</View>;
+  return (
+    <View style={containerStyle}>
+      {handleRenderListCheckboxItem(checkboxIds)}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
