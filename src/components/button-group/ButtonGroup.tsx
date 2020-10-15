@@ -90,7 +90,7 @@ export default function ButtonGroup({
         onSelect(id, selected);
       }
     },
-    [actionType, selected, onSelect, onPress],
+    [actionType, selected, isSelected, onSelect, onPress],
   );
 
   const handleRenderButtonItem = useCallback(
@@ -157,6 +157,7 @@ export default function ButtonGroup({
       buttonContainerStyle,
       selectedButtonContainerStyle,
       containerBorderRadius,
+      isSelected,
       buttonComponent,
       handlePressButtonItem,
     ],

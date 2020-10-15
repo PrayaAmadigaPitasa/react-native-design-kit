@@ -29,4 +29,7 @@ describe('ButtonGroup', () => {
   runTest('selectedId non-solid', {selectedId: ['a', 'b'], type: 'outline'});
   runTest('buttonComponent', {buttonComponent: info => info.id});
   runTest('buttonComponent element', {buttonComponent: () => <></>});
+  runTest('actionType radio', {
+    actionType: 'radio',
+  });
 });
