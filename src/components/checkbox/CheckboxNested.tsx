@@ -11,11 +11,11 @@ export interface CheckboxNestedProps
   title?: string;
   titleStyle?: TextStyle;
   checkboxIds: CheckboxIdentifier[];
-  status: CheckboxCategoryStatus;
+  status?: CheckboxCategoryStatus;
 }
 
 export default function CheckboxNested({
-  status,
+  status = 'not-selected',
   style,
   title,
   titleStyle,
