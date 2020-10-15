@@ -217,6 +217,23 @@ export default function Checkbox({
     defaultIds !== undefined ? filterId(defaultIds) : [],
   );
 
+  function checkId(
+    id: string,
+    checkboxIdenfitifer: CheckboxIdentifier[],
+  ): boolean {
+    for (const value of checkboxIdenfitifer) {
+      if (typeof value === 'string') {
+        if (value === id) {
+          return true;
+        }
+      } else {
+        return checkId(id, value.checkboxIds);
+      }
+    }
+
+    return false;
+  }
+
   function filterId(id: string | string[]) {
     const selection: string[] = [];
 
@@ -266,23 +283,6 @@ export default function Checkbox({
         : 'not-selected';
     },
     [isSelected],
-  );
-
-  const checkId = useCallback(
-    (id: string, checkboxIdenfitifer: CheckboxIdentifier[]): boolean => {
-      for (const value of checkboxIdenfitifer) {
-        if (typeof value === 'string') {
-          if (value === id) {
-            return true;
-          }
-        } else {
-          return checkId(id, value.checkboxIds);
-        }
-      }
-
-      return false;
-    },
-    [],
   );
 
   const filterSelection = useCallback(

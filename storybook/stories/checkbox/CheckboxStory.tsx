@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {CheckboxProps, Checkbox} from '../../../src';
+import {Checkbox, CheckboxProps} from '../../../src/components';
 
 export interface CheckboxStoryProps extends CheckboxProps {}
 
