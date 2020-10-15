@@ -88,11 +88,11 @@ export default function CheckboxItem({
   return (
     <Touchable
       {...props}
-      style={[
+      style={StyleSheet.flatten([
         styles.checkboxContainer,
         style,
         isSelected && selectedCheckboxStyle,
-      ]}>
+      ])}>
       {handleRenderCheckboxIcon}
       {handleRenderComponent}
     </Touchable>
