@@ -1,8 +1,7 @@
-import React, {useState, useEffect, ReactNode} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
-  TouchableOpacityProps,
   FlatList,
   NativeScrollPoint,
   TouchableOpacity,
@@ -12,24 +11,7 @@ import {
 } from 'react-native';
 import {ChipIcon, ChipIconAction, ChipInfo} from '../../types';
 import {Icon} from '../icon';
-import {
-  Button,
-  ButtonBaseProps,
-  ButtonIconProps,
-  ButtonTitleProps,
-} from '../button';
-
-export interface ChipItemBaseProps
-  extends TouchableOpacityProps,
-    ButtonBaseProps {
-  rounded?: boolean;
-  children?: ReactNode;
-}
-
-export interface ChipItemProps
-  extends ButtonIconProps,
-    ButtonTitleProps,
-    ChipItemBaseProps {}
+import {ChipItem, ChipItemBaseProps} from './ChipItem';
 
 export interface ChipProps extends ChipItemBaseProps {
   actionType?: 'chip' | 'radio' | 'checkbox';
@@ -53,37 +35,6 @@ export interface ChipProps extends ChipItemBaseProps {
   horizontalScrollRightButtonContainerStyle?: ViewStyle;
   selectedId?: string | string[];
   onSelect(id: string, selected: string[]): void;
-}
-
-export function ChipItem({
-  rounded = true,
-  titleStyle,
-  containerStyle,
-  children,
-  ...props
-}: ChipItemProps) {
-  const [borderRadius, setBorderRadius] = useState<number>(0);
-
-  return (
-    <Button
-      {...props}
-      onLayout={event => {
-        const {height, width} = event.nativeEvent.layout;
-
-        setBorderRadius(Math.min(height, width) / 2);
-      }}
-      containerStyle={StyleSheet.flatten([
-        styles.chipContainer,
-        containerStyle,
-        rounded ? {borderRadius: borderRadius} : {},
-      ])}
-      titleStyle={StyleSheet.flatten([styles.chipTitle, titleStyle])}
-      titleContainerStyle={styles.chipTitleContainer}
-      leftIconContainerStyle={styles.chipLeftIconContainer}
-      rightIconContainerStyle={styles.chipRightIconContainer}>
-      {children}
-    </Button>
-  );
 }
 
 export default function Chip({
@@ -404,27 +355,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
-  },
-  chipContainer: {
-    padding: 7.5,
-    marginHorizontal: 5,
-    marginVertical: 5,
-    backgroundColor: 'lightgray',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  chipTitle: {
-    fontWeight: 'normal',
-    color: 'black',
-  },
-  chipTitleContainer: {
-    marginHorizontal: 5,
-  },
-  chipLeftIconContainer: {
-    marginRight: 0,
-  },
-  chipRightIconContainer: {
-    marginLeft: 0,
   },
   scrollContainer: {
     paddingVertical: 10,
