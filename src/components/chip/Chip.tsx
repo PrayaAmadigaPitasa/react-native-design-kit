@@ -10,6 +10,7 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
+import {ChipIcon, ChipIconAction, ChipInfo} from '../../types';
 import {Icon} from '../icon';
 import {
   Button,
@@ -17,17 +18,6 @@ import {
   ButtonIconProps,
   ButtonTitleProps,
 } from '../button';
-
-export type ChipIcon = (info: ChipInfo) => JSX.Element;
-export type ChipIconAction = (
-  id: string,
-  isSelected: boolean,
-) => 'delete' | 'check' | (() => void);
-
-export interface ChipInfo {
-  id: string;
-  isSelected: boolean;
-}
 
 export interface ChipItemBaseProps
   extends TouchableOpacityProps,
