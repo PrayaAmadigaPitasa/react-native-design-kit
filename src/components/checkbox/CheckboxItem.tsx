@@ -60,7 +60,9 @@ export default function CheckboxItem({
           checkboxComponentContainerStyle,
           isSelected && selectedCheckboxComponentContainerStyle,
         ])}>
-        {typeof children === 'string' ? (
+        {typeof children === 'object' ? (
+          children
+        ) : (
           <Text
             style={StyleSheet.flatten([
               styles.title,
@@ -69,15 +71,15 @@ export default function CheckboxItem({
             ])}>
             {title}
           </Text>
-        ) : (
-          children
         )}
       </View>
     ),
     [
-      children,
+      title,
       titleStyle,
+      children,
       isSelected,
+      selectedCheckboxTitleStyle,
       selectedCheckboxComponentContainerStyle,
       checkboxComponentContainerStyle,
     ],
@@ -86,11 +88,11 @@ export default function CheckboxItem({
   return (
     <Touchable
       {...props}
-      style={StyleSheet.flatten([
+      style={[
         styles.checkboxContainer,
         style,
         isSelected && selectedCheckboxStyle,
-      ])}>
+      ]}>
       {handleRenderCheckboxIcon}
       {handleRenderComponent}
     </Touchable>
