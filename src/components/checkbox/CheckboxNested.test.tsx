@@ -5,7 +5,7 @@ import CheckboxNested, {CheckboxNestedProps} from './CheckboxNested';
 
 const defaultProps: CheckboxNestedProps = {
   checkboxIds: [{title: 'alphabet', checkboxIds: ['a', 'b']}],
-  status: 'selected',
+  status: 'not-selected',
 };
 
 function runTest(name: string, props?: ObjectPartial<CheckboxNestedProps>) {
@@ -16,4 +16,6 @@ function runTest(name: string, props?: ObjectPartial<CheckboxNestedProps>) {
 
 describe('CheckboxNested', () => {
   runTest('default');
+  runTest('status indeterminate', {status: 'indeterminate'});
+  runTest('status selected', {status: 'selected'});
 });
