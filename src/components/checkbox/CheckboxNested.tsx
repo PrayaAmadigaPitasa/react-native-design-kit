@@ -70,15 +70,8 @@ export default function CheckboxNested({
     indeterminateCheckboxIconContainerStyle,
   ]);
 
-  return (
-    <Touchable
-      {...props}
-      style={StyleSheet.flatten([
-        styles.checkboxContainer,
-        style,
-        status === 'selected' && selectedCheckboxStyle,
-      ])}>
-      {handleRenderIcon}
+  const handleRenderTitle = useMemo(
+    () => (
       <View
         style={StyleSheet.flatten([
           styles.checkboxComponentContainer,
@@ -94,6 +87,27 @@ export default function CheckboxNested({
           {title}
         </Text>
       </View>
+    ),
+    [
+      status,
+      title,
+      titleStyle,
+      selectedCheckboxTitleStyle,
+      checkboxComponentContainerStyle,
+      selectedCheckboxComponentContainerStyle,
+    ],
+  );
+
+  return (
+    <Touchable
+      {...props}
+      style={StyleSheet.flatten([
+        styles.checkboxContainer,
+        style,
+        status === 'selected' && selectedCheckboxStyle,
+      ])}>
+      {handleRenderIcon}
+      {handleRenderTitle}
     </Touchable>
   );
 }
