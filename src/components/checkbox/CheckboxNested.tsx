@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {StyleSheet, Text, TextStyle, View} from 'react-native';
 import {CheckboxCategoryStatus, CheckboxIdentifier} from '../../types';
 import {Icon} from '../icon';
@@ -30,7 +30,7 @@ export default function CheckboxNested({
   checkboxComponentContainerStyle,
   ...props
 }: CheckboxNestedProps) {
-  function getIcon() {
+  const handleRenderIcon = useMemo(() => {
     switch (status) {
       case 'selected':
         return (
@@ -47,7 +47,7 @@ export default function CheckboxNested({
       default:
         return undefined;
     }
-  }
+  }, []);
 
   return (
     <Touchable
@@ -72,7 +72,7 @@ export default function CheckboxNested({
               indeterminateCheckboxIconContainerStyle,
             ]),
         ])}>
-        {getIcon()}
+        {handleRenderIcon}
       </View>
       <View
         style={StyleSheet.flatten([
