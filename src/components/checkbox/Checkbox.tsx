@@ -1,4 +1,4 @@
-import React, {useState, ReactNode, useCallback} from 'react';
+import React, {useState, ReactNode, useCallback, ReactElement} from 'react';
 import {
   View,
   StyleSheet,
@@ -23,7 +23,7 @@ export interface CheckboxBaseProps extends TouchableOpacityProps {
   checkboxIconContainerStyle?: ViewStyle;
   checkboxComponentContainerStyle?: ViewStyle;
   selectedCheckboxStyle?: ViewStyle;
-  selectedCheckboxIcon?: JSX.Element;
+  selectedCheckboxIcon?: ReactElement;
   selectedCheckboxIconContainerStyle?: ViewStyle;
   selectedCheckboxComponentContainerStyle?: ViewStyle;
   selectedCheckboxTitleStyle?: ViewStyle;

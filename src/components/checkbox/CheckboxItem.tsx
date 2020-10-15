@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet, Text, TextStyle, View} from 'react-native';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
@@ -26,14 +26,8 @@ export default function CheckboxItem({
   children,
   ...props
 }: CheckboxItemProps) {
-  return (
-    <Touchable
-      {...props}
-      style={[
-        styles.checkboxContainer,
-        style,
-        isSelected && selectedCheckboxStyle,
-      ]}>
+  const handleRenderCheckboxIcon = useMemo(
+    () => (
       <View
         style={StyleSheet.flatten([
           styles.checkboxIconContainer,
@@ -45,21 +39,28 @@ export default function CheckboxItem({
             ]),
         ])}>
         {isSelected &&
-          (selectedCheckboxIcon !== undefined ? (
-            selectedCheckboxIcon
-          ) : (
+          (selectedCheckboxIcon || (
             <Icon style={styles.defaultIcon} name="check" />
           ))}
       </View>
+    ),
+    [
+      isSelected,
+      selectedCheckboxIcon,
+      checkboxIconContainerStyle,
+      selectedCheckboxIconContainerStyle,
+    ],
+  );
+
+  const handleRenderComponent = useMemo(
+    () => (
       <View
         style={StyleSheet.flatten([
           styles.checkboxComponentContainer,
           checkboxComponentContainerStyle,
           isSelected && selectedCheckboxComponentContainerStyle,
         ])}>
-        {typeof children === 'object' ? (
-          children
-        ) : (
+        {typeof children === 'string' ? (
           <Text
             style={StyleSheet.flatten([
               styles.title,
@@ -68,8 +69,30 @@ export default function CheckboxItem({
             ])}>
             {title}
           </Text>
+        ) : (
+          children
         )}
       </View>
+    ),
+    [
+      children,
+      titleStyle,
+      isSelected,
+      selectedCheckboxComponentContainerStyle,
+      checkboxComponentContainerStyle,
+    ],
+  );
+
+  return (
+    <Touchable
+      {...props}
+      style={StyleSheet.flatten([
+        styles.checkboxContainer,
+        style,
+        isSelected && selectedCheckboxStyle,
+      ])}>
+      {handleRenderCheckboxIcon}
+      {handleRenderComponent}
     </Touchable>
   );
 }

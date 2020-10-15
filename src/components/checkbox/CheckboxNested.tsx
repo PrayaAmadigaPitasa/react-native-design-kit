@@ -52,12 +52,11 @@ export default function CheckboxNested({
   return (
     <Touchable
       {...props}
-      testID="checkbox-nested-container"
-      style={[
+      style={StyleSheet.flatten([
         styles.checkboxContainer,
         style,
         status === 'selected' && selectedCheckboxStyle,
-      ]}>
+      ])}>
       <View
         style={StyleSheet.flatten([
           styles.checkboxIconContainer,
