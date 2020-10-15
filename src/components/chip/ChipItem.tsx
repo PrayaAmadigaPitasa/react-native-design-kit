@@ -1,5 +1,9 @@
-import React, {ReactNode, useState} from 'react';
-import {StyleSheet, TouchableOpacityProps} from 'react-native';
+import React, {ReactNode, useCallback, useState} from 'react';
+import {
+  LayoutChangeEvent,
+  StyleSheet,
+  TouchableOpacityProps,
+} from 'react-native';
 import {
   Button,
   ButtonBaseProps,
@@ -28,14 +32,16 @@ export function ChipItem({
 }: ChipItemProps) {
   const [borderRadius, setBorderRadius] = useState<number>(0);
 
+  const handleLayout = useCallback((event: LayoutChangeEvent) => {
+    const {height, width} = event.nativeEvent.layout;
+
+    setBorderRadius(Math.min(height, width) / 2);
+  }, []);
+
   return (
     <Button
       {...props}
-      onLayout={event => {
-        const {height, width} = event.nativeEvent.layout;
-
-        setBorderRadius(Math.min(height, width) / 2);
-      }}
+      onLayout={handleLayout}
       containerStyle={StyleSheet.flatten([
         styles.chipContainer,
         containerStyle,
