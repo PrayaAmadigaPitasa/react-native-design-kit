@@ -392,7 +392,7 @@ export default function Checkbox({
         </CheckboxItem>
       );
     },
-    [props, checkboxComponent, handlePressCheckboxItem],
+    [props, checkboxComponent, isSelected, handlePressCheckboxItem],
   );
 
   const handleRenderListCheckboxItem = useCallback(
@@ -432,7 +432,11 @@ export default function Checkbox({
         list
       );
     },
-    [checkboxIndeterminateContainerStyle, handleRenderCheckboxItem],
+    [
+      checkboxIndeterminateContainerStyle,
+      handleRenderCheckboxItem,
+      handleRenderCheckboxNested,
+    ],
   );
 
   return (
