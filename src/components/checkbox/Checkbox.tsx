@@ -233,7 +233,9 @@ export default function Checkbox({
     return selection;
   }
 
-  const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, []);
+  const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
+    selected,
+  ]);
 
   const checkIndeterminateStatus = useCallback(
     (
@@ -263,7 +265,7 @@ export default function Checkbox({
           : 'selected'
         : 'not-selected';
     },
-    [],
+    [isSelected],
   );
 
   const checkId = useCallback(
@@ -328,7 +330,7 @@ export default function Checkbox({
 
       setSelected(selection);
     },
-    [selected, onPress],
+    [selected, filterSelection, onPress],
   );
 
   const handleRenderCheckboxNested = useCallback(
@@ -348,12 +350,12 @@ export default function Checkbox({
         />
       );
     },
-    [props, handlePressCheckboxNested],
+    [props, checkIndeterminateStatus, handlePressCheckboxNested],
   );
 
   const handlePressCheckboxItem = useCallback(
     (id: string, event: GestureResponderEvent) => {
-      onPress !== undefined && onPress(event);
+      onPress && onPress(event);
       const selection = [...selected];
 
       if (isSelected(id)) {
@@ -366,7 +368,7 @@ export default function Checkbox({
 
       setSelected(selection);
     },
-    [selected, onPress, onSelect],
+    [selected, isSelected, onPress, onSelect],
   );
 
   const handleRenderCheckboxItem = useCallback(
