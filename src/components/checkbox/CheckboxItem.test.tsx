@@ -1,5 +1,5 @@
-import {render} from '@testing-library/react-native';
 import React from 'react';
+import {render} from '@testing-library/react-native';
 import {ObjectPartial} from '../../types';
 import CheckboxItem, {CheckboxItemProps} from './CheckboxItem';
 
@@ -15,4 +15,6 @@ function runTest(name: string, props?: ObjectPartial<CheckboxItemProps>) {
 
 describe('CheckboxItem', () => {
   runTest('default');
+  runTest('isSelected', {isSelected: true});
+  runTest('children', {children: <></>});
 });
