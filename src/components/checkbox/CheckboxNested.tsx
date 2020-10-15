@@ -31,32 +31,18 @@ export default function CheckboxNested({
   ...props
 }: CheckboxNestedProps) {
   const handleRenderIcon = useMemo(() => {
-    switch (status) {
-      case 'selected':
-        return (
-          selectedCheckboxIcon || (
+    const iconItem =
+      status === 'selected'
+        ? selectedCheckboxIcon || (
             <Icon style={styles.defaultIcon} name="check" />
           )
-        );
-      case 'indeterminate':
-        return (
-          indeterminateCheckboxIcon || (
+        : status === 'indeterminate'
+        ? indeterminateCheckboxIcon || (
             <Icon style={styles.defaultIcon} name="minus" />
           )
-        );
-      default:
-        return undefined;
-    }
-  }, []);
+        : undefined;
 
-  return (
-    <Touchable
-      {...props}
-      style={StyleSheet.flatten([
-        styles.checkboxContainer,
-        style,
-        status === 'selected' && selectedCheckboxStyle,
-      ])}>
+    return (
       <View
         style={StyleSheet.flatten([
           styles.checkboxIconContainer,
@@ -72,8 +58,27 @@ export default function CheckboxNested({
               indeterminateCheckboxIconContainerStyle,
             ]),
         ])}>
-        {handleRenderIcon}
+        {iconItem}
       </View>
+    );
+  }, [
+    status,
+    selectedCheckboxIcon,
+    indeterminateCheckboxIcon,
+    checkboxIconContainerStyle,
+    selectedCheckboxIconContainerStyle,
+    indeterminateCheckboxIconContainerStyle,
+  ]);
+
+  return (
+    <Touchable
+      {...props}
+      style={StyleSheet.flatten([
+        styles.checkboxContainer,
+        style,
+        status === 'selected' && selectedCheckboxStyle,
+      ])}>
+      {handleRenderIcon}
       <View
         style={StyleSheet.flatten([
           styles.checkboxComponentContainer,
