@@ -2,7 +2,6 @@ import React, {useState, ReactNode, useCallback} from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Text,
   TextStyle,
   ViewStyle,
@@ -16,6 +15,7 @@ import {
 } from '../../types';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
+import CheckboxItem from './CheckboxItem';
 
 export interface CheckboxIndeterminateProps {
   indeterminateCheckboxIcon?: JSX.Element;
@@ -30,13 +30,6 @@ export interface CheckboxBaseProps extends TouchableOpacityProps {
   selectedCheckboxIconContainerStyle?: ViewStyle;
   selectedCheckboxComponentContainerStyle?: ViewStyle;
   selectedCheckboxTitleStyle?: ViewStyle;
-}
-
-export interface CheckboxItemProps extends CheckboxBaseProps {
-  title?: string;
-  titleStyle?: TextStyle;
-  isSelected: boolean;
-  children?: ReactNode;
 }
 
 export interface CheckboxNestedProps
@@ -57,69 +50,6 @@ export interface CheckboxProps
   checkboxIndeterminateContainerStyle?: ViewStyle;
   defaultIds?: string[];
   onSelect(id: string, toggle: boolean, selected: string[]): void;
-}
-
-export function CheckboxItem({
-  isSelected,
-  style,
-  title,
-  titleStyle,
-  selectedCheckboxStyle,
-  selectedCheckboxIcon,
-  selectedCheckboxIconContainerStyle,
-  selectedCheckboxComponentContainerStyle,
-  selectedCheckboxTitleStyle,
-  checkboxIconContainerStyle,
-  checkboxComponentContainerStyle,
-  children,
-  ...props
-}: CheckboxItemProps) {
-  return (
-    <Touchable
-      {...props}
-      style={[
-        styles.checkboxContainer,
-        style,
-        isSelected && selectedCheckboxStyle,
-      ]}>
-      <View
-        style={StyleSheet.flatten([
-          styles.checkboxIconContainer,
-          checkboxIconContainerStyle,
-          isSelected &&
-            StyleSheet.flatten([
-              styles.selectedCheckboxIconContainer,
-              selectedCheckboxIconContainerStyle,
-            ]),
-        ])}>
-        {isSelected &&
-          (selectedCheckboxIcon !== undefined ? (
-            selectedCheckboxIcon
-          ) : (
-            <Icon style={styles.defaultIcon} name="check" />
-          ))}
-      </View>
-      <View
-        style={StyleSheet.flatten([
-          styles.checkboxComponentContainer,
-          checkboxComponentContainerStyle,
-          isSelected && selectedCheckboxComponentContainerStyle,
-        ])}>
-        {typeof children === 'object' ? (
-          children
-        ) : (
-          <Text
-            style={StyleSheet.flatten([
-              styles.title,
-              titleStyle,
-              isSelected && selectedCheckboxTitleStyle,
-            ])}>
-            {title}
-          </Text>
-        )}
-      </View>
-    </Touchable>
-  );
 }
 
 export function CheckboxNested({
@@ -158,15 +88,14 @@ export function CheckboxNested({
   }
 
   return (
-    <TouchableOpacity
+    <Touchable
       {...props}
       testID="checkbox-nested-container"
       style={[
         styles.checkboxContainer,
         style,
         status === 'selected' && selectedCheckboxStyle,
-      ]}
-      activeOpacity={0.75}>
+      ]}>
       <View
         style={StyleSheet.flatten([
           styles.checkboxIconContainer,
@@ -199,7 +128,7 @@ export function CheckboxNested({
           {title}
         </Text>
       </View>
-    </TouchableOpacity>
+    </Touchable>
   );
 }
 
