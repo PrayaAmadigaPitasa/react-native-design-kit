@@ -11,7 +11,6 @@ import {
   TouchableOpacityProps,
   FlatList,
   NativeScrollPoint,
-  TouchableOpacity,
   LayoutRectangle,
   TextStyle,
   ViewStyle,
@@ -21,6 +20,7 @@ import {ChipActionType, ChipIcon, ChipIconAction, ChipInfo} from '../../types';
 import {Icon} from '../icon';
 import {ButtonBaseProps} from '../button';
 import ChipItem from './ChipItem';
+import {Touchable} from '../touchable';
 
 export interface ChipItemBaseProps
   extends TouchableOpacityProps,
@@ -77,7 +77,6 @@ export default function Chip({
   rightIconAction,
   onSelect,
   onPress,
-  activeOpacity = 0.5,
   ...props
 }: ChipProps) {
   const [chipIds, setChipIds] = useState(chips);
@@ -103,14 +102,6 @@ export default function Chip({
     [difSize, offset],
   );
 
-  function checkId(id: string) {
-    return chipIds.indexOf(id) >= 0;
-  }
-
-  function isSelected(id: string) {
-    return selected.indexOf(id) >= 0;
-  }
-
   function filterId(id: string | string[], checkType?: boolean) {
     const selection: string[] = [];
 
@@ -135,6 +126,14 @@ export default function Chip({
     return selection;
   }
 
+  const checkId = useCallback((id: string) => chipIds.indexOf(id) >= 0, [
+    chipIds,
+  ]);
+
+  const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
+    selected,
+  ]);
+
   const removeChipId = useCallback(
     (id: string) => setChipIds(chipIds.filter(chipId => chipId !== id)),
     [chipIds],
@@ -156,7 +155,7 @@ export default function Chip({
 
       return undefined;
     },
-    [],
+    [isSelected],
   );
 
   const handlePressChipItem = useCallback(
@@ -301,9 +300,7 @@ export default function Chip({
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
       {horizontalScrollButton && (
-        <TouchableOpacity
-          testID="chip-scroll-left-icon-container"
-          activeOpacity={activeOpacity}
+        <Touchable
           disabled={!allowScrollLeft}
           style={StyleSheet.flatten([
             styles.scrollContainer,
@@ -320,7 +317,7 @@ export default function Chip({
             }
           }}>
           {horizontalScrollLeftButton || <Icon name="chevron-left" />}
-        </TouchableOpacity>
+        </Touchable>
       )}
       <FlatList
         ref={instance => setScrollRef(instance)}
@@ -338,9 +335,7 @@ export default function Chip({
         renderItem={({item}) => handleRenderChipItem(item)}
       />
       {horizontalScrollButton && (
-        <TouchableOpacity
-          testID="chip-scroll-right-icon-container"
-          activeOpacity={activeOpacity}
+        <Touchable
           disabled={!allowScrollRight}
           style={StyleSheet.flatten([
             styles.scrollContainer,
@@ -357,7 +352,7 @@ export default function Chip({
             }
           }}>
           {horizontalScrollRightButton || <Icon name="chevron-right" />}
-        </TouchableOpacity>
+        </Touchable>
       )}
     </View>
   ) : (
