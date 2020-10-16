@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ReactNode} from 'react';
 import {
   StyleSheet,
   View,
+  TouchableOpacityProps,
   FlatList,
   NativeScrollPoint,
   TouchableOpacity,
@@ -9,12 +10,20 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-import {ChipIcon, ChipIconAction, ChipInfo} from '../../types';
+import {ChipActionType, ChipIcon, ChipIconAction, ChipInfo} from '../../types';
 import {Icon} from '../icon';
-import {ChipItem, ChipItemBaseProps} from './ChipItem';
+import {ButtonBaseProps} from '../button';
+import ChipItem from './ChipItem';
+
+export interface ChipItemBaseProps
+  extends TouchableOpacityProps,
+    ButtonBaseProps {
+  rounded?: boolean;
+  children?: ReactNode;
+}
 
 export interface ChipProps extends ChipItemBaseProps {
-  actionType?: 'chip' | 'radio' | 'checkbox';
+  actionType?: ChipActionType;
   chips: string[];
   chipContainerStyle?: ((id: string) => ViewStyle) | ViewStyle;
   chipComponent?(info: ChipInfo): string | JSX.Element;
@@ -353,6 +362,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
+  },
+  chipContainer: {
+    padding: 7.5,
+    marginHorizontal: 5,
+    marginVertical: 5,
+    backgroundColor: 'lightgray',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chipTitle: {
+    fontWeight: 'normal',
+    color: 'black',
+  },
+  chipTitleContainer: {
+    marginHorizontal: 5,
+  },
+  chipLeftIconContainer: {
+    marginRight: 0,
+  },
+  chipRightIconContainer: {
+    marginLeft: 0,
   },
   scrollContainer: {
     paddingVertical: 10,

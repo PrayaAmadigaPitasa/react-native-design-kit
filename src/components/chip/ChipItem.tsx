@@ -18,7 +18,7 @@ export interface ChipItemProps
     ButtonTitleProps,
     ChipItemBaseProps {}
 
-export function ChipItem({
+export default function ChipItem({
   titleStyle,
   containerStyle,
   children,

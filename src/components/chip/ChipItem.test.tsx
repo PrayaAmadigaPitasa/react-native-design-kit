@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react-native';
 import React from 'react';
 import {ObjectPartial} from '../../types';
-import {ChipItem, ChipItemProps} from './ChipItem';
+import ChipItem, {ChipItemProps} from './ChipItem';
 
 const defaultProps: ChipItemProps = {
   testID: 'chip',
