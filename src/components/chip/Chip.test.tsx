@@ -5,6 +5,7 @@ import Chip, {ChipProps} from './Chip';
 
 const defaultProps: ChipProps = {
   chips: ['a', 'b', 'c', 'd', 'e'],
+  selectedId: ['a', 'b'],
   onSelect: jest.fn(),
   onPress: jest.fn(),
   testID: 'chip',
@@ -56,4 +57,14 @@ describe('Chip', () => {
   });
   runTest('actionType checkbox', {actionType: 'checkbox'});
   runTest('actionType radio', {actionType: 'radio'});
+  runTest('chipComponent id', {chipComponent: info => info.id});
+  runTest('chipComponent element', {chipComponent: () => <></>});
+  runTest('chipContainerStyle function', {chipContainerStyle: () => ({})});
+  runTest('chipTitleStyle function', {chipTitleStyle: () => ({})});
+  runTest('selectedChipContainerStyle function', {
+    selectedChipContainerStyle: () => ({}),
+  });
+  runTest('selectedChipTitleStyle function', {
+    selectedChipTitleStyle: () => ({}),
+  });
 });
