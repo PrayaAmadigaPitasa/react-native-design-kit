@@ -55,6 +55,12 @@ describe('Chip', () => {
     horizontal: true,
     horizontalScrollButton: true,
   });
+  runTest('leftIcon', {leftIcon: () => <></>});
+  runTest('leftIconAction check', {leftIconAction: () => 'check'});
+  runTest('leftIconAction delete', {leftIconAction: () => 'delete'});
+  runTest('rightIcon', {rightIcon: () => <></>});
+  runTest('rightIconAction check', {rightIconAction: () => 'check'});
+  runTest('rightIconAction delete', {rightIconAction: () => 'delete'});
   runTest('actionType checkbox', {actionType: 'checkbox'});
   runTest('actionType radio', {actionType: 'radio'});
   runTest('chipComponent id', {chipComponent: info => info.id});
