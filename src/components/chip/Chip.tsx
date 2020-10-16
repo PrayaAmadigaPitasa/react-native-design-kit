@@ -86,10 +86,10 @@ export default function Chip({
   const [layout, setLayout] = useState<LayoutRectangle>();
   const [size, setSize] = useState<NativeScrollPoint>();
   const [offset, setOffset] = useState<NativeScrollPoint>({x: 0, y: 0});
-  const [scrollRef, setScrollRef] = useState<FlatList<string> | null>(null);
   const [selected, setSelected] = useState<string[]>(
     filterSelectList(chipIds, selectedId || [], singleValue),
   );
+  const refScroll = useRef<FlatList<string>>();
   const initialize = useRef(false);
 
   const difSize = useMemo(
@@ -134,6 +134,12 @@ export default function Chip({
     [isSelected],
   );
 
+  const handleRefList = useCallback((instance: FlatList<string>) => {
+    if (instance) {
+      refScroll.current = instance;
+    }
+  }, []);
+
   const handlePressChipItem = useCallback(
     (id: string, event: GestureResponderEvent) => {
       onPress && onPress(event);
@@ -165,22 +171,22 @@ export default function Chip({
 
   const handlePressScrollLeftButton = useCallback(
     () =>
-      scrollRef &&
-      scrollRef.scrollToOffset({
+      refScroll.current &&
+      refScroll.current.scrollToOffset({
         offset: Math.max(0, offset.x - 125),
         animated: true,
       }),
-    [scrollRef, offset],
+    [refScroll.current, offset],
   );
 
   const handlePressScrollRightButton = useCallback(() => {
-    if (scrollRef && difSize) {
-      scrollRef.scrollToOffset({
+    if (refScroll.current && difSize) {
+      refScroll.current.scrollToOffset({
         offset: Math.min(difSize, offset.x + 125),
         animated: true,
       });
     }
-  }, [scrollRef, difSize, offset]);
+  }, [refScroll.current, difSize, offset]);
 
   const handleRenderIcon = useCallback(
     (
@@ -349,7 +355,7 @@ export default function Chip({
       {handleRenderScrollLeftButton}
       <FlatList
         horizontal
-        ref={instance => setScrollRef(instance)}
+        ref={handleRefList}
         onLayout={event => setLayout(event.nativeEvent.layout)}
         data={chipIds}
         scrollEnabled={horizontalScrollEnabled}
