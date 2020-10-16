@@ -8,6 +8,7 @@ import {
   LayoutChangeEvent,
   Animated,
 } from 'react-native';
+import {useDidUpdate} from '../../utilities';
 
 export interface SwitchableTextProps {
   containerStyle?: ViewStyle;
@@ -16,6 +17,7 @@ export interface SwitchableTextProps {
   duration?: number;
   progressBar?: boolean;
   progressBarStyle?: ViewStyle;
+  byPassAnimationCallback?: boolean;
 }
 
 export default function SwitchableText({
@@ -24,6 +26,7 @@ export default function SwitchableText({
   textStyle,
   duration = 2000,
   progressBar = true,
+  byPassAnimationCallback = false,
   progressBarStyle,
 }: SwitchableTextProps) {
   const [index, setIndex] = useState(0);
@@ -74,10 +77,14 @@ export default function SwitchableText({
       toValue: 1,
       duration,
       useNativeDriver: false,
-    }).start(() => setIndex(index + 1 >= texts.length ? 0 : index + 1));
+    }).start(
+      callback =>
+        (byPassAnimationCallback || callback.finished) &&
+        setIndex(index + 1 >= texts.length ? 0 : index + 1),
+    );
   }, [animation, index, duration, texts]);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     setIndex(0);
   }, [texts]);
 

@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  ReactElement,
-  useMemo,
-  useCallback,
-  useRef,
-} from 'react';
+import React, {useState, ReactElement, useMemo, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -15,7 +8,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import {ButtonGroupActionType, ButtonGroupInfo} from '../../types';
-import {filterSelectList} from '../../utilities';
+import {filterSelectList, useDidUpdate} from '../../utilities';
 import {Button, ButtonBaseProps, ButtonTypeProps} from '../button';
 
 export interface ButtonGroupProps
@@ -58,7 +51,6 @@ export default function ButtonGroup({
   const [selected, setSelected] = useState<string[]>(
     filterSelectList(buttonIds, selectedId || [], singleValue),
   );
-  const initialize = useRef(false);
 
   const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
     selected,
@@ -176,12 +168,8 @@ export default function ButtonGroup({
     return list;
   }, [buttonIds, handleRenderButtonItem]);
 
-  useEffect(() => {
-    if (initialize.current) {
-      setSelected(filterSelectList(buttonIds, selectedId || [], singleValue));
-    } else {
-      initialize.current = true;
-    }
+  useDidUpdate(() => {
+    setSelected(filterSelectList(buttonIds, selectedId || [], singleValue));
   }, [singleValue, buttonIds, selectedId]);
 
   return (
