@@ -174,12 +174,17 @@ export default function Chip({
     return undefined;
   }
 
+  const handleRemoveId = useCallback(
+    (id: string) => setChipIds(chipIds.filter(chipId => chipId !== id)),
+    [chipIds],
+  );
+
   function getIconAction(id: string, iconActionFunction?: ChipIconAction) {
     if (iconActionFunction !== undefined) {
       const action = iconActionFunction(id, isSelected(id));
 
       if (action === 'delete') {
-        return () => removeIconId(id);
+        return () => handleRemoveId(id);
       } else if (action === 'check') {
         return () => {};
       }
@@ -188,20 +193,6 @@ export default function Chip({
     }
 
     return undefined;
-  }
-
-  function removeIconId(id: string) {
-    const list = [];
-
-    for (let index = 0; index < chipIds.length; index++) {
-      const chipId = chipIds[index];
-
-      if (chipId !== id) {
-        list.push(chipId);
-      }
-    }
-
-    setChipIds(list);
   }
 
   const handlePressChipItem = useCallback(
@@ -296,6 +287,7 @@ export default function Chip({
       getIcon,
       chipComponent,
       isSelected,
+      handlePressChipItem,
     ],
   );
 
