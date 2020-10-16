@@ -66,14 +66,10 @@ export default function SwitchableText({
     [index, texts, textStyle, handleLayoutText],
   );
 
-  useEffect(() => {
-    setIndex(0);
-  }, [texts]);
-
-  return (
-    <View style={containerStyle}>
-      {handleRenderText}
-      {progressBar && width !== undefined && (
+  const handleRenderBar = useMemo(() => {
+    return (
+      progressBar &&
+      width !== undefined && (
         <View
           style={StyleSheet.flatten([
             styles.progress,
@@ -81,7 +77,18 @@ export default function SwitchableText({
             {width: progress * width},
           ])}
         />
-      )}
+      )
+    );
+  }, [width, progress, progressBar, progressBarStyle]);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [texts]);
+
+  return (
+    <View style={containerStyle}>
+      {handleRenderText}
+      {handleRenderBar}
     </View>
   );
 }
