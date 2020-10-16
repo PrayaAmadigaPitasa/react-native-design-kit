@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ViewStyle,
   TextStyle,
-  Platform,
   LayoutChangeEvent,
+  Animated,
 } from 'react-native';
 
 export interface SwitchableTextProps {
@@ -14,7 +14,6 @@ export interface SwitchableTextProps {
   texts: string[];
   textStyle?: TextStyle;
   duration?: number;
-  tps?: number;
   progressBar?: boolean;
   progressBarStyle?: ViewStyle;
 }
@@ -24,30 +23,12 @@ export default function SwitchableText({
   texts,
   textStyle,
   duration = 2000,
-  tps = 100,
   progressBar = true,
   progressBarStyle,
 }: SwitchableTextProps) {
   const [index, setIndex] = useState(0);
   const [width, setWidth] = useState<number>();
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    if (width !== undefined) {
-      if (progress >= 1) {
-        setIndex((index + 1) % texts.length);
-        setProgress(0);
-      } else {
-        const period = 1000 / Math.max(1, Math.min(1000, tps));
-        const scale = Platform.select({android: 1.5, default: 1});
-        const timeout = setTimeout(() => {
-          setProgress(progress + (period / duration) * scale);
-        }, period);
-
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [progress, width]);
+  const animation = useRef(new Animated.Value(0)).current;
 
   const handleLayoutText = useCallback(
     (event: LayoutChangeEvent) =>
@@ -70,20 +51,42 @@ export default function SwitchableText({
     return (
       progressBar &&
       width !== undefined && (
-        <View
+        <Animated.View
           style={StyleSheet.flatten([
             styles.progress,
             progressBarStyle,
-            {width: progress * width},
+            {
+              width: animation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, width],
+              }),
+            },
           ])}
         />
       )
     );
-  }, [width, progress, progressBar, progressBarStyle]);
+  }, [width, animation, progressBar, progressBarStyle]);
+
+  const handleRunAnimation = useCallback(() => {
+    animation.setValue(0);
+    Animated.timing(animation, {
+      toValue: 1,
+      duration,
+      useNativeDriver: false,
+    }).start(
+      callback =>
+        callback.finished &&
+        setIndex(index + 1 >= texts.length ? 0 : index + 1),
+    );
+  }, [animation, index, duration, texts]);
 
   useEffect(() => {
     setIndex(0);
   }, [texts]);
+
+  useEffect(() => {
+    handleRunAnimation();
+  }, [index]);
 
   return (
     <View style={containerStyle}>
