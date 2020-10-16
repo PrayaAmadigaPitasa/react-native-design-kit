@@ -187,6 +187,16 @@ export default function Chip({
     [actionType, selected, isSelected, onPress, onSelect],
   );
 
+  const handlePressScrollLeftButton = useCallback(
+    () =>
+      scrollRef &&
+      scrollRef.scrollToOffset({
+        offset: Math.max(0, offset.x - 125),
+        animated: true,
+      }),
+    [scrollRef, offset],
+  );
+
   const handleRenderIcon = useCallback(
     (
       id: string,
@@ -284,6 +294,28 @@ export default function Chip({
     ],
   );
 
+  const handleRenderScrollLeftButton = useMemo(
+    () => (
+      <Touchable
+        disabled={!allowScrollLeft}
+        style={StyleSheet.flatten([
+          styles.scrollContainer,
+          styles.scrollLeftIconContainer,
+          horizontalScrollLeftButtonContainerStyle,
+          !allowScrollLeft ? styles.scrollContainerDisabled : {},
+        ])}
+        onPress={handlePressScrollLeftButton}>
+        {horizontalScrollLeftButton || <Icon name="chevron-left" />}
+      </Touchable>
+    ),
+    [
+      allowScrollLeft,
+      horizontalScrollLeftButton,
+      horizontalScrollLeftButtonContainerStyle,
+      handlePressScrollLeftButton,
+    ],
+  );
+
   const handleRenderListChipItem = useMemo(
     () => chipIds.map(id => handleRenderChipItem(id)),
     [chipIds, handleRenderChipItem],
@@ -299,31 +331,12 @@ export default function Chip({
 
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
-      {horizontalScrollButton && (
-        <Touchable
-          disabled={!allowScrollLeft}
-          style={StyleSheet.flatten([
-            styles.scrollContainer,
-            styles.scrollLeftIconContainer,
-            horizontalScrollLeftButtonContainerStyle,
-            !allowScrollLeft ? styles.scrollContainerDisabled : {},
-          ])}
-          onPress={() => {
-            if (scrollRef !== null) {
-              scrollRef.scrollToOffset({
-                offset: Math.max(0, offset.x - 125),
-                animated: true,
-              });
-            }
-          }}>
-          {horizontalScrollLeftButton || <Icon name="chevron-left" />}
-        </Touchable>
-      )}
+      {horizontalScrollButton && handleRenderScrollLeftButton}
       <FlatList
+        horizontal
         ref={instance => setScrollRef(instance)}
         onLayout={event => setLayout(event.nativeEvent.layout)}
         data={chipIds}
-        horizontal
         scrollEnabled={horizontalScrollEnabled}
         onContentSizeChange={(w, h) => setSize({x: w, y: h})}
         onScroll={event => {
