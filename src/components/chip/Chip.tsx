@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import {
   StyleSheet,
@@ -21,6 +22,7 @@ import {Icon} from '../icon';
 import {ButtonBaseProps} from '../button';
 import ChipItem from './ChipItem';
 import {Touchable} from '../touchable';
+import {filterSelectList} from '../../utilities';
 
 export interface ChipItemBaseProps
   extends TouchableOpacityProps,
@@ -79,14 +81,16 @@ export default function Chip({
   onPress,
   ...props
 }: ChipProps) {
+  const singleValue = useMemo(() => actionType === 'radio', [actionType]);
   const [chipIds, setChipIds] = useState(chips);
   const [layout, setLayout] = useState<LayoutRectangle>();
   const [size, setSize] = useState<NativeScrollPoint>();
   const [offset, setOffset] = useState<NativeScrollPoint>({x: 0, y: 0});
   const [scrollRef, setScrollRef] = useState<FlatList<string> | null>(null);
   const [selected, setSelected] = useState<string[]>(
-    selectedId !== undefined ? filterId(selectedId, true) : [],
+    filterSelectList(chipIds, selectedId || [], singleValue),
   );
+  const initialize = useRef(false);
 
   const difSize = useMemo(
     () => (layout && size ? size.x - layout.width : undefined),
@@ -101,34 +105,6 @@ export default function Chip({
     () => difSize !== undefined && offset.x < difSize,
     [difSize, offset],
   );
-
-  function filterId(id: string | string[], checkType?: boolean) {
-    const selection: string[] = [];
-
-    if (Array.isArray(id)) {
-      for (let indexId = 0; indexId < id.length; indexId++) {
-        const check = id[indexId];
-
-        if (checkId(check)) {
-          selection.push(check);
-
-          if (checkType && actionType === 'radio') {
-            return selection;
-          }
-        }
-      }
-    } else {
-      if (checkId(id)) {
-        selection.push(id);
-      }
-    }
-
-    return selection;
-  }
-
-  const checkId = useCallback((id: string) => chipIds.indexOf(id) >= 0, [
-    chipIds,
-  ]);
 
   const isSelected = useCallback((id: string) => selected.indexOf(id) >= 0, [
     selected,
@@ -359,8 +335,12 @@ export default function Chip({
   }, [chips]);
 
   useEffect(() => {
-    setSelected(selectedId !== undefined ? filterId(selectedId, true) : []);
-  }, [selectedId]);
+    if (initialize.current) {
+      setSelected(filterSelectList(chipIds, selectedId || [], singleValue));
+    } else {
+      initialize.current = true;
+    }
+  }, [singleValue, chipIds, selectedId]);
 
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
