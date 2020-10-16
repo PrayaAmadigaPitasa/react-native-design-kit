@@ -39,6 +39,7 @@ export default function SwitchableText({
   const handleRenderText = useMemo(
     () => (
       <Text
+        testID="text"
         style={StyleSheet.flatten([styles.text, textStyle])}
         onLayout={handleLayoutText}>
         {texts[index]}
@@ -88,12 +89,12 @@ export default function SwitchableText({
     handleRunAnimation();
   }, [index]);
 
-  return (
+  return texts.length > 0 ? (
     <View style={containerStyle}>
       {handleRenderText}
       {handleRenderBar}
     </View>
-  );
+  ) : null;
 }
 
 const styles = StyleSheet.create({
