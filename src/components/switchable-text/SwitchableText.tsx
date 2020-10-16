@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TextStyle,
   Platform,
+  LayoutChangeEvent,
 } from 'react-native';
 
 export interface SwitchableTextProps {
@@ -48,21 +49,30 @@ export default function SwitchableText({
     }
   }, [progress, width]);
 
+  const handleLayoutText = useCallback(
+    (event: LayoutChangeEvent) =>
+      progressBar && setWidth(event.nativeEvent.layout.width),
+    [progressBar],
+  );
+
+  const handleRenderText = useMemo(
+    () => (
+      <Text
+        style={StyleSheet.flatten([styles.text, textStyle])}
+        onLayout={handleLayoutText}>
+        {texts[index]}
+      </Text>
+    ),
+    [index, texts, textStyle, handleLayoutText],
+  );
+
   useEffect(() => {
     setIndex(0);
   }, [texts]);
 
   return (
     <View style={containerStyle}>
-      <Text
-        style={StyleSheet.flatten([styles.text, textStyle])}
-        onLayout={event => {
-          if (progressBar) {
-            setWidth(event.nativeEvent.layout.width);
-          }
-        }}>
-        {texts[index]}
-      </Text>
+      {handleRenderText}
       {progressBar && width !== undefined && (
         <View
           style={StyleSheet.flatten([

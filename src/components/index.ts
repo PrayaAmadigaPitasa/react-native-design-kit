@@ -15,7 +15,7 @@ export * from './PlayingBar';
 export * from './Radio';
 export * from './Slider';
 export * from './Stepper';
-export * from './SwitchableText';
+export * from './switchable-text';
 export * from './ExpansionPanel';
 export * from './touchable';
 
@@ -23,4 +23,3 @@ export {default as PlayingBar} from './PlayingBar';
 export {default as Radio} from './Radio';
 export {default as Slider} from './Slider';
 export {default as Stepper} from './Stepper';
-export {default as SwitchableText} from './SwitchableText';
