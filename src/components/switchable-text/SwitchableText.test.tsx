@@ -26,4 +26,5 @@ function runTest(name: string, props?: ObjectPartial<SwitchableTextProps>) {
 describe('SwitchableText', () => {
   runTest('default');
   runTest('texts empty', {texts: []});
+  runTest('texts single', {texts: ['a']});
 });

@@ -74,11 +74,7 @@ export default function SwitchableText({
       toValue: 1,
       duration,
       useNativeDriver: false,
-    }).start(
-      callback =>
-        callback.finished &&
-        setIndex(index + 1 >= texts.length ? 0 : index + 1),
-    );
+    }).start(() => setIndex(index + 1 >= texts.length ? 0 : index + 1));
   }, [animation, index, duration, texts]);
 
   useEffect(() => {
