@@ -179,14 +179,16 @@ export default function Chip({
     [refScroll.current, offset],
   );
 
-  const handlePressScrollRightButton = useCallback(() => {
-    if (refScroll.current && difSize) {
+  const handlePressScrollRightButton = useCallback(
+    () =>
+      refScroll.current &&
+      difSize &&
       refScroll.current.scrollToOffset({
         offset: Math.min(difSize, offset.x + 125),
         animated: true,
-      });
-    }
-  }, [refScroll.current, difSize, offset]);
+      }),
+    [refScroll.current, difSize, offset],
+  );
 
   const handleRenderIcon = useCallback(
     (
