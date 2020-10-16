@@ -1,4 +1,10 @@
-import React, {useState, useEffect, ReactNode, useMemo} from 'react';
+import React, {
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,6 +15,7 @@ import {
   LayoutRectangle,
   TextStyle,
   ViewStyle,
+  GestureResponderEvent,
 } from 'react-native';
 import {ChipActionType, ChipIcon, ChipIconAction, ChipInfo} from '../../types';
 import {Icon} from '../icon';
@@ -197,81 +204,104 @@ export default function Chip({
     setChipIds(list);
   }
 
-  function getChipItem(id: string) {
-    const component =
-      chipComponent && chipComponent({id: id, isSelected: isSelected(id)});
-    const title =
-      typeof component === 'string'
-        ? component
-        : component === undefined
-        ? id
-        : undefined;
+  const handlePressChipItem = useCallback(
+    (id: string, event: GestureResponderEvent) => {
+      onPress && onPress(event);
 
-    return (
-      <ChipItem
-        {...props}
-        key={id}
-        containerStyle={StyleSheet.flatten([
-          typeof chipContainerStyle === 'function'
-            ? chipContainerStyle(id)
-            : chipContainerStyle,
-          isSelected(id)
-            ? StyleSheet.flatten([
-                styles.selectedChipContainer,
-                typeof selectedChipContainerStyle === 'function'
-                  ? selectedChipContainerStyle(id)
-                  : selectedChipContainerStyle,
-              ])
-            : {},
-        ])}
-        title={title}
-        titleStyle={StyleSheet.flatten([
-          typeof chipTitleStyle === 'function'
-            ? chipTitleStyle(id)
-            : chipTitleStyle,
-          isSelected(id)
-            ? typeof selectedChipTitleStyle === 'function'
-              ? selectedChipTitleStyle(id)
-              : selectedChipTitleStyle
-            : {},
-        ])}
-        leftIcon={getIcon(id, leftIcon, leftIconAction)}
-        leftIconAction={getIconAction(id, leftIconAction)}
-        rightIcon={getIcon(id, rightIcon, rightIconAction)}
-        rightIconAction={getIconAction(id, rightIconAction)}
-        onPress={event => {
-          onPress !== undefined && onPress(event);
+      if (actionType !== 'chip') {
+        if (actionType === 'checkbox') {
+          const selection = [...selected];
 
-          if (actionType !== 'chip') {
-            if (actionType === 'checkbox') {
-              const selection = [...selected];
-
-              if (isSelected(id)) {
-                selection.splice(selection.indexOf(id), 1);
-              } else {
-                selection.push(id);
-              }
-
-              setSelected(selection);
-              onSelect(id, selection);
-            } else {
-              const selection = [id];
-
-              setSelected([id]);
-              onSelect(id, selection);
-            }
+          if (isSelected(id)) {
+            selection.splice(selection.indexOf(id), 1);
           } else {
-            onSelect(id, selected);
+            selection.push(id);
           }
-        }}>
-        {component !== undefined && typeof component !== 'string' && component}
-      </ChipItem>
-    );
-  }
+
+          setSelected(selection);
+          onSelect(id, selection);
+        } else {
+          const selection = [id];
+
+          setSelected([id]);
+          onSelect(id, selection);
+        }
+      } else {
+        onSelect(id, selected);
+      }
+    },
+    [actionType, selected, isSelected, onPress, onSelect],
+  );
+
+  const handleRenderChipItem = useCallback(
+    (id: string) => {
+      const component =
+        chipComponent && chipComponent({id, isSelected: isSelected(id)});
+      const title =
+        typeof component === 'string'
+          ? component
+          : component === undefined
+          ? id
+          : undefined;
+
+      return (
+        <ChipItem
+          {...props}
+          key={id}
+          containerStyle={StyleSheet.flatten([
+            typeof chipContainerStyle === 'function'
+              ? chipContainerStyle(id)
+              : chipContainerStyle,
+            isSelected(id)
+              ? StyleSheet.flatten([
+                  styles.selectedChipContainer,
+                  typeof selectedChipContainerStyle === 'function'
+                    ? selectedChipContainerStyle(id)
+                    : selectedChipContainerStyle,
+                ])
+              : {},
+          ])}
+          title={title}
+          titleStyle={StyleSheet.flatten([
+            typeof chipTitleStyle === 'function'
+              ? chipTitleStyle(id)
+              : chipTitleStyle,
+            isSelected(id)
+              ? typeof selectedChipTitleStyle === 'function'
+                ? selectedChipTitleStyle(id)
+                : selectedChipTitleStyle
+              : {},
+          ])}
+          leftIcon={getIcon(id, leftIcon, leftIconAction)}
+          leftIconAction={getIconAction(id, leftIconAction)}
+          rightIcon={getIcon(id, rightIcon, rightIconAction)}
+          rightIconAction={getIconAction(id, rightIconAction)}
+          onPress={event => handlePressChipItem(id, event)}>
+          {component !== undefined &&
+            typeof component !== 'string' &&
+            component}
+        </ChipItem>
+      );
+    },
+    [
+      props,
+      chipTitleStyle,
+      chipContainerStyle,
+      selectedChipTitleStyle,
+      selectedChipContainerStyle,
+      leftIcon,
+      leftIconAction,
+      rightIcon,
+      rightIconAction,
+      getIcon,
+      chipComponent,
+      isSelected,
+    ],
+  );
 
   const handleRenderListChipItem = useMemo(
-    () => chipIds.map(id => getChipItem(id)),
-    [chipIds, getChipItem],
+    () => chipIds.map(id => handleRenderChipItem(id)),
+    [chipIds, handleRenderChipItem],
   );
 
   return horizontal ? (
@@ -311,7 +341,7 @@ export default function Chip({
         contentContainerStyle={styles.sectionWrap}
         showsHorizontalScrollIndicator={horizontalScrollIndicator}
         keyExtractor={item => item}
-        renderItem={({item}) => getChipItem(item)}
+        renderItem={({item}) => handleRenderChipItem(item)}
       />
       {horizontalScrollButton && (
         <TouchableOpacity
