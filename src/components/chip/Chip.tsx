@@ -89,13 +89,19 @@ export default function Chip({
     selectedId !== undefined ? filterId(selectedId, true) : [],
   );
 
-  useEffect(() => {
-    setChipIds(chips);
-  }, [chips]);
+  const difSize = useMemo(
+    () => (layout && size ? size.x - layout.width : undefined),
+    [layout],
+  );
 
-  useEffect(() => {
-    setSelected(selectedId !== undefined ? filterId(selectedId, true) : []);
-  }, [selectedId]);
+  const allowScrollLeft = useMemo(() => offset !== undefined && offset.x > 0, [
+    offset,
+  ]);
+
+  const allowScrollRight = useMemo(
+    () => difSize !== undefined && offset.x < difSize,
+    [difSize, offset],
+  );
 
   function checkId(id: string) {
     return chipIds.indexOf(id) >= 0;
@@ -127,22 +133,6 @@ export default function Chip({
     }
 
     return selection;
-  }
-
-  function allowScrollLeft() {
-    return offset !== undefined && offset.x > 0;
-  }
-
-  function allowScrollRight() {
-    const difSize = getDifSize();
-
-    return difSize !== undefined && offset.x < difSize;
-  }
-
-  function getDifSize() {
-    return layout !== undefined && size !== undefined
-      ? size.x - layout.width
-      : undefined;
   }
 
   const removeChipId = useCallback(
@@ -300,18 +290,26 @@ export default function Chip({
     [chipIds, handleRenderChipItem],
   );
 
+  useEffect(() => {
+    setChipIds(chips);
+  }, [chips]);
+
+  useEffect(() => {
+    setSelected(selectedId !== undefined ? filterId(selectedId, true) : []);
+  }, [selectedId]);
+
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
       {horizontalScrollButton && (
         <TouchableOpacity
           testID="chip-scroll-left-icon-container"
           activeOpacity={activeOpacity}
-          disabled={!allowScrollLeft()}
+          disabled={!allowScrollLeft}
           style={StyleSheet.flatten([
             styles.scrollContainer,
             styles.scrollLeftIconContainer,
             horizontalScrollLeftButtonContainerStyle,
-            !allowScrollLeft() ? styles.scrollContainerDisabled : {},
+            !allowScrollLeft ? styles.scrollContainerDisabled : {},
           ])}
           onPress={() => {
             if (scrollRef !== null) {
@@ -343,17 +341,15 @@ export default function Chip({
         <TouchableOpacity
           testID="chip-scroll-right-icon-container"
           activeOpacity={activeOpacity}
-          disabled={!allowScrollRight()}
+          disabled={!allowScrollRight}
           style={StyleSheet.flatten([
             styles.scrollContainer,
             styles.scrollRightIconContainer,
             horizontalScrollRightButtonContainerStyle,
-            !allowScrollRight() ? styles.scrollContainerDisabled : {},
+            !allowScrollRight ? styles.scrollContainerDisabled : {},
           ])}
           onPress={() => {
-            const difSize = getDifSize();
-
-            if (scrollRef !== null && difSize !== undefined) {
+            if (scrollRef && difSize) {
               scrollRef.scrollToOffset({
                 offset: Math.min(difSize, offset.x + 125),
                 animated: true,
