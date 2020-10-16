@@ -280,21 +280,23 @@ export default function Chip({
   );
 
   const handleRenderScrollLeftButton = useMemo(
-    () => (
-      <Touchable
-        disabled={!allowScrollLeft}
-        style={StyleSheet.flatten([
-          styles.scrollContainer,
-          styles.scrollLeftIconContainer,
-          horizontalScrollLeftButtonContainerStyle,
-          !allowScrollLeft ? styles.scrollContainerDisabled : {},
-        ])}
-        onPress={handlePressScrollLeftButton}>
-        {horizontalScrollLeftButton || <Icon name="chevron-left" />}
-      </Touchable>
-    ),
+    () =>
+      horizontalScrollButton && (
+        <Touchable
+          disabled={!allowScrollLeft}
+          style={StyleSheet.flatten([
+            styles.scrollContainer,
+            styles.scrollLeftIconContainer,
+            horizontalScrollLeftButtonContainerStyle,
+            !allowScrollLeft ? styles.scrollContainerDisabled : {},
+          ])}
+          onPress={handlePressScrollLeftButton}>
+          {horizontalScrollLeftButton || <Icon name="chevron-left" />}
+        </Touchable>
+      ),
     [
       allowScrollLeft,
+      horizontalScrollButton,
       horizontalScrollLeftButton,
       horizontalScrollLeftButtonContainerStyle,
       handlePressScrollLeftButton,
@@ -344,7 +346,7 @@ export default function Chip({
 
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
-      {horizontalScrollButton && handleRenderScrollLeftButton}
+      {handleRenderScrollLeftButton}
       <FlatList
         horizontal
         ref={instance => setScrollRef(instance)}
