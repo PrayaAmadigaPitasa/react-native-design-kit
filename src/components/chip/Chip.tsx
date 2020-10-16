@@ -197,6 +197,15 @@ export default function Chip({
     [scrollRef, offset],
   );
 
+  const handlePressScrollRightButton = useCallback(() => {
+    if (scrollRef && difSize) {
+      scrollRef.scrollToOffset({
+        offset: Math.min(difSize, offset.x + 125),
+        animated: true,
+      });
+    }
+  }, [scrollRef, difSize, offset]);
+
   const handleRenderIcon = useCallback(
     (
       id: string,
@@ -316,6 +325,30 @@ export default function Chip({
     ],
   );
 
+  const handleRenderScrollRightButton = useMemo(() => {
+    return (
+      horizontalScrollButton && (
+        <Touchable
+          disabled={!allowScrollRight}
+          style={StyleSheet.flatten([
+            styles.scrollContainer,
+            styles.scrollRightIconContainer,
+            horizontalScrollRightButtonContainerStyle,
+            !allowScrollRight ? styles.scrollContainerDisabled : {},
+          ])}
+          onPress={handlePressScrollRightButton}>
+          {horizontalScrollRightButton || <Icon name="chevron-right" />}
+        </Touchable>
+      )
+    );
+  }, [
+    allowScrollRight,
+    horizontalScrollButton,
+    horizontalScrollRightButton,
+    horizontalScrollRightButtonContainerStyle,
+    handlePressScrollRightButton,
+  ]);
+
   const handleRenderListChipItem = useMemo(
     () => chipIds.map(id => handleRenderChipItem(id)),
     [chipIds, handleRenderChipItem],
@@ -347,26 +380,7 @@ export default function Chip({
         keyExtractor={item => item}
         renderItem={({item}) => handleRenderChipItem(item)}
       />
-      {horizontalScrollButton && (
-        <Touchable
-          disabled={!allowScrollRight}
-          style={StyleSheet.flatten([
-            styles.scrollContainer,
-            styles.scrollRightIconContainer,
-            horizontalScrollRightButtonContainerStyle,
-            !allowScrollRight ? styles.scrollContainerDisabled : {},
-          ])}
-          onPress={() => {
-            if (scrollRef && difSize) {
-              scrollRef.scrollToOffset({
-                offset: Math.min(difSize, offset.x + 125),
-                animated: true,
-              });
-            }
-          }}>
-          {horizontalScrollRightButton || <Icon name="chevron-right" />}
-        </Touchable>
-      )}
+      {handleRenderScrollRightButton}
     </View>
   ) : (
     <View style={StyleSheet.flatten([containerStyle, styles.containerWrap])}>
