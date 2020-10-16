@@ -360,9 +360,7 @@ export default function Chip({
         data={chipIds}
         scrollEnabled={horizontalScrollEnabled}
         onContentSizeChange={(w, h) => setSize({x: w, y: h})}
-        onScroll={event => {
-          setOffset(event.nativeEvent.contentOffset);
-        }}
+        onScroll={event => setOffset(event.nativeEvent.contentOffset)}
         contentContainerStyle={styles.sectionWrap}
         showsHorizontalScrollIndicator={horizontalScrollIndicator}
         keyExtractor={item => item}
