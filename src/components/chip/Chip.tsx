@@ -1,4 +1,4 @@
-import React, {useState, useEffect, ReactNode} from 'react';
+import React, {useState, useEffect, ReactNode, useMemo} from 'react';
 import {
   StyleSheet,
   View,
@@ -269,18 +269,10 @@ export default function Chip({
     );
   }
 
-  function getListChipItem() {
-    const list: JSX.Element[] = [];
-
-    for (let index = 0; index < chipIds.length; index++) {
-      const id = chipIds[index];
-      const chip = getChipItem(id);
-
-      list.push(chip);
-    }
-
-    return list;
-  }
+  const handleRenderListChipItem = useMemo(
+    () => chipIds.map(id => getChipItem(id)),
+    [chipIds, getChipItem],
+  );
 
   return horizontal ? (
     <View style={StyleSheet.flatten([containerStyle, styles.containerNoWrap])}>
@@ -348,7 +340,7 @@ export default function Chip({
     </View>
   ) : (
     <View style={StyleSheet.flatten([containerStyle, styles.containerWrap])}>
-      {getListChipItem()}
+      {handleRenderListChipItem}
     </View>
   );
 }
