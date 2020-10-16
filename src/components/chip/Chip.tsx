@@ -355,6 +355,7 @@ export default function Chip({
       {handleRenderScrollLeftButton}
       <FlatList
         horizontal
+        testID="list"
         ref={handleRefList}
         onLayout={event => setLayout(event.nativeEvent.layout)}
         data={chipIds}
