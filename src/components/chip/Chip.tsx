@@ -295,6 +295,7 @@ export default function Chip({
     () =>
       horizontalScrollButton && (
         <Touchable
+          testID="button-left"
           disabled={!allowScrollLeft}
           style={StyleSheet.flatten([
             styles.scrollContainer,
@@ -319,6 +320,7 @@ export default function Chip({
     return (
       horizontalScrollButton && (
         <Touchable
+          testID="button-right"
           disabled={!allowScrollRight}
           style={StyleSheet.flatten([
             styles.scrollContainer,

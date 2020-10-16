@@ -13,7 +13,7 @@ const defaultProps: ChipProps = {
 
 function runTest(name: string, props?: ObjectPartial<ChipProps>) {
   test(name, async () => {
-    const {getAllByTestId, getByTestId} = render(
+    const {getAllByTestId, getByTestId, rerender} = render(
       <Chip {...defaultProps} {...props} />,
     );
     const chips = getAllByTestId('chip');
@@ -21,6 +21,7 @@ function runTest(name: string, props?: ObjectPartial<ChipProps>) {
     if (props?.horizontal) {
       const list = getByTestId('list');
 
+      fireEvent(list, 'contentSizeChange', 2000, 48);
       fireEvent(list, 'layout', {
         nativeEvent: {layout: {x: 0, y: 0, width: 1000, height: 48}},
       });
@@ -40,6 +41,14 @@ function runTest(name: string, props?: ObjectPartial<ChipProps>) {
           },
         },
       });
+
+      if (props?.horizontalScrollButton) {
+        const buttonLeft = getByTestId('button-left');
+        const buttonRight = getByTestId('button-right');
+
+        fireEvent.press(buttonLeft);
+        fireEvent.press(buttonRight);
+      }
     }
 
     for (const chip of chips) {
@@ -53,6 +62,8 @@ function runTest(name: string, props?: ObjectPartial<ChipProps>) {
         fireEvent.press(icon);
       }
     }
+
+    rerender(<Chip {...defaultProps} {...props} selectedId={undefined} />);
   });
 }
 
