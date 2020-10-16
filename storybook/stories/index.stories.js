@@ -18,7 +18,6 @@ configure(
     require('./radio/index.stories'),
     require('./slider/index.stories'),
     require('./stepper/index.stories'),
-    require('./swiper/index.stories'),
     require('./switchable-text/index.stories'),
     require('./expansion-panel/index.stories'),
   ],
