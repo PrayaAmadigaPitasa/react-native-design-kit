@@ -45,11 +45,20 @@ function runTest(name: string, props?: ObjectPartial<ChipProps>) {
     for (const chip of chips) {
       fireEvent.press(chip);
     }
+
+    if (props?.leftIconAction && props.leftIconAction('', false) === 'delete') {
+      const icons = getAllByTestId('icon-delete');
+
+      for (const icon of icons) {
+        fireEvent.press(icon);
+      }
+    }
   });
 }
 
 describe('Chip', () => {
   runTest('default');
+  runTest('selectedId empty', {selectedId: []});
   runTest('horizontal', {horizontal: true});
   runTest('horizontal horizontalScrollButton', {
     horizontal: true,
@@ -58,9 +67,11 @@ describe('Chip', () => {
   runTest('leftIcon', {leftIcon: () => <></>});
   runTest('leftIconAction check', {leftIconAction: () => 'check'});
   runTest('leftIconAction delete', {leftIconAction: () => 'delete'});
+  runTest('leftIconAction function', {leftIconAction: () => jest.fn()});
   runTest('rightIcon', {rightIcon: () => <></>});
   runTest('rightIconAction check', {rightIconAction: () => 'check'});
   runTest('rightIconAction delete', {rightIconAction: () => 'delete'});
+  runTest('rightIconAction function', {rightIconAction: () => jest.fn()});
   runTest('actionType checkbox', {actionType: 'checkbox'});
   runTest('actionType radio', {actionType: 'radio'});
   runTest('chipComponent id', {chipComponent: info => info.id});

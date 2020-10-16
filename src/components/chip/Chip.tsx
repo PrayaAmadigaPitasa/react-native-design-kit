@@ -202,7 +202,13 @@ export default function Chip({
         const action = iconActionFunction(id, isSelected(id));
 
         if (action === 'delete') {
-          return <Icon style={styles.icon} name="times-circle" />;
+          return (
+            <Icon
+              testID="icon-delete"
+              style={styles.icon}
+              name="times-circle"
+            />
+          );
         } else if (action === 'check' && isSelected(id)) {
           return (
             <Icon
