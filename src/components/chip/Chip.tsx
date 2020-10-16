@@ -145,55 +145,29 @@ export default function Chip({
       : undefined;
   }
 
-  function getIcon(
-    id: string,
-    iconFunction?: ChipIcon,
-    iconActionFunction?: ChipIconAction,
-  ) {
-    if (iconFunction !== undefined) {
-      return iconFunction({id: id, isSelected: isSelected(id)});
-    }
-
-    if (iconActionFunction !== undefined) {
-      const action = iconActionFunction(id, isSelected(id));
-
-      if (action === 'delete') {
-        return <Icon style={styles.icon} name="times-circle" />;
-      }
-
-      if (action === 'check' && isSelected(id)) {
-        return (
-          <Icon
-            style={StyleSheet.flatten([styles.icon, styles.iconCheck])}
-            name="check"
-          />
-        );
-      }
-    }
-
-    return undefined;
-  }
-
-  const handleRemoveId = useCallback(
+  const removeChipId = useCallback(
     (id: string) => setChipIds(chipIds.filter(chipId => chipId !== id)),
     [chipIds],
   );
 
-  function getIconAction(id: string, iconActionFunction?: ChipIconAction) {
-    if (iconActionFunction !== undefined) {
-      const action = iconActionFunction(id, isSelected(id));
+  const getIconAction = useCallback(
+    (id: string, iconActionFunction?: ChipIconAction) => {
+      if (iconActionFunction) {
+        const action = iconActionFunction(id, isSelected(id));
 
-      if (action === 'delete') {
-        return () => handleRemoveId(id);
-      } else if (action === 'check') {
-        return () => {};
+        if (action === 'delete') {
+          return () => removeChipId(id);
+        } else if (action === 'check') {
+          return undefined;
+        }
+
+        return action;
       }
 
-      return action;
-    }
-
-    return undefined;
-  }
+      return undefined;
+    },
+    [],
+  );
 
   const handlePressChipItem = useCallback(
     (id: string, event: GestureResponderEvent) => {
@@ -222,6 +196,36 @@ export default function Chip({
       }
     },
     [actionType, selected, isSelected, onPress, onSelect],
+  );
+
+  const handleRenderIcon = useCallback(
+    (
+      id: string,
+      iconFunction?: ChipIcon,
+      iconActionFunction?: ChipIconAction,
+    ) => {
+      if (iconFunction) {
+        return iconFunction({id, isSelected: isSelected(id)});
+      }
+
+      if (iconActionFunction) {
+        const action = iconActionFunction(id, isSelected(id));
+
+        if (action === 'delete') {
+          return <Icon style={styles.icon} name="times-circle" />;
+        } else if (action === 'check' && isSelected(id)) {
+          return (
+            <Icon
+              style={StyleSheet.flatten([styles.icon, styles.iconCheck])}
+              name="check"
+            />
+          );
+        }
+      }
+
+      return undefined;
+    },
+    [isSelected],
   );
 
   const handleRenderChipItem = useCallback(
@@ -263,9 +267,9 @@ export default function Chip({
                 : selectedChipTitleStyle
               : {},
           ])}
-          leftIcon={getIcon(id, leftIcon, leftIconAction)}
+          leftIcon={handleRenderIcon(id, leftIcon, leftIconAction)}
           leftIconAction={getIconAction(id, leftIconAction)}
-          rightIcon={getIcon(id, rightIcon, rightIconAction)}
+          rightIcon={handleRenderIcon(id, rightIcon, rightIconAction)}
           rightIconAction={getIconAction(id, rightIconAction)}
           onPress={event => handlePressChipItem(id, event)}>
           {component !== undefined &&
@@ -284,9 +288,9 @@ export default function Chip({
       leftIconAction,
       rightIcon,
       rightIconAction,
-      getIcon,
       chipComponent,
       isSelected,
+      handleRenderIcon,
       handlePressChipItem,
     ],
   );
