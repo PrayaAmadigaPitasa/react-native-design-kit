@@ -34,7 +34,6 @@ export default function ExpansionPanel<ItemT>({
   children,
 }: ExpansionPanelProps<ItemT>) {
   const animation = useState(new Animated.Value(0))[0];
-  const containerListAnimation = useState(new Animated.Value(0))[0];
   const [toggle, setToggle] = useState(false);
   const [buttonRef, setButtonRef] = useState<TouchableOpacity>();
   const [layout, setLayout] = useState<Layout>();
@@ -43,11 +42,6 @@ export default function ExpansionPanel<ItemT>({
     Animated.timing(animation, {
       toValue: toggle ? 1 : 0,
       duration: 250,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(containerListAnimation, {
-      toValue: 1,
-      duration: 2000,
       useNativeDriver: true,
     }).start();
   }, [toggle]);
