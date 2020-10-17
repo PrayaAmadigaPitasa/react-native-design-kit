@@ -4,13 +4,12 @@ import {
   TouchableOpacity,
   Text,
   Animated,
-  Easing,
   ViewStyle,
   View,
   TextStyle,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {Layout} from '../../layout';
+import {Icon} from '../icon';
 
 export interface ExpansionPanelProps<ItemT> {
   title?: string;
@@ -44,11 +43,12 @@ export default function ExpansionPanel<ItemT>({
     Animated.timing(animation, {
       toValue: toggle ? 1 : 0,
       duration: 250,
+      useNativeDriver: true,
     }).start();
     Animated.timing(containerListAnimation, {
       toValue: 1,
       duration: 2000,
-      easing: Easing.linear,
+      useNativeDriver: true,
     }).start();
   }, [toggle]);
 

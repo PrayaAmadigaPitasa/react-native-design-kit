@@ -16,7 +16,7 @@ export * from './Radio';
 export * from './Slider';
 export * from './Stepper';
 export * from './switchable-text';
-export * from './ExpansionPanel';
+export * from './expansion-panel';
 export * from './touchable';
 
 export {default as PlayingBar} from './PlayingBar';
