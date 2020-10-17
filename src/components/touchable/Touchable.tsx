@@ -6,14 +6,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {TouchableType} from '../../types';
+import {ObjectRef, TouchableType} from '../../types';
 
 export interface TouchableProps extends TouchableOpacityProps {
+  refView?: ObjectRef<View>;
   touchableType?: TouchableType;
   children?: ReactNode;
 }
 
 export default function Touchable({
+  refView,
   touchableType = 'opacity',
   activeOpacity = 0.75,
   style,
@@ -33,13 +35,17 @@ export default function Touchable({
     case 'highlight':
       return (
         <TouchableHighlight {...props} activeOpacity={activeOpacity}>
-          <View style={style}>{children}</View>
+          <View ref={refView} style={style}>
+            {children}
+          </View>
         </TouchableHighlight>
       );
     default:
       return (
         <TouchableWithoutFeedback {...props}>
-          <View style={style}>{children}</View>
+          <View ref={refView} style={style}>
+            {children}
+          </View>
         </TouchableWithoutFeedback>
       );
   }
