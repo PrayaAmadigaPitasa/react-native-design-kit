@@ -104,6 +104,7 @@ export default function ExpansionPanel<ItemT>({
       <Collapse visible={toggle} animationDuration={animationDuration}>
         <View
           style={StyleSheet.flatten([
+            styles.contentContainer,
             contentContainerStyle,
             {width: width.current},
           ])}>
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginLeft: 12,
   },
-  listContainer: {
+  contentContainer: {
     borderWidth: 1,
     padding: 12,
     borderBottomLeftRadius: 4,
