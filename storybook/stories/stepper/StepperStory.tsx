@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Stepper, StepperProps} from '../../../src';
+import {Stepper, StepperProps} from '../../../src/components';
 
 export interface StepperStoryProps extends StepperProps {}
 

@@ -14,10 +14,9 @@ export * from './Picker';
 export * from './playing-bar';
 export * from './radio';
 export * from './Slider';
-export * from './Stepper';
+export * from './stepper';
 export * from './switchable-text';
 export * from './expansion-panel';
 export * from './touchable';
 
 export {default as Slider} from './Slider';
-export {default as Stepper} from './Stepper';

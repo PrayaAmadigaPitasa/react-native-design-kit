@@ -1,5 +1,3 @@
-import StepperStory from './StepperStory';
-
 export * from './StepperStory';
 
-export {StepperStory};
+export {default as StepperStory} from './StepperStory';
