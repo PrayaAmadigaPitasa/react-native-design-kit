@@ -107,6 +107,7 @@ export default function ExpansionPanel({
       containerStyle,
       animation,
       handlePress,
+      handleLayout,
     ],
   );
 

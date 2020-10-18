@@ -15,7 +15,8 @@ function runTest(name: string, props?: ObjectPartial<ExpansionPanelProps>) {
     const {getByTestId, rerender} = render(<ExpansionPanel {...props} />);
     const panel = getByTestId('panel');
 
-    fireEvent.press(panel);
+    fireEvent(panel, 'press');
+    fireEvent(panel, 'layout', {nativeEvent: {layout: {}}});
 
     rerender(<ExpansionPanel {...props} visible={!props?.visible} />);
   });
