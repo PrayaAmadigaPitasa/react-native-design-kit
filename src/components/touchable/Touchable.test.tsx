@@ -11,6 +11,6 @@ function runTest(name: string, props?: ObjectPartial<TouchableProps>) {
 
 describe('Touchable', () => {
   runTest('default');
-  runTest('type normal', {touchableType: 'normal'});
-  runTest('type highlight', {touchableType: 'highlight'});
+  runTest('touchableType normal', {touchableType: 'normal'});
+  runTest('touchableType highlight', {touchableType: 'highlight'});
 });

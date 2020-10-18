@@ -7,6 +7,7 @@ import {
   View,
   TextStyle,
 } from 'react-native';
+import {Collapse} from '../collapse';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
 
@@ -15,6 +16,7 @@ export interface ExpansionPanelProps<ItemT> {
   titleStyle?: TextStyle;
   icon?: JSX.Element;
   animationRotation?: string;
+  animationDuration?: number;
   subtitle?: string;
   subtitleStyle?: TextStyle;
   content?: string;
@@ -26,6 +28,7 @@ export default function ExpansionPanel<ItemT>({
   title,
   titleStyle,
   animationRotation = '-180deg',
+  animationDuration = 250,
   icon,
   subtitle,
   subtitleStyle,
@@ -88,17 +91,9 @@ export default function ExpansionPanel<ItemT>({
           {icon || <Icon name={'chevron-down'} />}
         </Animated.View>
       </Touchable>
-      {panelWidth.current && toggle && (
-        <View
-          style={StyleSheet.flatten([
-            styles.listContainer,
-            {
-              width: panelWidth.current,
-            },
-          ])}>
-          {children}
-        </View>
-      )}
+      <Collapse visible={toggle} animationDuration={animationDuration}>
+        {children}
+      </Collapse>
     </>
   );
 }

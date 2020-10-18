@@ -5,6 +5,7 @@ export * from './badge';
 export * from './button-group';
 export * from './checkbox';
 export * from './chip';
+export * from './collapse';
 export * from './Header';
 export * from './Input';
 export * from './InputOTP';
