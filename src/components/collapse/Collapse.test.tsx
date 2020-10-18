@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
+import {fireEvent, render} from '@testing-library/react-native';
 import {ObjectPartial} from '../../types';
 import Collapse, {CollapseProps} from './Collapse';
 
@@ -9,11 +9,16 @@ const defaultProps: CollapseProps = {
 
 function runTest(name: string, props?: ObjectPartial<CollapseProps>) {
   test(name, async () => {
-    const {rerender} = render(<Collapse {...defaultProps} {...props} />);
+    const {getByTestId, rerender} = render(
+      <Collapse {...defaultProps} {...props} />,
+    );
+    const view = getByTestId('view');
 
+    fireEvent(view, 'layout', {nativeEvent: {layout: {}}});
     rerender(
       <Collapse {...defaultProps} {...props} visible={!props?.visible} />,
     );
+    fireEvent(view, 'layout', {nativeEvent: {layout: {}}});
   });
 }
 

@@ -60,6 +60,7 @@ export default function Collapse({
             },
       ])}>
       <View
+        testID="view"
         pointerEvents={fakeContent ? 'none' : 'auto'}
         style={StyleSheet.flatten([fakeContent && {position: 'absolute'}])}
         onLayout={handleLayoutView}>
