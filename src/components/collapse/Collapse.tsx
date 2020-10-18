@@ -14,16 +14,9 @@ export default function Collapse({
   children,
 }: CollapseProps) {
   const height = useRef<number>(0);
-  const refView = useRef<View>();
   const animation = useRef(new Animated.Value(visible ? 1 : 0)).current;
   const toggle = useRef(visible);
   const [animating, setAnimating] = useState(false);
-
-  const handleRefView = useCallback((instance: View | null) => {
-    if (instance) {
-      refView.current = instance;
-    }
-  }, []);
 
   const handleLayoutView = useCallback(
     (event: LayoutChangeEvent) => {
@@ -31,7 +24,7 @@ export default function Collapse({
         height.current = event.nativeEvent.layout.height;
       }
     },
-    [refView.current && animating],
+    [animating],
   );
 
   const handleRunAnimation = useCallback(() => {
@@ -64,7 +57,6 @@ export default function Collapse({
             },
       ])}>
       <View
-        ref={handleRefView}
         style={StyleSheet.flatten([
           !animating && !toggle.current && {position: 'absolute'},
         ])}
