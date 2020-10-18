@@ -8,6 +8,7 @@ configure(
     require('./button-group/index.stories'),
     require('./checkbox/index.stories'),
     require('./chip/index.stories'),
+    require('./expansion-panel/index.stories'),
     require('./header/index.stories'),
     require('./input/index.stories'),
     require('./input-otp/index.stories'),
@@ -19,7 +20,6 @@ configure(
     require('./slider/index.stories'),
     require('./stepper/index.stories'),
     require('./switchable-text/index.stories'),
-    require('./expansion-panel/index.stories'),
   ],
   module,
 );
