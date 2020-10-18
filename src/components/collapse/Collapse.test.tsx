@@ -9,10 +9,16 @@ const defaultProps: CollapseProps = {
 
 function runTest(name: string, props?: ObjectPartial<CollapseProps>) {
   test(name, async () => {
-    render(<Collapse {...defaultProps} {...props} />);
+    const {rerender} = render(<Collapse {...defaultProps} {...props} />);
+
+    rerender(
+      <Collapse {...defaultProps} {...props} visible={!props?.visible} />,
+    );
   });
 }
 
 describe('Collapse', () => {
   runTest('default');
+  runTest('byPassAnimationCallback', {byPassAnimationCallback: true});
+  runTest('visible', {visible: true});
 });

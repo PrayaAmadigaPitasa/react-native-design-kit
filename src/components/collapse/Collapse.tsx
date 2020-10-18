@@ -5,12 +5,14 @@ import {useDidUpdate} from '../../utilities';
 export interface CollapseProps {
   visible?: boolean;
   animationDuration?: number;
+  byPassAnimationCallback?: boolean;
   children: ReactNode;
 }
 
 export default function Collapse({
   visible = false,
   animationDuration = 250,
+  byPassAnimationCallback = false,
   children,
 }: CollapseProps) {
   const [animating, setAnimating] = useState(false);
@@ -35,7 +37,7 @@ export default function Collapse({
       duration: animationDuration,
       useNativeDriver: false,
     }).start(callback => {
-      if (callback.finished) {
+      if (callback.finished || byPassAnimationCallback) {
         toggle.current = visible;
         setAnimating(false);
       }
