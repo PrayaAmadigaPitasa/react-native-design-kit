@@ -99,6 +99,21 @@ export default function ExpansionPanel<ItemT>({
     ],
   );
 
+  const handleRenderContent = useMemo(
+    () => (
+      <Collapse visible={toggle} animationDuration={animationDuration}>
+        <View
+          style={StyleSheet.flatten([
+            contentContainerStyle,
+            {width: width.current},
+          ])}>
+          {children}
+        </View>
+      </Collapse>
+    ),
+    [width.current, toggle, animationDuration, contentContainerStyle, children],
+  );
+
   useEffect(() => {
     Animated.timing(animation, {
       toValue: toggle ? 1 : 0,
@@ -110,15 +125,7 @@ export default function ExpansionPanel<ItemT>({
   return (
     <>
       {handleRenderPanel}
-      <Collapse visible={toggle} animationDuration={animationDuration}>
-        <View
-          style={StyleSheet.flatten([
-            contentContainerStyle,
-            {width: width.current},
-          ])}>
-          {children}
-        </View>
-      </Collapse>
+      {handleRenderContent}
     </>
   );
 }
