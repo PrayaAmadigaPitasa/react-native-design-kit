@@ -53,16 +53,19 @@ export default function ExpansionPanel({
     }
   }, []);
 
-  const handlePress = useCallback(() => {
-    refView.current?.measure((x, y, w) => {
-      width.current = w;
-      setToggle(!toggle);
-    });
-  }, [refView.current, toggle]);
+  const handlePress = useCallback(
+    () =>
+      refView.current?.measure((x, y, w) => {
+        width.current = w;
+        setToggle(!toggle);
+      }),
+    [refView.current, toggle],
+  );
 
   const handleRenderPanel = useMemo(
     () => (
       <Touchable
+        testID="panel"
         touchableType="normal"
         refView={handleRefView}
         style={StyleSheet.flatten([
