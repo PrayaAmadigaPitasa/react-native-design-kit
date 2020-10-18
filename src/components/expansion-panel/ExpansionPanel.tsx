@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import React, {useState, useRef, useCallback, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,11 +7,13 @@ import {
   View,
   TextStyle,
 } from 'react-native';
+import {useDidUpdate} from '../../utilities';
 import {Collapse} from '../collapse';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
 
-export interface ExpansionPanelProps<ItemT> {
+export interface ExpansionPanelProps {
+  visible?: boolean;
   title?: string;
   titleStyle?: TextStyle;
   icon?: JSX.Element;
@@ -26,7 +28,8 @@ export interface ExpansionPanelProps<ItemT> {
   children?: React.ReactNode;
 }
 
-export default function ExpansionPanel<ItemT>({
+export default function ExpansionPanel({
+  visible = false,
   title,
   titleStyle,
   iconStartRotation = '-90deg',
@@ -38,11 +41,11 @@ export default function ExpansionPanel<ItemT>({
   containerStyle,
   contentContainerStyle,
   children,
-}: ExpansionPanelProps<ItemT>) {
-  const animation = useRef(new Animated.Value(0)).current;
+}: ExpansionPanelProps) {
   const refView = useRef<View>();
   const width = useRef<number>();
-  const [toggle, setToggle] = useState(false);
+  const animation = useRef(new Animated.Value(visible ? 1 : 0)).current;
+  const [toggle, setToggle] = useState(visible);
 
   const handleRefView = useCallback((instance: View | null) => {
     if (instance) {
@@ -130,13 +133,19 @@ export default function ExpansionPanel<ItemT>({
     [width.current, toggle, animationDuration, contentContainerStyle, children],
   );
 
-  useEffect(() => {
-    Animated.timing(animation, {
-      toValue: toggle ? 1 : 0,
-      duration: animationDuration,
-      useNativeDriver: true,
-    }).start();
-  }, [toggle]);
+  const handleRunAnimation = useCallback(
+    () =>
+      Animated.timing(animation, {
+        toValue: toggle ? 1 : 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }).start(),
+    [animation, toggle, animationDuration],
+  );
+
+  useDidUpdate(() => setToggle(visible), [visible]);
+
+  useDidUpdate(handleRunAnimation, [handleRunAnimation]);
 
   return (
     <>
