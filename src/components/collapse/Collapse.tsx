@@ -13,10 +13,11 @@ export default function Collapse({
   animationDuration = 250,
   children,
 }: CollapseProps) {
+  const [animating, setAnimating] = useState(false);
   const height = useRef<number>(0);
   const animation = useRef(new Animated.Value(visible ? 1 : 0)).current;
   const toggle = useRef(visible);
-  const [animating, setAnimating] = useState(false);
+  const fakeContent = !animating && !toggle.current;
 
   const handleLayoutView = useCallback(
     (event: LayoutChangeEvent) => {
@@ -57,9 +58,8 @@ export default function Collapse({
             },
       ])}>
       <View
-        style={StyleSheet.flatten([
-          !animating && !toggle.current && {position: 'absolute'},
-        ])}
+        pointerEvents={fakeContent ? 'none' : 'auto'}
+        style={StyleSheet.flatten([fakeContent && {position: 'absolute'}])}
         onLayout={handleLayoutView}>
         {children}
       </View>

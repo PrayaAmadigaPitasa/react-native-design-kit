@@ -152,8 +152,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     borderWidth: 1,
     padding: 12,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
+    borderRadius: 4,
     borderColor: 'lightgray',
     backgroundColor: '#fff',
     maxHeight: 300,
