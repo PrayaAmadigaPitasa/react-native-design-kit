@@ -6,6 +6,7 @@ import {
   ViewStyle,
   View,
   TextStyle,
+  LayoutChangeEvent,
 } from 'react-native';
 import {useDidUpdate} from '../../utilities';
 import {Collapse} from '../collapse';
@@ -42,32 +43,22 @@ export default function ExpansionPanel({
   contentContainerStyle,
   children,
 }: ExpansionPanelProps) {
-  const refView = useRef<View>();
   const width = useRef<number>();
   const animation = useRef(new Animated.Value(visible ? 1 : 0)).current;
   const [toggle, setToggle] = useState(visible);
 
-  const handleRefView = useCallback((instance: View | null) => {
-    if (instance) {
-      refView.current = instance;
-    }
+  const handleLayout = useCallback((event: LayoutChangeEvent) => {
+    width.current = event.nativeEvent.layout.width;
   }, []);
 
-  const handlePress = useCallback(
-    () =>
-      refView.current?.measure((x, y, w) => {
-        width.current = w;
-        setToggle(!toggle);
-      }),
-    [refView.current, toggle],
-  );
+  const handlePress = useCallback(() => setToggle(!toggle), [toggle]);
 
   const handleRenderPanel = useMemo(
     () => (
       <Touchable
         testID="panel"
         touchableType="normal"
-        refView={handleRefView}
+        onLayout={handleLayout}
         style={StyleSheet.flatten([
           styles.container,
           containerStyle,
@@ -116,7 +107,6 @@ export default function ExpansionPanel({
       containerStyle,
       animation,
       handlePress,
-      handleRefView,
     ],
   );
 
