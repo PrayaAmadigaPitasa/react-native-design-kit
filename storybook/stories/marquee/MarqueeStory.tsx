@@ -10,8 +10,8 @@ export default function MarqueeStory({...props}: MarqueeStoryProps) {
       <Marquee {...props}>
         <Text>
           Components: Avatar - Badge - Button - ButtonGroup - Chip - Header -
-          Input - InputOTP - Marquee - Modal - Picker - PlayingBar - Radio -
-          Slider - Stepper - SwitchableText
+          Input - Marquee - Modal - Picker - PlayingBar - Radio - Slider -
+          Stepper - SwitchableText
         </Text>
       </Marquee>
     </View>

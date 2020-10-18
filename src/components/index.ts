@@ -8,7 +8,6 @@ export * from './chip';
 export * from './collapse';
 export * from './Header';
 export * from './Input';
-export * from './InputOTP';
 export * from './Marquee';
 export * from './Modal';
 export * from './Picker';
