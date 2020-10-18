@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -54,22 +54,14 @@ export default function ExpansionPanel<ItemT>({
     });
   }, [refView.current, toggle]);
 
-  useEffect(() => {
-    Animated.timing(animation, {
-      toValue: toggle ? 1 : 0,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }, [toggle]);
-
-  return (
-    <>
+  const handleRenderPanel = useMemo(
+    () => (
       <Touchable
         touchableType="normal"
         refView={handleRefView}
         style={StyleSheet.flatten([styles.container, containerStyle])}
         onPress={handlePress}>
-        <Text style={StyleSheet.flatten([titleStyle])}>{title}</Text>
+        <Text style={titleStyle}>{title}</Text>
         {subtitle ? (
           <Text style={StyleSheet.flatten([styles.subtitle, subtitleStyle])}>
             {subtitle}
@@ -92,6 +84,32 @@ export default function ExpansionPanel<ItemT>({
           {icon || <Icon name={'chevron-down'} />}
         </Animated.View>
       </Touchable>
+    ),
+    [
+      icon,
+      titleStyle,
+      title,
+      subtitle,
+      subtitleStyle,
+      containerStyle,
+      animation,
+      animationRotation,
+      handlePress,
+      handleRefView,
+    ],
+  );
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: toggle ? 1 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [toggle]);
+
+  return (
+    <>
+      {handleRenderPanel}
       <Collapse visible={toggle} animationDuration={animationDuration}>
         <View
           style={StyleSheet.flatten([
