@@ -102,7 +102,7 @@ export default function ExpansionPanel<ItemT>({
   useEffect(() => {
     Animated.timing(animation, {
       toValue: toggle ? 1 : 0,
-      duration: 250,
+      duration: animationDuration,
       useNativeDriver: true,
     }).start();
   }, [toggle]);
