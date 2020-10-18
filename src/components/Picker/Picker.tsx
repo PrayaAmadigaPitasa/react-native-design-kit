@@ -1,23 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useCallback, useMemo, useRef} from 'react';
 import {
   FlatListProps,
   Text,
   Animated,
   StyleSheet,
   View,
-  TouchableOpacity,
   FlatList,
   ViewStyle,
   TextStyle,
+  ListRenderItemInfo,
 } from 'react-native';
-
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {Layout} from '../../layout';
+import {useDidUpdate} from '../../utilities';
+import {Icon} from '../icon';
+import {Touchable} from '../touchable';
 import {Modal} from '../Modal';
 
-export interface PickerDataSelection {
+export interface PickerSelectionInfo<ItemT> {
+  item: ItemT;
   key: string;
-  title?: string;
+  index: number;
 }
 
 export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
@@ -32,7 +34,8 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   placeholderColor?: string;
   icon?: JSX.Element;
   iconContainerStyle?: ViewStyle;
-  animationRotation?: string;
+  iconStartRotation?: string;
+  iconEndRotation?: string;
   data: ReadonlyArray<ItemT>;
   keyExtractor(item: ItemT, index: number): string;
   titleExtractor?(item: ItemT, index: number): string;
@@ -43,15 +46,14 @@ export default function Picker<ItemT>({
   containerStyle,
   selected,
   selectedContainerStyle,
-  selectedTitleStyle,
   listContainerStyle,
   listItemContainerStyle,
   listItemSelectedContainerStyle,
   placeholder = 'Select Option',
-  placeholderColor = 'darkgray',
   icon,
   iconContainerStyle,
-  animationRotation = '-180deg',
+  iconStartRotation = '-90deg',
+  iconEndRotation = '0deg',
   data,
   keyExtractor,
   titleExtractor,
@@ -59,35 +61,35 @@ export default function Picker<ItemT>({
   renderItem,
   ...props
 }: PickerProps<ItemT>) {
-  const [selection, setSelection] = useState();
+  const [selection, setSelection] = useState<
+    PickerSelectionInfo<ItemT> | undefined
+  >(getInfoFromKey(selected));
   const [toggle, setToggle] = useState(false);
-  const [layout, setLayout] = useState<Layout>();
-  const [buttonRef, setButtonRef] = useState<TouchableOpacity>();
+  const layout = useRef<Layout>();
+  const refButton = useRef<View>();
   const animation = useState(new Animated.Value(0))[0];
-  const selectionIndex = getSelectionIndex(selection);
 
-  useEffect(() => {
-    Animated.timing(animation, {
-      toValue: toggle ? 1 : 0,
-      duration: 250,
-    }).start();
-  }, [toggle]);
+  const title = useMemo(
+    () =>
+      selection
+        ? titleExtractor
+          ? titleExtractor(selection.item, selection.index)
+          : keyExtractor(selection.item, selection.index)
+        : placeholder,
+    [selection, titleExtractor, keyExtractor, placeholder],
+  );
 
-  useEffect(() => {
-    if (selected !== undefined && getSelectionIndex(selected) !== undefined) {
-      setSelection(selected);
-    } else {
-      setSelection(undefined);
-    }
-  }, [selected]);
+  console.log(`title: ${title}`);
 
-  function getSelectionIndex(key: string) {
+  function getInfoFromKey(
+    key?: string,
+  ): PickerSelectionInfo<ItemT> | undefined {
     if (key !== undefined) {
       for (let index = 0; index < data.length; index++) {
         const item = data[index];
 
         if (keyExtractor(item, index) === key) {
-          return index;
+          return {key, index, item};
         }
       }
     }
@@ -95,55 +97,137 @@ export default function Picker<ItemT>({
     return undefined;
   }
 
-  function getTitle() {
-    if (selectionIndex !== undefined) {
-      return titleExtractor !== undefined
-        ? titleExtractor(selection, selectionIndex)
-        : keyExtractor(selection, selectionIndex);
+  const handleRefButton = useCallback((instance: View | null) => {
+    if (instance) {
+      refButton.current = instance;
     }
+  }, []);
 
-    return placeholder;
-  }
+  const handleRunAnimation = useCallback(
+    () =>
+      Animated.timing(animation, {
+        toValue: toggle ? 1 : 0,
+        duration: 250,
+        useNativeDriver: true,
+      }).start(),
+    [animation, toggle],
+  );
 
-  function updateLayout() {
-    buttonRef?.measure((x, y, width, height, pageX, pageY) =>
-      setLayout({
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        pageX: pageX,
-        pageY: pageY,
+  const handlePressMenuItem = useCallback(
+    (key: string, item: ItemT, index: number) => {
+      setSelection({key, item, index});
+      setToggle(false);
+      onSelect(key, item, index);
+    },
+    [],
+  );
+
+  const handlePressButton = useCallback(
+    () =>
+      refButton.current?.measure((x, y, width, height, pageX, pageY) => {
+        layout.current = {
+          x,
+          y,
+          width,
+          height,
+          pageX,
+          pageY,
+        };
+        setToggle(!toggle);
       }),
-    );
-  }
+    [refButton.current, toggle],
+  );
+
+  const handleRenderMenuItem = useCallback(
+    (info: ListRenderItemInfo<ItemT>) => {
+      const {item, index} = info;
+      const key = keyExtractor(item, index);
+
+      return (
+        <Touchable
+          style={StyleSheet.flatten([
+            styles.listItemContainer,
+            listItemContainerStyle,
+            selection?.index === index &&
+              StyleSheet.flatten([
+                styles.listItemSelectedContainer,
+                listItemSelectedContainerStyle,
+              ]),
+          ])}
+          onPress={() => handlePressMenuItem(key, item, index)}>
+          {renderItem(info)}
+        </Touchable>
+      );
+    },
+    [
+      selection,
+      listItemContainerStyle,
+      listItemSelectedContainerStyle,
+      keyExtractor,
+      renderItem,
+      handlePressMenuItem,
+    ],
+  );
+
+  const handleRenderMenu = useMemo(
+    () =>
+      layout.current && (
+        <Modal
+          transparent
+          visible={toggle}
+          onPressBackdrop={() => setToggle(!toggle)}>
+          <View
+            style={StyleSheet.flatten([
+              styles.listContainer,
+              listContainerStyle,
+              styles.fixedListContainer,
+              {
+                width: layout.current.width,
+                left: layout.current.pageX,
+                top: layout.current.pageY + layout.current.height,
+              },
+            ])}>
+            <FlatList
+              {...props}
+              data={data}
+              keyExtractor={keyExtractor}
+              renderItem={handleRenderMenuItem}
+            />
+          </View>
+        </Modal>
+      ),
+    [
+      layout.current,
+      toggle,
+      props,
+      data,
+      listContainerStyle,
+      keyExtractor,
+      handleRenderMenuItem,
+    ],
+  );
+
+  useDidUpdate(() => setSelection(getInfoFromKey(selected)), [selected]);
+
+  useDidUpdate(handleRunAnimation, [handleRunAnimation]);
 
   return (
     <>
-      <TouchableOpacity
-        testID="button-container"
-        ref={instance =>
-          instance && buttonRef !== instance && setButtonRef(instance)
-        }
+      <Touchable
+        touchableType="normal"
+        refView={handleRefButton}
         style={StyleSheet.flatten([
           styles.container,
           containerStyle,
-          toggle ? [styles.selectedContainer, selectedContainerStyle] : {},
+          toggle
+            ? StyleSheet.flatten([
+                styles.selectedContainer,
+                selectedContainerStyle,
+              ])
+            : {},
         ])}
-        activeOpacity={0.5}
-        onPress={() => {
-          updateLayout();
-          setToggle(!toggle);
-        }}>
-        <Text
-          style={StyleSheet.flatten([
-            styles.title,
-            selectionIndex !== undefined
-              ? selectedTitleStyle
-              : {color: placeholderColor},
-          ])}>
-          {selectionIndex !== undefined ? getTitle() : placeholder}
-        </Text>
+        onPress={handlePressButton}>
+        <Text style={StyleSheet.flatten([styles.title])}>{title}</Text>
         <Animated.View
           style={StyleSheet.flatten([
             styles.iconContainer,
@@ -153,7 +237,7 @@ export default function Picker<ItemT>({
                 {
                   rotateZ: animation.interpolate({
                     inputRange: [0, 1],
-                    outputRange: ['0deg', animationRotation],
+                    outputRange: [iconStartRotation, iconEndRotation],
                   }),
                 },
               ],
@@ -161,59 +245,8 @@ export default function Picker<ItemT>({
           ])}>
           {icon || <Icon name={'chevron-down'} />}
         </Animated.View>
-      </TouchableOpacity>
-      {layout !== undefined && (
-        <Modal
-          transparent
-          visible={toggle}
-          onPressBackdrop={() => setToggle(!toggle)}>
-          <View
-            style={StyleSheet.flatten([
-              styles.listContainer,
-              listContainerStyle,
-              {
-                position: 'absolute',
-                width: layout.width,
-                left: layout.pageX,
-                top: layout.pageY + layout.height,
-                zIndex: 1,
-              },
-            ])}>
-            <FlatList
-              {...props}
-              data={data}
-              keyExtractor={keyExtractor}
-              renderItem={info => {
-                const {item, index} = info;
-                const key = keyExtractor(item, index);
-
-                return (
-                  <TouchableOpacity
-                    testID="selection-container"
-                    activeOpacity={0.5}
-                    style={StyleSheet.flatten([
-                      styles.listItemContainer,
-                      listItemContainerStyle,
-                      selection !== undefined && selection === key
-                        ? [
-                            styles.listItemSelectedContainer,
-                            listItemSelectedContainerStyle,
-                          ]
-                        : {},
-                    ])}
-                    onPress={() => {
-                      setSelection(key);
-                      setToggle(false);
-                      onSelect(key, item, index);
-                    }}>
-                    {renderItem(info)}
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
-        </Modal>
-      )}
+      </Touchable>
+      {handleRenderMenu}
     </>
   );
 }
@@ -240,6 +273,10 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     backgroundColor: '#fff',
     maxHeight: 300,
+  },
+  fixedListContainer: {
+    position: 'absolute',
+    zIndex: 1,
   },
   listItemContainer: {
     paddingHorizontal: 12,
