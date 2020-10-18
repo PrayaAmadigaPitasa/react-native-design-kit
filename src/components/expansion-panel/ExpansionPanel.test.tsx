@@ -3,13 +3,6 @@ import {fireEvent, render} from '@testing-library/react-native';
 import {ObjectPartial} from '../../types';
 import ExpansionPanel, {ExpansionPanelProps} from './ExpansionPanel';
 
-jest.mock(
-  'react-native/Libraries/Components/Touchable/TouchableOpacity',
-  () => {
-    return {measure: jest.mock};
-  },
-);
-
 function runTest(name: string, props?: ObjectPartial<ExpansionPanelProps>) {
   test(name, async () => {
     const {getByTestId, rerender} = render(<ExpansionPanel {...props} />);
@@ -17,7 +10,6 @@ function runTest(name: string, props?: ObjectPartial<ExpansionPanelProps>) {
 
     fireEvent(panel, 'press');
     fireEvent(panel, 'layout', {nativeEvent: {layout: {}}});
-
     rerender(<ExpansionPanel {...props} visible={!props?.visible} />);
   });
 }
