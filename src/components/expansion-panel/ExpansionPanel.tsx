@@ -19,8 +19,8 @@ export interface ExpansionPanelProps<ItemT> {
   animationDuration?: number;
   subtitle?: string;
   subtitleStyle?: TextStyle;
-  content?: string;
   containerStyle?: ViewStyle;
+  contentContainerStyle?: ViewStyle;
   children?: React.ReactNode;
 }
 
@@ -33,20 +33,13 @@ export default function ExpansionPanel<ItemT>({
   subtitle,
   subtitleStyle,
   containerStyle,
+  contentContainerStyle,
   children,
 }: ExpansionPanelProps<ItemT>) {
   const animation = useRef(new Animated.Value(0)).current;
   const refView = useRef<View>();
-  const panelWidth = useRef<number>();
+  const width = useRef<number>();
   const [toggle, setToggle] = useState(false);
-
-  useEffect(() => {
-    Animated.timing(animation, {
-      toValue: toggle ? 1 : 0,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }, [toggle]);
 
   const handleRefView = useCallback((instance: View | null) => {
     if (instance) {
@@ -55,11 +48,19 @@ export default function ExpansionPanel<ItemT>({
   }, []);
 
   const handlePress = useCallback(() => {
-    refView.current?.measure((x, y, width) => {
-      panelWidth.current = width;
+    refView.current?.measure((x, y, w) => {
+      width.current = w;
       setToggle(!toggle);
     });
   }, [refView.current, toggle]);
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: toggle ? 1 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [toggle]);
 
   return (
     <>
@@ -92,7 +93,13 @@ export default function ExpansionPanel<ItemT>({
         </Animated.View>
       </Touchable>
       <Collapse visible={toggle} animationDuration={animationDuration}>
-        {children}
+        <View
+          style={StyleSheet.flatten([
+            contentContainerStyle,
+            {width: width.current},
+          ])}>
+          {children}
+        </View>
       </Collapse>
     </>
   );
