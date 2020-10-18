@@ -62,14 +62,12 @@ export default function ExpansionPanel<ItemT>({
       <Touchable
         touchableType="normal"
         refView={handleRefView}
-        style={StyleSheet.flatten([styles.container, containerStyle])}
+        style={StyleSheet.flatten([
+          styles.container,
+          containerStyle,
+          styles.fixedContainer,
+        ])}
         onPress={handlePress}>
-        <Text style={titleStyle}>{title}</Text>
-        {subtitle ? (
-          <Text style={StyleSheet.flatten([styles.subtitle, subtitleStyle])}>
-            {subtitle}
-          </Text>
-        ) : null}
         <Animated.View
           style={StyleSheet.flatten([
             styles.iconContainer,
@@ -86,18 +84,31 @@ export default function ExpansionPanel<ItemT>({
           ])}>
           {icon || <Icon name={'chevron-down'} />}
         </Animated.View>
+        <View style={styles.sectionTitle}>
+          <View style={styles.titleContainer}>
+            <Text style={titleStyle}>{title}</Text>
+          </View>
+          {subtitle ? (
+            <View style={styles.subtitleContainer}>
+              <Text
+                style={StyleSheet.flatten([styles.subtitle, subtitleStyle])}>
+                {subtitle}
+              </Text>
+            </View>
+          ) : null}
+        </View>
       </Touchable>
     ),
     [
       icon,
+      iconStartRotation,
+      iconEndRotation,
       titleStyle,
       title,
       subtitle,
       subtitleStyle,
       containerStyle,
       animation,
-      iconStartRotation,
-      iconEndRotation,
       handlePress,
       handleRefView,
     ],
@@ -137,21 +148,37 @@ export default function ExpansionPanel<ItemT>({
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    flexDirection: 'row',
     borderWidth: 1,
     borderRadius: 4,
     borderColor: 'lightgray',
-    padding: 12,
     zIndex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  fixedContainer: {
+    flexDirection: 'row-reverse',
+  },
+  titleContainer: {
+    flex: 1,
+    padding: 12,
+    paddingRight: 6,
+    justifyContent: 'center',
+  },
+  subtitleContainer: {
+    flex: 1,
+    padding: 12,
+    paddingHorizontal: 6,
+    justifyContent: 'center',
+  },
+  sectionTitle: {
+    flexDirection: 'row',
+    flex: 1,
   },
   subtitle: {
     color: 'lightgrey',
   },
   iconContainer: {
-    marginLeft: 12,
+    padding: 12,
   },
   contentContainer: {
     borderWidth: 1,
@@ -159,6 +186,5 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: 'lightgray',
     backgroundColor: '#fff',
-    maxHeight: 300,
   },
 });
