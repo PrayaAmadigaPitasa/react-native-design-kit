@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {Marquee, MarqueeProps} from '../../../src/components/Marquee';
+import {Marquee, MarqueeProps} from '../../../src/components';
 
 export interface MarqueeStoryProps extends MarqueeProps {}
 

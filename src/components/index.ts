@@ -8,7 +8,7 @@ export * from './chip';
 export * from './collapse';
 export * from './Header';
 export * from './input';
-export * from './Marquee';
+export * from './marquees';
 export * from './Modal';
 export * from './Picker';
 export * from './playing-bar';
