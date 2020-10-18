@@ -15,6 +15,8 @@ export interface ExpansionPanelProps<ItemT> {
   title?: string;
   titleStyle?: TextStyle;
   icon?: JSX.Element;
+  iconStartRotation?: string;
+  iconEndRotation?: string;
   animationRotation?: string;
   animationDuration?: number;
   subtitle?: string;
@@ -27,7 +29,8 @@ export interface ExpansionPanelProps<ItemT> {
 export default function ExpansionPanel<ItemT>({
   title,
   titleStyle,
-  animationRotation = '-180deg',
+  iconStartRotation = '-90deg',
+  iconEndRotation = '0deg',
   animationDuration = 250,
   icon,
   subtitle,
@@ -75,7 +78,7 @@ export default function ExpansionPanel<ItemT>({
                 {
                   rotateZ: animation.interpolate({
                     inputRange: [0, 1],
-                    outputRange: ['0deg', animationRotation],
+                    outputRange: [iconStartRotation, iconEndRotation],
                   }),
                 },
               ],
@@ -93,7 +96,8 @@ export default function ExpansionPanel<ItemT>({
       subtitleStyle,
       containerStyle,
       animation,
-      animationRotation,
+      iconStartRotation,
+      iconEndRotation,
       handlePress,
       handleRefView,
     ],
