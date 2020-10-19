@@ -1,5 +1,5 @@
-import {render} from '@testing-library/react-native';
 import React from 'react';
+import {render} from '@testing-library/react-native';
 import {ObjectPartial} from '../../types';
 import Picker, {PickerProps} from './Picker';
 
@@ -18,4 +18,6 @@ function runtest(name: string, props?: ObjectPartial<PickerProps<string>>) {
 
 describe('Picker', () => {
   runtest('default');
+  runtest('selected', {selected: 'a'});
+  runtest('selected invalid', {selected: 'invalid'});
 });
