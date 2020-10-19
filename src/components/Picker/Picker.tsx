@@ -260,7 +260,7 @@ export default function Picker<ItemT>({
           transparent
           visible={toggle}
           onPressBackdrop={() => setToggle(!toggle)}>
-          <View
+          <Animated.View
             style={StyleSheet.flatten([
               styles.listContainer,
               listContainerStyle,
@@ -269,6 +269,10 @@ export default function Picker<ItemT>({
                 width: layout.current.width,
                 left: layout.current.pageX,
                 top: layout.current.pageY + layout.current.height,
+                opacity: animation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1],
+                }),
               },
             ])}>
             <FlatList
@@ -277,7 +281,7 @@ export default function Picker<ItemT>({
               keyExtractor={keyExtractor}
               renderItem={handleRenderMenuItem}
             />
-          </View>
+          </Animated.View>
         </Modal>
       ),
     [
