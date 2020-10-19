@@ -16,6 +16,7 @@ export * from './radio';
 export * from './Slider';
 export * from './stepper';
 export * from './switchable-text';
+export * from './text';
 export * from './expansion-panel';
 export * from './touchable';
 

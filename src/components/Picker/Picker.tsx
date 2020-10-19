@@ -1,7 +1,6 @@
 import React, {useState, useCallback, useMemo, useRef} from 'react';
 import {
   FlatListProps,
-  Text,
   Animated,
   StyleSheet,
   View,
@@ -15,6 +14,7 @@ import {useDidUpdate} from '../../utilities';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
 import {Modal} from '../Modal';
+import {Text} from '../text';
 
 export interface PickerSelectionInfo<ItemT> {
   item: ItemT;
@@ -31,7 +31,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   listItemContainerStyle?: ViewStyle;
   listItemSelectedContainerStyle?: ViewStyle;
   placeholder?: string;
-  placeholderColor?: string;
+  placeholderStyle?: TextStyle;
   icon?: JSX.Element;
   iconContainerStyle?: ViewStyle;
   iconStartRotation?: string;
@@ -46,10 +46,12 @@ export default function Picker<ItemT>({
   containerStyle,
   selected,
   selectedContainerStyle,
+  selectedTitleStyle,
   listContainerStyle,
   listItemContainerStyle,
   listItemSelectedContainerStyle,
   placeholder = 'Select Option',
+  placeholderStyle,
   icon,
   iconContainerStyle,
   iconStartRotation = '-90deg',
@@ -68,18 +70,6 @@ export default function Picker<ItemT>({
   const layout = useRef<Layout>();
   const refButton = useRef<View>();
   const animation = useState(new Animated.Value(0))[0];
-
-  const title = useMemo(
-    () =>
-      selection
-        ? titleExtractor
-          ? titleExtractor(selection.item, selection.index)
-          : keyExtractor(selection.item, selection.index)
-        : placeholder,
-    [selection, titleExtractor, keyExtractor, placeholder],
-  );
-
-  console.log(`title: ${title}`);
 
   function getInfoFromKey(
     key?: string,
@@ -169,6 +159,87 @@ export default function Picker<ItemT>({
     ],
   );
 
+  const handleRenderTitle = useMemo(() => {
+    const title = selection
+      ? titleExtractor
+        ? titleExtractor(selection.item, selection.index)
+        : keyExtractor(selection.item, selection.index)
+      : placeholder;
+
+    return (
+      <Text
+        style={StyleSheet.flatten([
+          styles.title,
+          selection
+            ? selectedTitleStyle
+            : StyleSheet.flatten<TextStyle>([
+                styles.placeholder,
+                placeholderStyle,
+              ]),
+        ])}>
+        {title}
+      </Text>
+    );
+  }, [
+    selection,
+    placeholder,
+    placeholderStyle,
+    selectedTitleStyle,
+    titleExtractor,
+    keyExtractor,
+  ]);
+
+  const handleRenderButton = useMemo(
+    () => (
+      <Touchable
+        touchableType="normal"
+        refView={handleRefButton}
+        style={StyleSheet.flatten([
+          styles.container,
+          containerStyle,
+          toggle
+            ? StyleSheet.flatten([
+                styles.selectedContainer,
+                selectedContainerStyle,
+              ])
+            : {},
+          styles.fixedContainer,
+        ])}
+        onPress={handlePressButton}>
+        <Animated.View
+          style={StyleSheet.flatten([
+            styles.iconContainer,
+            iconContainerStyle,
+            {
+              transform: [
+                {
+                  rotateZ: animation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [iconStartRotation, iconEndRotation],
+                  }),
+                },
+              ],
+            },
+          ])}>
+          {icon || <Icon name="chevron-down" />}
+        </Animated.View>
+        <View style={styles.sectionTitle}>{handleRenderTitle}</View>
+      </Touchable>
+    ),
+    [
+      toggle,
+      animation,
+      containerStyle,
+      selectedContainerStyle,
+      iconContainerStyle,
+      iconStartRotation,
+      iconEndRotation,
+      icon,
+      handleRefButton,
+      handleRenderTitle,
+    ],
+  );
+
   const handleRenderMenu = useMemo(
     () =>
       layout.current && (
@@ -213,39 +284,7 @@ export default function Picker<ItemT>({
 
   return (
     <>
-      <Touchable
-        touchableType="normal"
-        refView={handleRefButton}
-        style={StyleSheet.flatten([
-          styles.container,
-          containerStyle,
-          toggle
-            ? StyleSheet.flatten([
-                styles.selectedContainer,
-                selectedContainerStyle,
-              ])
-            : {},
-        ])}
-        onPress={handlePressButton}>
-        <Text style={StyleSheet.flatten([styles.title])}>{title}</Text>
-        <Animated.View
-          style={StyleSheet.flatten([
-            styles.iconContainer,
-            iconContainerStyle,
-            {
-              transform: [
-                {
-                  rotateZ: animation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [iconStartRotation, iconEndRotation],
-                  }),
-                },
-              ],
-            },
-          ])}>
-          {icon || <Icon name={'chevron-down'} />}
-        </Animated.View>
-      </Touchable>
+      {handleRenderButton}
       {handleRenderMenu}
     </>
   );
@@ -253,7 +292,6 @@ export default function Picker<ItemT>({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     padding: 12,
     borderWidth: 1,
     borderRadius: 4,
@@ -261,7 +299,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'whitesmoke',
     alignItems: 'center',
     justifyContent: 'space-between',
-    zIndex: 1,
+  },
+  fixedContainer: {
+    flexDirection: 'row-reverse',
   },
   selectedContainer: {
     borderColor: 'dodgerblue',
@@ -290,7 +330,13 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginLeft: 12,
   },
+  sectionTitle: {
+    flex: 1,
+  },
   title: {
     fontSize: 15,
+  },
+  placeholder: {
+    color: 'darkgray',
   },
 });
