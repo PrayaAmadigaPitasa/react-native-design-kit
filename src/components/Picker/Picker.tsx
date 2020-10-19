@@ -30,6 +30,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   listContainerStyle?: ViewStyle;
   listItemContainerStyle?: ViewStyle;
   listItemSelectedContainerStyle?: ViewStyle;
+  fullWidth?: boolean;
   placeholder?: string;
   placeholderStyle?: TextStyle;
   icon?: JSX.Element;
@@ -50,6 +51,7 @@ export default function Picker<ItemT>({
   listContainerStyle,
   listItemContainerStyle,
   listItemSelectedContainerStyle,
+  fullWidth = false,
   placeholder = 'Select Option',
   placeholderStyle,
   icon,
@@ -223,12 +225,16 @@ export default function Picker<ItemT>({
           ])}>
           {icon || <Icon name="chevron-down" />}
         </Animated.View>
-        <View style={styles.sectionTitle}>{handleRenderTitle}</View>
+        <View style={fullWidth && styles.sectionTitle}>
+          {handleRenderTitle}
+        </View>
       </Touchable>
     ),
     [
       toggle,
       animation,
+      handleRenderTitle,
+      fullWidth,
       containerStyle,
       selectedContainerStyle,
       iconContainerStyle,
@@ -236,7 +242,6 @@ export default function Picker<ItemT>({
       iconEndRotation,
       icon,
       handleRefButton,
-      handleRenderTitle,
     ],
   );
 

@@ -16,7 +16,6 @@ export default function PickerStory({
       <Picker
         {...props}
         data={data}
-        containerStyle={styles.pickerContainer}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         onSelect={onSelect}
@@ -30,8 +29,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  pickerContainer: {
-    width: 120,
   },
 });
