@@ -31,6 +31,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   listItemContainerStyle?: ViewStyle;
   listItemSelectedContainerStyle?: ViewStyle;
   fullWidth?: boolean;
+  animationDuration?: number;
   placeholder?: string;
   placeholderStyle?: TextStyle;
   icon?: JSX.Element;
@@ -52,6 +53,7 @@ export default function Picker<ItemT>({
   listItemContainerStyle,
   listItemSelectedContainerStyle,
   fullWidth = false,
+  animationDuration = 250,
   placeholder = 'Select Option',
   placeholderStyle,
   icon,
@@ -99,10 +101,10 @@ export default function Picker<ItemT>({
     () =>
       Animated.timing(animation, {
         toValue: toggle ? 1 : 0,
-        duration: 250,
+        duration: animationDuration,
         useNativeDriver: true,
       }).start(),
-    [animation, toggle],
+    [animation, toggle, animationDuration],
   );
 
   const handlePressMenuItem = useCallback(
