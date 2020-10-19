@@ -24,6 +24,7 @@ export interface PickerSelectionInfo<ItemT> {
 
 export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   containerStyle?: ViewStyle;
+  titleStyle?: TextStyle;
   selected?: string;
   selectedContainerStyle?: ViewStyle;
   selectedTitleStyle?: TextStyle;
@@ -46,6 +47,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
 
 export default function Picker<ItemT>({
   containerStyle,
+  titleStyle,
   selected,
   selectedContainerStyle,
   selectedTitleStyle,
@@ -197,6 +199,7 @@ export default function Picker<ItemT>({
       <Text
         style={StyleSheet.flatten([
           styles.title,
+          titleStyle,
           selection
             ? selectedTitleStyle
             : StyleSheet.flatten<TextStyle>([
@@ -209,6 +212,7 @@ export default function Picker<ItemT>({
     );
   }, [
     selection,
+    titleStyle,
     placeholder,
     placeholderStyle,
     selectedTitleStyle,
@@ -311,7 +315,6 @@ export default function Picker<ItemT>({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
     borderWidth: 1,
     borderRadius: 4,
     borderColor: 'lightgray',
@@ -347,13 +350,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'whitesmoke',
   },
   iconContainer: {
-    marginLeft: 12,
+    padding: 12,
   },
   sectionTitle: {
     flex: 1,
   },
   title: {
+    flex: 1,
     fontSize: 15,
+    paddingLeft: 12,
+    textAlignVertical: 'center',
   },
   placeholder: {
     color: 'darkgray',
