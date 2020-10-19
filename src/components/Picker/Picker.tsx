@@ -161,6 +161,29 @@ export default function Picker<ItemT>({
     ],
   );
 
+  const handleRenderIcon = useMemo(
+    () => (
+      <Animated.View
+        style={StyleSheet.flatten([
+          styles.iconContainer,
+          iconContainerStyle,
+          {
+            transform: [
+              {
+                rotateZ: animation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [iconStartRotation, iconEndRotation],
+                }),
+              },
+            ],
+          },
+        ])}>
+        {icon || <Icon name="chevron-down" />}
+      </Animated.View>
+    ),
+    [animation, icon, iconContainerStyle, iconStartRotation, iconEndRotation],
+  );
+
   const handleRenderTitle = useMemo(() => {
     const title = selection
       ? titleExtractor
@@ -208,23 +231,7 @@ export default function Picker<ItemT>({
           styles.fixedContainer,
         ])}
         onPress={handlePressButton}>
-        <Animated.View
-          style={StyleSheet.flatten([
-            styles.iconContainer,
-            iconContainerStyle,
-            {
-              transform: [
-                {
-                  rotateZ: animation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [iconStartRotation, iconEndRotation],
-                  }),
-                },
-              ],
-            },
-          ])}>
-          {icon || <Icon name="chevron-down" />}
-        </Animated.View>
+        {handleRenderIcon}
         <View style={fullWidth && styles.sectionTitle}>
           {handleRenderTitle}
         </View>
@@ -241,6 +248,7 @@ export default function Picker<ItemT>({
       iconStartRotation,
       iconEndRotation,
       icon,
+      handleRenderIcon,
       handleRefButton,
     ],
   );
