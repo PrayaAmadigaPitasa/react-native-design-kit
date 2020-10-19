@@ -25,6 +25,7 @@ export interface PickerSelectionInfo<ItemT> {
 export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   containerStyle?: ViewStyle;
   titleStyle?: TextStyle;
+  titleContainerStyle?: ViewStyle;
   selected?: string;
   selectedContainerStyle?: ViewStyle;
   selectedTitleStyle?: TextStyle;
@@ -48,6 +49,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
 export default function Picker<ItemT>({
   containerStyle,
   titleStyle,
+  titleContainerStyle,
   selected,
   selectedContainerStyle,
   selectedTitleStyle,
@@ -196,19 +198,26 @@ export default function Picker<ItemT>({
       : placeholder;
 
     return (
-      <Text
+      <View
         style={StyleSheet.flatten([
-          styles.title,
-          titleStyle,
-          selection
-            ? selectedTitleStyle
-            : StyleSheet.flatten<TextStyle>([
-                styles.placeholder,
-                placeholderStyle,
-              ]),
+          styles.titleContainer,
+          titleContainerStyle,
+          styles.fixedTitleContainer,
         ])}>
-        {title}
-      </Text>
+        <Text
+          style={StyleSheet.flatten([
+            styles.title,
+            titleStyle,
+            selection
+              ? selectedTitleStyle
+              : StyleSheet.flatten<TextStyle>([
+                  styles.placeholder,
+                  placeholderStyle,
+                ]),
+          ])}>
+          {title}
+        </Text>
+      </View>
     );
   }, [
     selection,
@@ -349,6 +358,12 @@ const styles = StyleSheet.create({
   listItemSelectedContainer: {
     backgroundColor: 'whitesmoke',
   },
+  titleContainer: {
+    paddingLeft: 12,
+  },
+  fixedTitleContainer: {
+    flex: 1,
+  },
   iconContainer: {
     padding: 12,
   },
@@ -358,7 +373,6 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: 15,
-    paddingLeft: 12,
     textAlignVertical: 'center',
   },
   placeholder: {
