@@ -232,8 +232,10 @@ export default function Picker<ItemT>({
   const handleRenderButton = useMemo(
     () => (
       <Touchable
+        testID="button"
         touchableType="normal"
         refView={handleRefButton}
+        onLayout={event => console.log(event.nativeEvent.layout)}
         style={StyleSheet.flatten([
           styles.container,
           containerStyle,
