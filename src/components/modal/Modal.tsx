@@ -41,7 +41,10 @@ export default function Modal({
   const handleRenderBackdrop = useMemo(
     () =>
       hasBackdrop && (
-        <Touchable touchableType="normal" onPress={handlePressBackdrop}>
+        <Touchable
+          testID="backdrop"
+          touchableType="normal"
+          onPress={handlePressBackdrop}>
           <View
             style={StyleSheet.flatten([
               !transparent &&
