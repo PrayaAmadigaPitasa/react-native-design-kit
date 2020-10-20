@@ -13,7 +13,7 @@ import {Layout} from '../../layout';
 import {useDidUpdate} from '../../utilities';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
-import {Modal} from '../Modal';
+import {Modal} from '../Modals';
 import {Text} from '../text';
 
 export interface PickerSelectionInfo<ItemT> {
