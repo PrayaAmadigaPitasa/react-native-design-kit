@@ -1,4 +1,4 @@
-import React, {useState, ReactNode, useCallback} from 'react';
+import React, {useState, ReactNode, useCallback, useMemo} from 'react';
 import {
   Modal as ModalRN,
   ModalProps as ModalRNProps,
@@ -38,6 +38,25 @@ export default function Modal({
     [toggle, onPressBackdrop],
   );
 
+  const handleRenderBackdrop = useMemo(
+    () =>
+      hasBackdrop && (
+        <Touchable touchableType="normal" onPress={handlePressBackdrop}>
+          <View
+            style={StyleSheet.flatten([
+              !transparent &&
+                StyleSheet.flatten([
+                  styles.backdropContainer,
+                  backdropContainerStyle,
+                ]),
+              styles.fixedBackdropContainer,
+            ])}
+          />
+        </Touchable>
+      ),
+    [hasBackdrop, transparent, backdropContainerStyle, handlePressBackdrop],
+  );
+
   useDidUpdate(() => {
     setToggle(visible);
   }, [visible]);
@@ -45,20 +64,7 @@ export default function Modal({
   return (
     <ModalRN {...props} transparent visible={toggle}>
       <View style={StyleSheet.flatten([styles.container, containerStyle])}>
-        {hasBackdrop && (
-          <Touchable touchableType="normal" onPress={handlePressBackdrop}>
-            <View
-              style={StyleSheet.flatten([
-                !transparent &&
-                  StyleSheet.flatten([
-                    styles.backdropContainer,
-                    backdropContainerStyle,
-                  ]),
-                styles.sectionBackdrop,
-              ])}
-            />
-          </Touchable>
-        )}
+        {handleRenderBackdrop}
         {children}
       </View>
     </ModalRN>
@@ -75,7 +81,7 @@ const styles = StyleSheet.create({
   backdropContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
-  sectionBackdrop: {
+  fixedBackdropContainer: {
     position: 'absolute',
     height: '100%',
     width: '100%',
