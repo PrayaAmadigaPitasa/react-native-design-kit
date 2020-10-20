@@ -13,11 +13,9 @@ export * from './Modal';
 export * from './picker';
 export * from './playing-bar';
 export * from './radio';
-export * from './Slider';
+export * from './slider';
 export * from './stepper';
 export * from './switchable-text';
 export * from './text';
 export * from './expansion-panel';
 export * from './touchable';
-
-export {default as Slider} from './Slider';

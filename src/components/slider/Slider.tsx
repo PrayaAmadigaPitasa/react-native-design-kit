@@ -1,12 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  LayoutRectangle,
-  TouchableOpacity,
-  ViewStyle,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {View, StyleSheet, LayoutRectangle, ViewStyle} from 'react-native';
+import {Icon} from '../icon';
+import {Touchable} from '../touchable';
 
 export interface SliderProps {
   containerStyle?: ViewStyle;
@@ -67,7 +62,7 @@ export default function Slider({
   const [startProgress, setStartProgress] = useState(progress);
   const [thumbLayout, setThumbLayout] = useState<LayoutRectangle>();
   const [pageX, setPageX] = useState<number>();
-  const [width, setWidth] = useState();
+  const [width, setWidth] = useState<number>();
 
   useEffect(() => {
     setWidth(undefined);
@@ -137,12 +132,11 @@ export default function Slider({
   return (
     <View style={StyleSheet.flatten([styles.container, containerStyle])}>
       {button && (
-        <TouchableOpacity
+        <Touchable
           style={StyleSheet.flatten([
             styles.startButtonContainer,
             startButtonContainerStyle,
           ])}
-          activeOpacity={0.5}
           onPress={() =>
             setValue(
               getValue() -
@@ -152,7 +146,7 @@ export default function Slider({
             )
           }>
           {startButton || <Icon style={styles.buttonIcon} name="caret-left" />}
-        </TouchableOpacity>
+        </Touchable>
       )}
       {width === undefined ? (
         <View style={styles.trackDefaultBaseContainer}>
@@ -241,12 +235,11 @@ export default function Slider({
         </View>
       )}
       {button && (
-        <TouchableOpacity
+        <Touchable
           style={StyleSheet.flatten([
             styles.endButtonContainer,
             endButtonContainerStyle,
           ])}
-          activeOpacity={0.5}
           onPress={() =>
             setValue(
               getValue() +
@@ -256,7 +249,7 @@ export default function Slider({
             )
           }>
           {endButton || <Icon style={styles.buttonIcon} name="caret-right" />}
-        </TouchableOpacity>
+        </Touchable>
       )}
     </View>
   );
