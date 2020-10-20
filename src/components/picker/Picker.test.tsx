@@ -10,7 +10,7 @@ const defaultProps: PickerProps<string> = {
   renderItem: () => null,
 };
 
-function runtest(name: string, props?: ObjectPartial<PickerProps<string>>) {
+function runTest(name: string, props?: ObjectPartial<PickerProps<string>>) {
   test(name, async () => {
     const {getByTestId} = render(<Picker {...defaultProps} {...props} />);
     const button = getByTestId('button');
@@ -20,10 +20,10 @@ function runtest(name: string, props?: ObjectPartial<PickerProps<string>>) {
 }
 
 describe('Picker', () => {
-  runtest('default');
-  runtest('selected', {selected: 'a'});
-  runtest('selected invalid', {selected: 'invalid'});
-  runtest('selected titleExtractor', {
+  runTest('default');
+  runTest('selected', {selected: 'a'});
+  runTest('selected invalid', {selected: 'invalid'});
+  runTest('selected titleExtractor', {
     selected: 'a',
     titleExtractor: item => item,
   });
