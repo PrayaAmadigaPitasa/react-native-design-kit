@@ -1,15 +1,16 @@
-import React, {useState, useEffect, ReactNode} from 'react';
+import React, {useState, ReactNode, useCallback} from 'react';
 import {
   Modal as ModalRN,
-  ModalProps as ModalPropsRN,
-  TouchableWithoutFeedback,
+  ModalProps as ModalRNProps,
   View,
   StyleSheet,
   ViewStyle,
   GestureResponderEvent,
 } from 'react-native';
+import {useDidUpdate} from '../../utilities';
+import {Touchable} from '../touchable';
 
-export interface ModalProps extends ModalPropsRN {
+export interface ModalProps extends ModalRNProps {
   containerStyle?: ViewStyle;
   hasBackdrop?: boolean;
   backdropContainerStyle?: ViewStyle;
@@ -29,7 +30,15 @@ export default function Modal({
 }: ModalProps) {
   const [toggle, setToggle] = useState(visible);
 
-  useEffect(() => {
+  const handlePressBackdrop = useCallback(
+    (event: GestureResponderEvent) => {
+      onPressBackdrop && onPressBackdrop(event);
+      setToggle(!toggle);
+    },
+    [toggle, onPressBackdrop],
+  );
+
+  useDidUpdate(() => {
     setToggle(visible);
   }, [visible]);
 
@@ -37,12 +46,7 @@ export default function Modal({
     <ModalRN {...props} transparent visible={toggle}>
       <View style={StyleSheet.flatten([styles.container, containerStyle])}>
         {hasBackdrop && (
-          <TouchableWithoutFeedback
-            testID="button-container"
-            onPress={event => {
-              onPressBackdrop !== undefined && onPressBackdrop(event);
-              setToggle(!toggle);
-            }}>
+          <Touchable touchableType="normal" onPress={handlePressBackdrop}>
             <View
               style={StyleSheet.flatten([
                 !transparent &&
@@ -53,7 +57,7 @@ export default function Modal({
                 styles.sectionBackdrop,
               ])}
             />
-          </TouchableWithoutFeedback>
+          </Touchable>
         )}
         {children}
       </View>
