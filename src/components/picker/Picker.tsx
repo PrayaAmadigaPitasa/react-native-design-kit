@@ -15,12 +15,7 @@ import {Icon} from '../icon';
 import {Touchable} from '../touchable';
 import {Modal} from '../modal';
 import {Text} from '../text';
-
-export interface PickerSelectionInfo<ItemT> {
-  item: ItemT;
-  key: string;
-  index: number;
-}
+import {PickerSelectionInfo} from '../../types';
 
 export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   containerStyle?: ViewStyle;
@@ -43,7 +38,7 @@ export interface PickerProps<ItemT> extends FlatListProps<ItemT> {
   data: ReadonlyArray<ItemT>;
   keyExtractor(item: ItemT, index: number): string;
   titleExtractor?(item: ItemT, index: number): string;
-  onSelect(key: string, item: ItemT, index: number): void;
+  onSelect(select: PickerSelectionInfo<ItemT>): void;
 }
 
 export default function Picker<ItemT>({
@@ -115,7 +110,7 @@ export default function Picker<ItemT>({
     (key: string, item: ItemT, index: number) => {
       setSelection({key, item, index});
       setToggle(false);
-      onSelect(key, item, index);
+      onSelect({key, item, index});
     },
     [],
   );

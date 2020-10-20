@@ -5,4 +5,5 @@ export * from './checkbox';
 export * from './chip';
 export * from './list';
 export * from './object';
+export * from './picker';
 export * from './touchable';
