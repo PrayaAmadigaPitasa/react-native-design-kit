@@ -13,36 +13,16 @@ import {
   LayoutRectangle,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {Layout} from '../../layout';
-
-export type InputIcon = ((status: InputStatus) => JSX.Element) | JSX.Element;
-export type InputIconAction =
-  | 'delete'
-  | 'search'
-  | 'toggle-visibility'
-  | (() => void);
-export type InputFillStatus = 'empty' | 'filled';
-export type InputVisibilityStatus = 'visibile' | 'hidden';
-export type InputSearchStatus = 'empty' | 'loading' | 'forbidden' | 'allowed';
-export type InputStatus =
-  | 'normal'
-  | InputFillStatus
-  | InputVisibilityStatus
-  | InputSearchStatus;
-export type InputError = string | InputValidation | InputValidation[];
-export type InputStrengthValidation = RegExp | ((text: string) => boolean);
-
-export interface InputValidation {
-  regex?: RegExp;
-  validation?(text: string): boolean;
-  error: string;
-}
-
-export interface InputSearch {
-  search?: string;
-  searchStatus: InputSearchStatus;
-}
+import {
+  InputError,
+  InputFillStatus,
+  InputIcon,
+  InputIconAction,
+  InputSearch,
+  InputStrengthValidation,
+  InputValidation,
+} from '../../types';
+import {Icon} from '../icon';
 
 export interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
@@ -71,7 +51,6 @@ export interface InputProps extends TextInputProps {
   focusLeftIconContainerStyle?: ViewStyle;
   focusRightIconContainerStyle?: ViewStyle;
   error?: InputError;
-  errorPosition?: 'relative' | 'absolute';
   errorStyle?: TextStyle;
   errorLabelStyle?: TextStyle;
   errorLabelContainerStyle?: ViewStyle;
@@ -115,7 +94,6 @@ export default function Input({
   focusLeftIconContainerStyle,
   focusRightIconContainerStyle,
   error,
-  errorPosition = 'relative',
   errorStyle,
   errorLabelStyle,
   errorLabelContainerStyle,
@@ -160,11 +138,9 @@ export default function Input({
     searchStatus:
       inputValue !== undefined && inputValue.length ? 'loading' : 'empty',
   });
-  const [layout, setLayout] = useState<Layout>();
   const [layoutBorder, setLayoutBorder] = useState<LayoutRectangle>();
   const [ref, setRef] = useState<TextInput>();
   const [refBorder, setRefBorder] = useState<View>();
-  const [refContainer, setRefContainer] = useState<View>();
   const {search, searchStatus} = inputSearch;
   const themeBorderActive = inputValue !== undefined && inputValue !== '';
   const animation = useState(new Animated.Value(themeBorderActive ? 1 : 0))[0];
@@ -196,6 +172,7 @@ export default function Input({
     Animated.spring(animation, {
       toValue: inputValue !== undefined && inputValue !== '' ? 1 : 0,
       bounciness: 0,
+      useNativeDriver: true,
     }).start();
 
     if (onSearch !== undefined) {
@@ -214,17 +191,6 @@ export default function Input({
       return () => clearTimeout(timeout);
     }
   }, [inputValue]);
-
-  useEffect(() => {
-    updateLayout();
-  }, [
-    containerStyle,
-    focusContainerStyle,
-    errorContainerStyle,
-    inputContainerStyle,
-    focusInputContainerStyle,
-    errorInputContainerStyle,
-  ]);
 
   useEffect(() => {
     updateLayoutBorder();
@@ -294,20 +260,6 @@ export default function Input({
     }
 
     return undefined;
-  }
-
-  function updateLayout() {
-    errorPosition === 'absolute' &&
-      refContainer?.measure((x, y, width, height, pageX, pageY) => {
-        setLayout({
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          pageX: pageX,
-          pageY: pageY,
-        });
-      });
   }
 
   function updateLayoutBorder() {
@@ -468,262 +420,229 @@ export default function Input({
   }
 
   return (
-    <>
-      <View
-        ref={instance => instance && setRefContainer(instance)}
-        onLayout={() => layout === undefined && updateLayout()}
-        style={[
-          styles.container,
-          containerStyle,
-          focus && focusContainerStyle,
-        ]}>
-        {label !== undefined && labelPosition === 'container' ? (
-          <View
-            style={StyleSheet.flatten([
-              styles.labelContainerThemeContainer,
-              labelContainerStyle,
-              focus && focusLabelContainerStyle,
-              errorMessage !== undefined && errorLabelContainerStyle,
-            ])}>
-            <Text
-              style={StyleSheet.flatten([
-                styles.label,
-                styles.labelThemeContainer,
-                labelStyle,
-                focus && focusLabelStyle,
-                errorMessage !== undefined && errorLabelStyle,
-              ])}>
-              {label}
-            </Text>
-          </View>
-        ) : (
-          <></>
-        )}
+    <View
+      style={[styles.container, containerStyle, focus && focusContainerStyle]}>
+      {label !== undefined && labelPosition === 'container' ? (
         <View
-          style={[
-            styles.inputContainer,
-            inputContainerStyle,
-            focus && focusInputContainerStyle,
-            errorMessage !== undefined &&
-              StyleSheet.flatten([
-                styles.errorInputContainer,
-                errorInputContainerStyle,
-              ]),
-          ]}>
-          {inputLeftIcon && (
+          style={StyleSheet.flatten([
+            styles.labelContainerThemeContainer,
+            labelContainerStyle,
+            focus && focusLabelContainerStyle,
+            errorMessage !== undefined && errorLabelContainerStyle,
+          ])}>
+          <Text
+            style={StyleSheet.flatten([
+              styles.label,
+              styles.labelThemeContainer,
+              labelStyle,
+              focus && focusLabelStyle,
+              errorMessage !== undefined && errorLabelStyle,
+            ])}>
+            {label}
+          </Text>
+        </View>
+      ) : (
+        <></>
+      )}
+      <View
+        style={[
+          styles.inputContainer,
+          inputContainerStyle,
+          focus && focusInputContainerStyle,
+          errorMessage !== undefined &&
+            StyleSheet.flatten([
+              styles.errorInputContainer,
+              errorInputContainerStyle,
+            ]),
+        ]}>
+        {inputLeftIcon && (
+          <View
+            style={[
+              styles.iconContainer,
+              styles.iconLeftContainer,
+              leftIconContainerStyle,
+              focus && focusLeftIconContainerStyle,
+              errorMessage !== undefined && errorLeftIconContainerStyle,
+            ]}>
+            <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
+              {inputLeftIcon}
+            </TouchableWithoutFeedback>
+          </View>
+        )}
+        <View style={styles.sectionInputReverse}>
+          {inputRightIcon && (
             <View
               style={[
                 styles.iconContainer,
-                styles.iconLeftContainer,
-                leftIconContainerStyle,
-                focus && focusLeftIconContainerStyle,
-                errorMessage !== undefined && errorLeftIconContainerStyle,
+                styles.iconRightContainer,
+                rightIconContainerStyle,
+                focus && focusRightIconContainerStyle,
+                errorMessage !== undefined && errorRightIconContainerStyle,
               ]}>
-              <TouchableWithoutFeedback onPress={getIconAction(leftIconAction)}>
-                {inputLeftIcon}
+              <TouchableWithoutFeedback
+                onPress={getIconAction(rightIconAction)}>
+                {inputRightIcon}
               </TouchableWithoutFeedback>
             </View>
           )}
-          <View style={styles.sectionInputReverse}>
-            {inputRightIcon && (
-              <View
-                style={[
-                  styles.iconContainer,
-                  styles.iconRightContainer,
-                  rightIconContainerStyle,
-                  focus && focusRightIconContainerStyle,
-                  errorMessage !== undefined && errorRightIconContainerStyle,
-                ]}>
-                <TouchableWithoutFeedback
-                  onPress={getIconAction(rightIconAction)}>
-                  {inputRightIcon}
-                </TouchableWithoutFeedback>
-              </View>
-            )}
-            <View style={styles.sectionInputBox}>
-              {labelPosition === 'box' ? (
-                <Animated.View
+          <View style={styles.sectionInputBox}>
+            {labelPosition === 'box' ? (
+              <Animated.View
+                style={StyleSheet.flatten([
+                  styles.sectionLabelThemeBox,
+                  focus && focusLabelContainerStyle,
+                  errorMessage !== undefined && errorLabelContainerStyle,
+                  {
+                    top: animation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [
+                        labelBoxStandByOffset,
+                        labelBoxActiveOffset,
+                      ],
+                    }),
+                  },
+                ])}>
+                <Animated.Text
                   style={StyleSheet.flatten([
-                    styles.sectionLabelThemeBox,
-                    focus && focusLabelContainerStyle,
-                    errorMessage !== undefined && errorLabelContainerStyle,
+                    styles.label,
+                    styles.labelThemeBox,
+                    labelStyle,
+                    focus && focusLabelStyle,
+                    errorMessage !== undefined && errorLabelStyle,
                     {
-                      top: animation.interpolate({
+                      fontSize: animation.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [
-                          labelBoxStandByOffset,
-                          labelBoxActiveOffset,
-                        ],
+                        outputRange: [labelBoxStandBySize, labelBoxActiveSize],
                       }),
                     },
+                    props.placeholderTextColor !== undefined
+                      ? {
+                          color: props.placeholderTextColor,
+                        }
+                      : {},
                   ])}>
-                  <Animated.Text
-                    style={StyleSheet.flatten([
-                      styles.label,
-                      styles.labelThemeBox,
-                      labelStyle,
-                      focus && focusLabelStyle,
-                      errorMessage !== undefined && errorLabelStyle,
-                      {
-                        fontSize: animation.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [
-                            labelBoxStandBySize,
-                            labelBoxActiveSize,
-                          ],
-                        }),
-                      },
-                      props.placeholderTextColor !== undefined
-                        ? {
-                            color: props.placeholderTextColor,
-                          }
-                        : {},
-                    ])}>
-                    {label !== undefined ? label : placeholder}
-                  </Animated.Text>
-                </Animated.View>
-              ) : (
-                <></>
-              )}
-              <View
+                  {label !== undefined ? label : placeholder}
+                </Animated.Text>
+              </Animated.View>
+            ) : (
+              <></>
+            )}
+            <View
+              style={StyleSheet.flatten([
+                {height: '100%', width: '100%'},
+                labelPosition === 'box' &&
+                  themeBorderActive && {paddingTop: inputBoxActiveOffset},
+              ])}>
+              <TextInput
+                {...props}
+                ref={instance => {
+                  if (instance && ref !== instance) {
+                    inputRef && inputRef(instance);
+                    setRef(instance);
+                  }
+                }}
+                multiline={multiline}
+                secureTextEntry={!visibility}
+                placeholder={labelPosition === 'box' ? undefined : placeholder}
                 style={StyleSheet.flatten([
-                  {height: '100%', width: '100%'},
-                  labelPosition === 'box' &&
-                    themeBorderActive && {paddingTop: inputBoxActiveOffset},
-                ])}>
-                <TextInput
-                  {...props}
-                  ref={instance => {
-                    if (instance && ref !== instance) {
-                      inputRef && inputRef(instance);
-                      setRef(instance);
-                    }
-                  }}
-                  multiline={multiline}
-                  secureTextEntry={!visibility}
-                  placeholder={
-                    labelPosition === 'box' ? undefined : placeholder
-                  }
-                  style={StyleSheet.flatten([
-                    styles.inputBox,
-                    multiline && styles.inputBoxMultiline,
-                    style,
-                    focus && focusStyle,
-                  ])}
-                  onChangeText={text => {
-                    onChangeText && onChangeText(text);
-                    setInputValue(text);
-                  }}
-                  onFocus={event => {
-                    onFocus && onFocus(event);
-                    clearErrorOnFocus && setErrorMessage(undefined);
-                    setFocus(true);
-                  }}
-                  onBlur={event => {
-                    onBlur && onBlur(event);
-                    setErrorMessage(getErrorMessage(inputValue || ''));
-                    setFocus(false);
-                  }}
-                />
-              </View>
-              {label !== undefined && labelPosition === 'border' ? (
-                <View
-                  ref={instance => instance && setRefBorder(instance)}
-                  onLayout={() =>
-                    layoutBorder === undefined && updateLayoutBorder()
-                  }
-                  style={[
-                    styles.labelContainerThemeBorder,
-                    labelContainerStyle,
-                    focus && focusLabelContainerStyle,
-                    errorMessage !== undefined &&
-                      StyleSheet.flatten([
-                        styles.errorLabelContainerThemeBorder,
-                        errorLabelContainerStyle,
-                      ]),
-                    styles.sectionLabelThemeBorder,
-                    !layoutBorder &&
-                      styles.labelContainerThemeBorderTransparent,
-                    {
-                      top: -1 + (layoutBorder ? -layoutBorder.height / 2 : 0),
-                    },
-                  ]}>
-                  <Text
-                    style={StyleSheet.flatten([
-                      styles.label,
-                      styles.labelThemeBorder,
-                      labelStyle,
-                      focus && focusLabelStyle,
-                      errorMessage !== undefined && errorLabelStyle,
-                    ])}>
-                    {label}
-                  </Text>
-                </View>
-              ) : (
-                <></>
-              )}
+                  styles.inputBox,
+                  multiline && styles.inputBoxMultiline,
+                  style,
+                  focus && focusStyle,
+                ])}
+                onChangeText={text => {
+                  onChangeText && onChangeText(text);
+                  setInputValue(text);
+                }}
+                onFocus={event => {
+                  onFocus && onFocus(event);
+                  clearErrorOnFocus && setErrorMessage(undefined);
+                  setFocus(true);
+                }}
+                onBlur={event => {
+                  onBlur && onBlur(event);
+                  setErrorMessage(getErrorMessage(inputValue || ''));
+                  setFocus(false);
+                }}
+              />
             </View>
+            {label !== undefined && labelPosition === 'border' ? (
+              <View
+                ref={instance => instance && setRefBorder(instance)}
+                onLayout={() =>
+                  layoutBorder === undefined && updateLayoutBorder()
+                }
+                style={[
+                  styles.labelContainerThemeBorder,
+                  labelContainerStyle,
+                  focus && focusLabelContainerStyle,
+                  errorMessage !== undefined &&
+                    StyleSheet.flatten([
+                      styles.errorLabelContainerThemeBorder,
+                      errorLabelContainerStyle,
+                    ]),
+                  styles.sectionLabelThemeBorder,
+                  !layoutBorder && styles.labelContainerThemeBorderTransparent,
+                  {
+                    top: -1 + (layoutBorder ? -layoutBorder.height / 2 : 0),
+                  },
+                ]}>
+                <Text
+                  style={StyleSheet.flatten([
+                    styles.label,
+                    styles.labelThemeBorder,
+                    labelStyle,
+                    focus && focusLabelStyle,
+                    errorMessage !== undefined && errorLabelStyle,
+                  ])}>
+                  {label}
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )}
           </View>
         </View>
-        {strength && (
-          <View
-            style={StyleSheet.flatten([
-              styles.strengthContainer,
-              strengthContainerStyle,
-            ])}>
-            <View
-              style={StyleSheet.flatten([
-                styles.strengthLeftContainer,
-                strengthLeftContainerStyle,
-                {
-                  flex: passwordStrengthEstimator(),
-                  backgroundColor: getStrengthColor(),
-                },
-              ])}
-            />
-            <View
-              style={StyleSheet.flatten([
-                styles.strengthRightContainer,
-                strengthRightContainerStyle,
-                {
-                  flex: getStrengthDeviation(),
-                },
-              ])}
-            />
-          </View>
-        )}
-        {errorMessage !== undefined && errorPosition === 'relative' && (
-          <View
-            style={StyleSheet.flatten([
-              styles.errorContainer,
-              errorContainerStyle,
-            ])}>
-            <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
-              {errorMessage}
-            </Text>
-          </View>
-        )}
       </View>
-      {errorMessage !== undefined &&
-        errorPosition === 'absolute' &&
-        layout !== undefined && (
+      {strength && (
+        <View
+          style={StyleSheet.flatten([
+            styles.strengthContainer,
+            strengthContainerStyle,
+          ])}>
           <View
             style={StyleSheet.flatten([
-              styles.errorContainer,
-              errorContainerStyle,
+              styles.strengthLeftContainer,
+              strengthLeftContainerStyle,
               {
-                position: 'absolute',
-                width: layout.width,
-                left: layout.pageX,
-                top: layout.pageY + layout.height,
+                flex: passwordStrengthEstimator(),
+                backgroundColor: getStrengthColor(),
               },
-            ])}>
-            <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
-              {errorMessage}
-            </Text>
-          </View>
-        )}
-    </>
+            ])}
+          />
+          <View
+            style={StyleSheet.flatten([
+              styles.strengthRightContainer,
+              strengthRightContainerStyle,
+              {
+                flex: getStrengthDeviation(),
+              },
+            ])}
+          />
+        </View>
+      )}
+      {errorMessage ? (
+        <View
+          style={StyleSheet.flatten([
+            styles.errorContainer,
+            errorContainerStyle,
+          ])}>
+          <Text style={StyleSheet.flatten([styles.error, errorStyle])}>
+            {errorMessage}
+          </Text>
+        </View>
+      ) : null}
+    </View>
   );
 }
 
