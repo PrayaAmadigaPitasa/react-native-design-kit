@@ -10,7 +10,7 @@ export * from './Header';
 export * from './input';
 export * from './marquee';
 export * from './Modal';
-export * from './Picker';
+export * from './Pickers';
 export * from './playing-bar';
 export * from './radio';
 export * from './Slider';
