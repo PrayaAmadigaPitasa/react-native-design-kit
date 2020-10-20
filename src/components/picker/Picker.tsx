@@ -13,7 +13,7 @@ import {Layout} from '../../layout';
 import {useDidUpdate} from '../../utilities';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
-import {Modal} from '../Modals';
+import {Modal} from '../modal';
 import {Text} from '../text';
 
 export interface PickerSelectionInfo<ItemT> {
@@ -235,7 +235,6 @@ export default function Picker<ItemT>({
         testID="button"
         touchableType="normal"
         refView={handleRefButton}
-        onLayout={event => console.log(event.nativeEvent.layout)}
         style={StyleSheet.flatten([
           styles.container,
           containerStyle,
