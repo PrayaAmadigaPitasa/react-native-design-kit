@@ -72,7 +72,7 @@ export default function Picker<ItemT>({
   const [toggle, setToggle] = useState(false);
   const layout = useRef<Layout>();
   const refButton = useRef<View>();
-  const animation = useState(new Animated.Value(0))[0];
+  const animation = useRef(new Animated.Value(0)).current;
 
   function getInfoFromKey(
     key?: string,
