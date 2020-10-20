@@ -1,6 +1,6 @@
 {
   "name": "react-native-design-kit",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "All in one react native material design",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,6 +22,7 @@
     "test:watch": "npm run test -- --watch",
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
     "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
+    "publish": "npm run lint && npm run build && npm publish",
     "storybook": "start-storybook -p 9001 -c storybook",
     "storybook:build": "build-storybook -c storybook -o .web",
     "storybook:server": "npx http-server .web",

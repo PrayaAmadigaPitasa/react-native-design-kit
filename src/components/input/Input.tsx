@@ -172,7 +172,7 @@ export default function Input({
     Animated.spring(animation, {
       toValue: inputValue !== undefined && inputValue !== '' ? 1 : 0,
       bounciness: 0,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
 
     if (onSearch !== undefined) {
