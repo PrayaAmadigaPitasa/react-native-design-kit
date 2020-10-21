@@ -40,8 +40,8 @@ export default function Header({
     }
   }, [placement]);
 
-  return (
-    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+  const handleRenderLeftComponent = useMemo(
+    () => (
       <View
         style={StyleSheet.flatten([
           styles.sectionContainer,
@@ -51,6 +51,13 @@ export default function Header({
         ])}>
         {leftComponent}
       </View>
+    ),
+    [sectionContainerStyle, leftContainerStyle, leftComponent],
+  );
+
+  return (
+    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+      {handleRenderLeftComponent}
       <View
         style={StyleSheet.flatten([
           styles.sectionContainer,
