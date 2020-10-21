@@ -1,18 +1,17 @@
-import React from 'react';
+import React, {ReactElement, useMemo} from 'react';
 import {View, StyleSheet, ViewStyle, TextStyle, Text} from 'react-native';
-
-export type HeaderPlacement = 'left' | 'center' | 'right';
+import {HeaderPlacement} from '../../types';
 
 export interface HeaderProps {
   placement?: HeaderPlacement;
   title?: string;
   titleStyle?: TextStyle;
   containerStyle?: ViewStyle;
-  leftComponent?: JSX.Element;
+  leftComponent?: ReactElement;
   leftContainerStyle?: ViewStyle;
-  centerComponent?: JSX.Element;
+  centerComponent?: ReactElement;
   centerContainerStyle?: ViewStyle;
-  rightComponent?: JSX.Element;
+  rightComponent?: ReactElement;
   rightContainerStyle?: ViewStyle;
   sectionContainerStyle?: ViewStyle;
 }
@@ -30,7 +29,7 @@ export default function Header({
   rightContainerStyle,
   sectionContainerStyle,
 }: HeaderProps) {
-  function getPlacement() {
+  const justifyContent = useMemo(() => {
     switch (placement) {
       case 'left':
         return 'flex-start';
@@ -39,7 +38,7 @@ export default function Header({
       default:
         return 'center';
     }
-  }
+  }, [placement]);
 
   return (
     <View style={StyleSheet.flatten([styles.container, containerStyle])}>
@@ -58,7 +57,7 @@ export default function Header({
           styles.centerContainer,
           sectionContainerStyle,
           centerContainerStyle,
-          placement !== undefined && {justifyContent: getPlacement()},
+          placement && {justifyContent},
         ])}>
         {centerComponent !== undefined ? (
           centerComponent
