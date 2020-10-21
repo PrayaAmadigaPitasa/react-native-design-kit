@@ -1,5 +1,3 @@
-# Stil In Development
-
 <a href="https://www.npmjs.com/package/react-native-design-kit"><img src="https://img.shields.io/npm/v/react-native-design-kit.svg?style=flat-square"></a>
 <a href="https://www.npmjs.com/package/react-native-design-kit"><img src="https://img.shields.io/npm/dm/react-native-design-kit.svg?style=flat-square"></a>
 <a href="https://travis-ci.org/PrayaAmadigaPitasa/react-native-design-kit"><img src="https://travis-ci.org/PrayaAmadigaPitasa/react-native-design-kit.svg?"></a>
