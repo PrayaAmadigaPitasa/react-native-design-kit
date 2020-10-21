@@ -55,9 +55,8 @@ export default function Header({
     [sectionContainerStyle, leftContainerStyle, leftComponent],
   );
 
-  return (
-    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
-      {handleRenderLeftComponent}
+  const handleRenderCenterComponent = useMemo(
+    () => (
       <View
         style={StyleSheet.flatten([
           styles.sectionContainer,
@@ -66,7 +65,7 @@ export default function Header({
           centerContainerStyle,
           placement && {justifyContent},
         ])}>
-        {centerComponent !== undefined ? (
+        {centerComponent ? (
           centerComponent
         ) : (
           <Text style={StyleSheet.flatten([styles.title, titleStyle])}>
@@ -74,6 +73,22 @@ export default function Header({
           </Text>
         )}
       </View>
+    ),
+    [
+      sectionContainerStyle,
+      centerContainerStyle,
+      placement,
+      centerComponent,
+      title,
+      titleStyle,
+      justifyContent,
+    ],
+  );
+
+  return (
+    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+      {handleRenderLeftComponent}
+      {handleRenderCenterComponent}
       <View
         style={StyleSheet.flatten([
           styles.sectionContainer,
