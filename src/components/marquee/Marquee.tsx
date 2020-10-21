@@ -1,4 +1,4 @@
-import React, {useState, useEffect, ReactNode} from 'react';
+import React, {useState, useEffect, ReactNode, useMemo} from 'react';
 import {ScrollView, StyleSheet, View, ViewStyle, Platform} from 'react-native';
 
 export interface MarqueeProps {
@@ -35,16 +35,9 @@ export default function Marquee({
     }
   }, [offset]);
 
-  useEffect(() => {
-    setWidth(width);
-    setOffset(width);
-  }, [width]);
-
-  return (
-    <View
-      style={StyleSheet.flatten([styles.container, containerStyle])}
-      onLayout={event => setWidth(event.nativeEvent.layout.width)}>
-      {offset !== undefined && (
+  const handleRenderMarquee = useMemo(
+    () =>
+      offset !== undefined && (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -59,7 +52,20 @@ export default function Marquee({
             {children}
           </View>
         </ScrollView>
-      )}
+      ),
+    [offset, children],
+  );
+
+  useEffect(() => {
+    setWidth(width);
+    setOffset(width);
+  }, [width]);
+
+  return (
+    <View
+      style={StyleSheet.flatten([styles.container, containerStyle])}
+      onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+      {handleRenderMarquee}
     </View>
   );
 }
