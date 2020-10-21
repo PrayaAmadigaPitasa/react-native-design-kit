@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, useMemo} from 'react';
+import React, {useRef, useCallback, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   View,
   TextStyle,
   LayoutChangeEvent,
+  GestureResponderEvent,
 } from 'react-native';
 import {useDidUpdate} from '../../utilities';
 import {Collapse} from '../collapse';
@@ -27,6 +28,7 @@ export interface ExpansionPanelProps {
   containerStyle?: ViewStyle;
   contentContainerStyle?: ViewStyle;
   children?: React.ReactNode;
+  onPress?(event: GestureResponderEvent): void;
 }
 
 export default function ExpansionPanel({
@@ -42,16 +44,14 @@ export default function ExpansionPanel({
   containerStyle,
   contentContainerStyle,
   children,
+  onPress,
 }: ExpansionPanelProps) {
   const width = useRef<number>();
   const animation = useRef(new Animated.Value(visible ? 1 : 0)).current;
-  const [toggle, setToggle] = useState(visible);
 
   const handleLayout = useCallback((event: LayoutChangeEvent) => {
     width.current = event.nativeEvent.layout.width;
   }, []);
-
-  const handlePress = useCallback(() => setToggle(!toggle), [toggle]);
 
   const handleRenderPanel = useMemo(
     () => (
@@ -64,7 +64,7 @@ export default function ExpansionPanel({
           containerStyle,
           styles.fixedContainer,
         ])}
-        onPress={handlePress}>
+        onPress={onPress}>
         <Animated.View
           style={StyleSheet.flatten([
             styles.iconContainer,
@@ -79,7 +79,7 @@ export default function ExpansionPanel({
               ],
             },
           ])}>
-          {icon || <Icon name={'chevron-down'} />}
+          {icon || <Icon name="chevron-down" />}
         </Animated.View>
         <View style={styles.sectionTitle}>
           <View style={styles.titleContainer}>
@@ -106,14 +106,14 @@ export default function ExpansionPanel({
       subtitleStyle,
       containerStyle,
       animation,
-      handlePress,
+      onPress,
       handleLayout,
     ],
   );
 
   const handleRenderContent = useMemo(
     () => (
-      <Collapse visible={toggle} animationDuration={animationDuration}>
+      <Collapse visible={visible} animationDuration={animationDuration}>
         <View
           style={StyleSheet.flatten([
             styles.contentContainer,
@@ -124,20 +124,24 @@ export default function ExpansionPanel({
         </View>
       </Collapse>
     ),
-    [width.current, toggle, animationDuration, contentContainerStyle, children],
+    [
+      width.current,
+      visible,
+      animationDuration,
+      contentContainerStyle,
+      children,
+    ],
   );
 
   const handleRunAnimation = useCallback(
     () =>
       Animated.timing(animation, {
-        toValue: toggle ? 1 : 0,
+        toValue: visible ? 1 : 0,
         duration: animationDuration,
         useNativeDriver: true,
       }).start(),
-    [animation, toggle, animationDuration],
+    [animation, visible, animationDuration],
   );
-
-  useDidUpdate(() => setToggle(visible), [visible]);
 
   useDidUpdate(handleRunAnimation, [handleRunAnimation]);
 

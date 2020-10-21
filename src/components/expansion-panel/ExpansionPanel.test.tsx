@@ -3,9 +3,15 @@ import {fireEvent, render} from '@testing-library/react-native';
 import {ObjectPartial} from '../../types';
 import ExpansionPanel, {ExpansionPanelProps} from './ExpansionPanel';
 
+const defaultProps: ExpansionPanelProps = {
+  onPress: jest.fn(),
+};
+
 function runTest(name: string, props?: ObjectPartial<ExpansionPanelProps>) {
   test(name, async () => {
-    const {getByTestId, rerender} = render(<ExpansionPanel {...props} />);
+    const {getByTestId, rerender} = render(
+      <ExpansionPanel {...defaultProps} {...props} />,
+    );
     const panel = getByTestId('panel');
 
     fireEvent(panel, 'press');
