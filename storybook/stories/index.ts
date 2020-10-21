@@ -7,7 +7,6 @@ export * from './chip';
 export * from './header';
 export * from './input';
 export * from './marquee';
-export * from './modal';
 export * from './picker';
 export * from './playing-bar';
 export * from './radio';

@@ -12,7 +12,6 @@ configure(
     require('./header/index.stories'),
     require('./input/index.stories'),
     require('./marquee/index.stories'),
-    require('./modal/index.stories'),
     require('./picker/index.stories'),
     require('./playing-bar/index.stories'),
     require('./radio/index.stories'),
