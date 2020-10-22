@@ -12,12 +12,22 @@ function runTest(name: string, props?: ObjectPartial<SliderProps>) {
     const {getByTestId} = render(<Slider {...defaultProps} {...props} />);
     const trackContainer = getByTestId('track-container');
 
+    fireEvent(trackContainer, 'responderStart');
+    fireEvent(trackContainer, 'responderMove');
     fireEvent(trackContainer, 'layout', {nativeEvent: {layout: {width: 250}}});
 
     const thumbContainer = getByTestId('thumb-container');
 
     fireEvent(thumbContainer, 'layout', {
       nativeEvent: {layout: {width: 10, height: 20}},
+    });
+
+    fireEvent(trackContainer, 'startShouldSetResponder');
+    fireEvent(trackContainer, 'responderStart', {
+      nativeEvent: {pageX: 50, locationX: 50},
+    });
+    fireEvent(trackContainer, 'responderMove', {
+      nativeEvent: {pageX: 100, locationX: 100},
     });
 
     if (props?.button) {

@@ -93,38 +93,32 @@ export default function Slider({
   const handleRenderIndicator = useMemo(() => {
     const components: ReactElement[] = [];
 
-    if (numberOfSection > 0) {
-      for (let index = 0; index <= numberOfSection; index++) {
-        components.push(
-          <View key={`{indicatorSection: ${index}}`}>
-            {indicatorComponent || (
-              <View
-                style={StyleSheet.flatten([styles.indicator, indicatorStyle])}
-              />
-            )}
-          </View>,
-        );
+    for (let index = 0; index <= numberOfSection; index++) {
+      components.push(
+        <View key={`{indicatorSection: ${index}}`}>
+          {indicatorComponent || (
+            <View
+              style={StyleSheet.flatten([styles.indicator, indicatorStyle])}
+            />
+          )}
+        </View>,
+      );
 
-        if (index < numberOfSection) {
-          for (
-            let indexSub = 0;
-            indexSub < numberOfSubSection - 1;
-            indexSub++
-          ) {
-            components.push(
-              <View key={`{indicator: ${index}, sub: ${indexSub}}`}>
-                {indicatorSubComponent || (
-                  <View
-                    style={StyleSheet.flatten([
-                      styles.indicator,
-                      styles.indicatorSub,
-                      indicatorSubStyle,
-                    ])}
-                  />
-                )}
-              </View>,
-            );
-          }
+      if (index < numberOfSection) {
+        for (let indexSub = 0; indexSub < numberOfSubSection - 1; indexSub++) {
+          components.push(
+            <View key={`{indicator: ${index}, sub: ${indexSub}}`}>
+              {indicatorSubComponent || (
+                <View
+                  style={StyleSheet.flatten([
+                    styles.indicator,
+                    styles.indicatorSub,
+                    indicatorSubStyle,
+                  ])}
+                />
+              )}
+            </View>,
+          );
         }
       }
     }
