@@ -20,6 +20,7 @@ export default function Marquee({
 }: MarqueeProps) {
   const [layoutWidth, setLayoutWidth] = useState<number>();
   const [contentWidth, setContentWidth] = useState(0);
+  const [lastCycle, setLastCycle] = useState<Date>();
   const animation = useRef(new Animated.Value(0)).current;
   const lineWidth = useMemo(
     () => (layoutWidth ? layoutWidth + contentWidth * 2 : undefined),
@@ -41,7 +42,7 @@ export default function Marquee({
       }).start(
         callback =>
           (byPassAnimationCallback || callback.finished) &&
-          handleRunAnimation(),
+          setLastCycle(new Date()),
       );
     }
   }, [duration, animation, delay, byPassAnimationCallback]);
@@ -51,6 +52,7 @@ export default function Marquee({
       layoutWidth ? (
         <ScrollView
           horizontal
+          testID="marquee"
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           bounces={false}
@@ -73,10 +75,15 @@ export default function Marquee({
     [layoutWidth, contentWidth, children],
   );
 
-  useDidUpdate(handleRunAnimation, [layoutWidth, handleRunAnimation]);
+  useDidUpdate(handleRunAnimation, [
+    lastCycle,
+    layoutWidth,
+    handleRunAnimation,
+  ]);
 
   return (
     <View
+      testID="container"
       style={StyleSheet.flatten([styles.container, containerStyle])}
       onLayout={event => setLayoutWidth(event.nativeEvent.layout.width)}>
       {handleRenderMarquee}
