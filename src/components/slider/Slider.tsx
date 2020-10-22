@@ -55,7 +55,7 @@ export default function Slider({
   thumb,
   thumbContainerStyle,
   trackContainerStyle,
-  hitSlop,
+  hitSlop = {top: 10, bottom: 10},
   indicator,
   indicatorStyle,
   indicatorComponent,
@@ -172,7 +172,7 @@ export default function Slider({
   );
 
   const handleResponderMove = useCallback(
-    event => {
+    (event: GestureResponderEvent) => {
       if (pageX !== undefined && width !== undefined) {
         setProgress(
           Math.max(
@@ -260,6 +260,7 @@ export default function Slider({
             {
               left:
                 progress * width - (thumbLayout ? thumbLayout.width / 2 : 0),
+              opacity: thumbLayout ? 1 : 0,
             },
           ])}>
           {thumb || <View style={styles.thumb} />}
@@ -272,15 +273,14 @@ export default function Slider({
     () => (
       <View
         style={styles.sectionTrackContainer}
+        pointerEvents="box-only"
+        onStartShouldSetResponder={() => true}
+        onResponderStart={handleResponderStart}
+        onResponderMove={handleResponderMove}
+        hitSlop={hitSlop}
         onLayout={event => setWidth(event.nativeEvent.layout.width)}>
         {handleRenderTopIndicator}
-        <View
-          pointerEvents="box-only"
-          style={styles.sectionTrack}
-          onStartShouldSetResponder={() => true}
-          onResponderStart={handleResponderStart}
-          onResponderMove={handleResponderMove}
-          hitSlop={hitSlop}>
+        <View style={styles.sectionTrack}>
           <View
             style={StyleSheet.flatten([
               styles.trackContainer,
