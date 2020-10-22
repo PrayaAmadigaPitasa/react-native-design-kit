@@ -5,6 +5,7 @@ import {
   LayoutRectangle,
   ViewStyle,
   GestureResponderEvent,
+  Insets,
 } from 'react-native';
 import {useDidUpdate} from '../../utilities';
 import {Icon} from '../icon';
@@ -32,6 +33,7 @@ export interface SliderProps {
   indicatorSubStyle?: ViewStyle;
   indicatorSubComponent?: JSX.Element;
   indicatorContainerStyle?: ViewStyle;
+  hitSlop?: Insets;
   numberOfSection?: number;
   numberOfSubSection?: number;
   onChangeValue(value: number, progress: number): void;
@@ -53,6 +55,7 @@ export default function Slider({
   thumb,
   thumbContainerStyle,
   trackContainerStyle,
+  hitSlop,
   indicator,
   indicatorStyle,
   indicatorComponent,
@@ -272,12 +275,12 @@ export default function Slider({
         onLayout={event => setWidth(event.nativeEvent.layout.width)}>
         {handleRenderTopIndicator}
         <View
+          pointerEvents="box-only"
           style={styles.sectionTrack}
           onStartShouldSetResponder={() => true}
           onResponderStart={handleResponderStart}
           onResponderMove={handleResponderMove}
-          pointerEvents="box-only"
-          hitSlop={{top: 10, bottom: 10}}>
+          hitSlop={hitSlop}>
           <View
             style={StyleSheet.flatten([
               styles.trackContainer,
