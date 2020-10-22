@@ -3,9 +3,12 @@ import React from 'react';
 import {ObjectPartial} from '../../types';
 import PlayingBar, {PlayingBarProps} from './PlayingBar';
 
+jest.useFakeTimers();
+
 function runTest(name: string, props?: ObjectPartial<PlayingBarProps>) {
   test(name, async () => {
-    render(<PlayingBar {...props} />);
+    const {rerender} = render(<PlayingBar {...props} />);
+    rerender(<PlayingBar {...props} frequency={2} />);
   });
 }
 

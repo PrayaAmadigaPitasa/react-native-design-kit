@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback, useMemo} from 'react';
-import {View, ViewProps, StyleSheet, ViewStyle, Platform} from 'react-native';
+import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
+import {View, ViewProps, StyleSheet, ViewStyle, Animated} from 'react-native';
 
 export interface PlayingBarProps {
   bars?: number[];
@@ -9,6 +9,7 @@ export interface PlayingBarProps {
   maxHeight?: number;
   tps?: number;
   frequency?: number;
+  byPassAnimatedCallback?: boolean;
 }
 
 export default function PlayingBar({
@@ -17,10 +18,12 @@ export default function PlayingBar({
   containerStyle,
   minHeight = 4,
   maxHeight = 20,
-  tps = 100,
+  tps = 60,
   frequency = 1.5,
+  byPassAnimatedCallback = false,
 }: PlayingBarProps) {
   const [progress, setProgress] = useState(0);
+  const animation = useRef(new Animated.Value(0)).current;
   const min = useMemo(() => Math.min(minHeight, maxHeight), [
     minHeight,
     maxHeight,
@@ -32,6 +35,7 @@ export default function PlayingBar({
   const dif = useMemo(() => max - min, [max, min]);
   const period = useMemo(() => 1000 / tps, [tps]);
   const increment = useMemo(() => (1 / tps) * frequency, [tps, frequency]);
+  const mounted = useRef(true);
 
   const handleRenderPlayingBarItem = useCallback(
     (key: number, start: number) => {
@@ -53,14 +57,26 @@ export default function PlayingBar({
     [handleRenderPlayingBarItem],
   );
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const scale = Platform.select({android: 1.5, default: 1});
-      setProgress(progress + ((increment * scale) % 1));
-    }, period);
+  const handleRunAnimation = useCallback(() => {
+    mounted.current = true;
+    animation.setValue(0);
+    Animated.timing(animation, {
+      toValue: 1,
+      duration: period,
+      useNativeDriver: true,
+    }).start(
+      callback =>
+        mounted.current &&
+        (callback.finished || byPassAnimatedCallback) &&
+        setProgress(progress + (increment % 1)),
+    );
 
-    return () => clearTimeout(timeout);
-  }, [increment, progress, period]);
+    return () => {
+      mounted.current = false;
+    };
+  }, [animation, period, progress]);
+
+  useEffect(handleRunAnimation, [handleRunAnimation]);
 
   return (
     <View
