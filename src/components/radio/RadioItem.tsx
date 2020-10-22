@@ -76,7 +76,7 @@ export default function RadioItem({
   );
 }
 
-function DefaultSelectedRadio() {
+export function DefaultSelectedRadio() {
   const animation = useRef(new Animated.Value(0)).current;
   const sizeOuter = useRef(18).current;
   const sizeInner = useRef(sizeOuter - 6).current;
@@ -122,7 +122,7 @@ function DefaultSelectedRadio() {
   );
 }
 
-function DefaultDisabledRadio() {
+export function DefaultDisabledRadio() {
   const size = useRef(18).current;
 
   return (
