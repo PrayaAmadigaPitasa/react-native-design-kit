@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
+    width: '100%',
     alignItems: 'center',
   },
   sectionContent: {
