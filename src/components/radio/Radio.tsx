@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react';
+import React, {useState, useMemo, useCallback, ReactNode} from 'react';
 import {View, ViewStyle, GestureResponderEvent} from 'react-native';
 import RadioItem, {RadioBaseProps} from './RadioItem';
 
@@ -10,7 +10,7 @@ export interface RadioInfo {
 export interface RadioProps extends RadioBaseProps {
   containerStyle?: ViewStyle;
   radioIds: string[];
-  radioComponent?(info: RadioInfo): string | JSX.Element;
+  radioComponent?(info: RadioInfo): ReactNode;
   defaultId?: string;
   onSelect(id: string): void;
 }
@@ -49,6 +49,7 @@ export default function Radio({
       return (
         <RadioItem
           {...props}
+          testID="radio-item"
           key={id}
           title={title}
           isSelected={isSelected}
