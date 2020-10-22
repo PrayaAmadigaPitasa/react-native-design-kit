@@ -192,6 +192,7 @@ export default function Slider({
     () =>
       button && (
         <Touchable
+          testID="button-start"
           style={StyleSheet.flatten([
             styles.startButtonContainer,
             startButtonContainerStyle,
@@ -207,6 +208,7 @@ export default function Slider({
     () =>
       button && (
         <Touchable
+          testID="button-end"
           style={StyleSheet.flatten([
             styles.endButtonContainer,
             endButtonContainerStyle,

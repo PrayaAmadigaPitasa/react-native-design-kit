@@ -1,4 +1,4 @@
-import {render} from '@testing-library/react-native';
+import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
 import {ObjectPartial} from '../../types';
 import Slider, {SliderProps} from './Slider';
@@ -9,10 +9,19 @@ const defaultProps: SliderProps = {
 
 function runTest(name: string, props?: ObjectPartial<SliderProps>) {
   test(name, async () => {
-    render(<Slider {...defaultProps} {...props} />);
+    const {getByTestId} = render(<Slider {...defaultProps} {...props} />);
+
+    if (props?.button) {
+      const buttonStart = getByTestId('button-start');
+      const buttonEnd = getByTestId('button-end');
+
+      fireEvent.press(buttonStart);
+      fireEvent.press(buttonEnd);
+    }
   });
 }
 
 describe('Slider', () => {
   runTest('default');
+  runTest('button', {button: true});
 });
