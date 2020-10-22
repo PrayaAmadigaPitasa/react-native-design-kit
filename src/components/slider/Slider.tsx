@@ -1,5 +1,17 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
-import {View, StyleSheet, LayoutRectangle, ViewStyle} from 'react-native';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  ReactElement,
+} from 'react';
+import {
+  View,
+  StyleSheet,
+  LayoutRectangle,
+  ViewStyle,
+  GestureResponderEvent,
+} from 'react-native';
 import {useDidUpdate} from '../../utilities';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
@@ -89,8 +101,8 @@ export default function Slider({
     );
   }
 
-  function getIndicatorComponent() {
-    const components: JSX.Element[] = [];
+  const handleRenderIndicator = useMemo(() => {
+    const components: ReactElement[] = [];
 
     if (numberOfSection > 0) {
       for (let index = 0; index <= numberOfSection; index++) {
@@ -129,7 +141,14 @@ export default function Slider({
     }
 
     return components;
-  }
+  }, [
+    numberOfSection,
+    numberOfSubSection,
+    indicatorComponent,
+    indicatorSubComponent,
+    indicatorStyle,
+    indicatorSubStyle,
+  ]);
 
   const handlePressButtonLeft = useCallback(
     () =>
@@ -140,6 +159,42 @@ export default function Slider({
             : (maxValue - minValue) * 0.15),
       ),
     [value, buttonValue, maxValue, minValue],
+  );
+
+  const handlePressButtonRight = useCallback(
+    () =>
+      setValue(
+        value +
+          (buttonValue !== undefined
+            ? Math.max(0, buttonValue)
+            : (maxValue - minValue) * 0.15),
+      ),
+    [value, buttonValue, maxValue, minValue],
+  );
+
+  const handleResponderStart = useCallback(
+    (event: GestureResponderEvent) => {
+      setPageX(event.nativeEvent.pageX);
+      setStartProgress(progress);
+    },
+    [progress],
+  );
+
+  const handleResponderMove = useCallback(
+    event => {
+      if (pageX !== undefined && width !== undefined) {
+        setProgress(
+          Math.max(
+            0,
+            Math.min(
+              1,
+              startProgress + (event.nativeEvent.pageX - pageX) / width,
+            ),
+          ),
+        );
+      }
+    },
+    [pageX, width],
   );
 
   const handleRenderButtonLeft = useMemo(
@@ -157,10 +212,54 @@ export default function Slider({
     [button, startButtonContainerStyle, startButton, handlePressButtonLeft],
   );
 
-  return (
-    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
-      {handleRenderButtonLeft}
-      {width === undefined ? (
+  const handleRenderButtonRight = useMemo(
+    () =>
+      button && (
+        <Touchable
+          style={StyleSheet.flatten([
+            styles.endButtonContainer,
+            endButtonContainerStyle,
+          ])}
+          onPress={handlePressButtonRight}>
+          {endButton || <Icon style={styles.buttonIcon} name="caret-right" />}
+        </Touchable>
+      ),
+    [button, endButtonContainerStyle, endButton, handlePressButtonRight],
+  );
+
+  const handleRenderTopIndicator = useMemo(
+    () =>
+      indicator && (
+        <View
+          style={StyleSheet.flatten([
+            indicatorContainerStyle,
+            styles.sectionIndicator,
+            styles.sectionIndicatorTop,
+          ])}>
+          {handleRenderIndicator}
+        </View>
+      ),
+    [indicator, indicatorContainerStyle, handleRenderIndicator],
+  );
+
+  const handleRenderBottomIndicator = useMemo(
+    () =>
+      indicator && (
+        <View
+          style={StyleSheet.flatten([
+            indicatorContainerStyle,
+            styles.sectionIndicator,
+            styles.sectionIndicatorBottom,
+          ])}>
+          {handleRenderIndicator}
+        </View>
+      ),
+    [indicator, indicatorContainerStyle, handleRenderIndicator],
+  );
+
+  const handleRenderSlider = useMemo(
+    () =>
+      width === undefined ? (
         <View style={styles.trackDefaultBaseContainer}>
           <View
             onLayout={event => setWidth(event.nativeEvent.layout.width)}
@@ -169,16 +268,7 @@ export default function Slider({
         </View>
       ) : (
         <View style={styles.sectionTrackContainer}>
-          {indicator && (
-            <View
-              style={StyleSheet.flatten([
-                indicatorContainerStyle,
-                styles.sectionIndicator,
-                styles.sectionIndicatorTop,
-              ])}>
-              {getIndicatorComponent()}
-            </View>
-          )}
+          {handleRenderTopIndicator}
           <View style={styles.sectionTrack}>
             <View
               style={StyleSheet.flatten([
@@ -199,28 +289,10 @@ export default function Slider({
               ])}
             />
             <View
-              onLayout={event => {
-                setThumbLayout(event.nativeEvent.layout);
-              }}
+              onLayout={event => setThumbLayout(event.nativeEvent.layout)}
               onStartShouldSetResponder={() => true}
-              onResponderStart={event => {
-                setPageX(event.nativeEvent.pageX);
-                setStartProgress(progress);
-              }}
-              onResponderMove={event => {
-                if (pageX !== undefined) {
-                  setProgress(
-                    Math.max(
-                      0,
-                      Math.min(
-                        1,
-                        startProgress +
-                          (event.nativeEvent.pageX - pageX) / width,
-                      ),
-                    ),
-                  );
-                }
-              }}
+              onResponderStart={handleResponderStart}
+              onResponderMove={handleResponderMove}
               style={StyleSheet.flatten([
                 styles.thumbContainer,
                 thumbContainerStyle,
@@ -228,41 +300,37 @@ export default function Slider({
                 {
                   left:
                     progress * width -
-                    (thumbLayout !== undefined ? thumbLayout.width / 2 : 0),
+                    (thumbLayout ? thumbLayout.width / 2 : 0),
                 },
               ])}>
               {thumb || <View style={styles.thumb} />}
             </View>
           </View>
-          {indicator && (
-            <View
-              style={StyleSheet.flatten([
-                indicatorContainerStyle,
-                styles.sectionIndicator,
-                styles.sectionIndicatorBottom,
-              ])}>
-              {getIndicatorComponent()}
-            </View>
-          )}
+          {handleRenderBottomIndicator}
         </View>
-      )}
-      {button && (
-        <Touchable
-          style={StyleSheet.flatten([
-            styles.endButtonContainer,
-            endButtonContainerStyle,
-          ])}
-          onPress={() =>
-            setValue(
-              value +
-                (buttonValue !== undefined
-                  ? Math.max(0, buttonValue)
-                  : (maxValue - minValue) * 0.15),
-            )
-          }>
-          {endButton || <Icon style={styles.buttonIcon} name="caret-right" />}
-        </Touchable>
-      )}
+      ),
+    [
+      trackContainerStyle,
+      trackContainerStyle,
+      minTrackContainerStyle,
+      maxTrackContainerStyle,
+      thumbContainerStyle,
+      thumb,
+      width,
+      progress,
+      thumbLayout,
+      handleRenderTopIndicator,
+      handleRenderBottomIndicator,
+      handleResponderStart,
+      handleResponderMove,
+    ],
+  );
+
+  return (
+    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+      {handleRenderButtonLeft}
+      {handleRenderSlider}
+      {handleRenderButtonRight}
     </View>
   );
 }
