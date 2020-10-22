@@ -7,8 +7,7 @@ jest.useFakeTimers();
 
 function runTest(name: string, props?: ObjectPartial<PlayingBarProps>) {
   test(name, async () => {
-    const {rerender} = render(<PlayingBar {...props} />);
-    rerender(<PlayingBar {...props} frequency={2} />);
+    render(<PlayingBar {...props} />);
   });
 }
 
