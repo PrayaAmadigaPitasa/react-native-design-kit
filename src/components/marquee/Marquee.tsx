@@ -7,6 +7,7 @@ export interface MarqueeProps {
   speed?: number;
   delay?: number;
   cooldown?: number;
+  byPassAnimationCallback?: boolean;
   children: ReactNode;
 }
 
@@ -14,6 +15,7 @@ export default function Marquee({
   speed = 0.125,
   delay,
   containerStyle,
+  byPassAnimationCallback = false,
   children,
 }: MarqueeProps) {
   const [layoutWidth, setLayoutWidth] = useState<number>();
@@ -36,13 +38,17 @@ export default function Marquee({
         delay,
         toValue: 1,
         useNativeDriver: true,
-      }).start(callback => callback.finished && handleRunAnimation());
+      }).start(
+        callback =>
+          (byPassAnimationCallback || callback.finished) &&
+          handleRunAnimation(),
+      );
     }
-  }, [duration, animation, delay]);
+  }, [duration, animation, delay, byPassAnimationCallback]);
 
   const handleRenderMarquee = useMemo(
     () =>
-      layoutWidth !== undefined && (
+      layoutWidth ? (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -63,7 +69,7 @@ export default function Marquee({
             {children}
           </Animated.View>
         </ScrollView>
-      ),
+      ) : null,
     [layoutWidth, contentWidth, children],
   );
 
