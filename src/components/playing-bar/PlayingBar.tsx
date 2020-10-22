@@ -59,10 +59,8 @@ export default function PlayingBar({
       setProgress(progress + ((increment * scale) % 1));
     }, period);
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [progress]);
+    return () => clearTimeout(timeout);
+  }, [increment, progress, period]);
 
   return (
     <View
