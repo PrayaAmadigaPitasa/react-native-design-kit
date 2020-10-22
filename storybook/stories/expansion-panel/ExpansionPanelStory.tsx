@@ -21,6 +21,7 @@ export default function ExpansionPanelStory({
   const handleRenderPanel = useCallback(
     (panel: string) => (
       <ExpansionPanel
+        key={panel}
         visible={select === panel}
         title={`${panel} Settings`}
         subtitle="Nisi id ex dolor"
