@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  ReactElement,
-} from 'react';
+import React, {useState, useMemo, useCallback, ReactElement} from 'react';
 import {
   View,
   StyleSheet,
@@ -81,14 +75,6 @@ export default function Slider({
     maxValue,
     minValue,
   ]);
-
-  useEffect(() => {
-    setWidth(undefined);
-  }, [trackContainerStyle, button]);
-
-  useDidUpdate(() => {
-    onChangeValue && onChangeValue(value, progress);
-  }, [value]);
 
   function setValue(val: number) {
     setProgress(getProgress(val));
@@ -174,10 +160,12 @@ export default function Slider({
 
   const handleResponderStart = useCallback(
     (event: GestureResponderEvent) => {
-      setPageX(event.nativeEvent.pageX);
-      setStartProgress(progress);
+      if (width !== undefined) {
+        setPageX(event.nativeEvent.pageX);
+        setStartProgress(event.nativeEvent.locationX / width);
+      }
     },
-    [progress],
+    [width, progress],
   );
 
   const handleResponderMove = useCallback(
@@ -257,74 +245,79 @@ export default function Slider({
     [indicator, indicatorContainerStyle, handleRenderIndicator],
   );
 
-  const handleRenderSlider = useMemo(
+  const handleRenderThumb = useMemo(
     () =>
-      width === undefined ? (
-        <View style={styles.trackDefaultBaseContainer}>
+      width ? (
+        <View
+          onLayout={event => setThumbLayout(event.nativeEvent.layout)}
+          style={StyleSheet.flatten([
+            styles.thumbContainer,
+            thumbContainerStyle,
+            styles.sectionThumb,
+            {
+              left:
+                progress * width - (thumbLayout ? thumbLayout.width / 2 : 0),
+            },
+          ])}>
+          {thumb || <View style={styles.thumb} />}
+        </View>
+      ) : null,
+    [thumb, thumbContainerStyle, width, progress, width, thumbLayout],
+  );
+
+  const handleRenderSlider = useMemo(
+    () => (
+      <View
+        style={styles.sectionTrackContainer}
+        onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+        {handleRenderTopIndicator}
+        <View
+          style={styles.sectionTrack}
+          onStartShouldSetResponder={() => true}
+          onResponderStart={handleResponderStart}
+          onResponderMove={handleResponderMove}
+          pointerEvents="box-only"
+          hitSlop={{top: 10, bottom: 10}}>
           <View
-            onLayout={event => setWidth(event.nativeEvent.layout.width)}
-            style={trackContainerStyle}
+            style={StyleSheet.flatten([
+              styles.trackContainer,
+              trackContainerStyle,
+              styles.trackContainerMin,
+              minTrackContainerStyle,
+              {width: `${progress * 100}%`},
+            ])}
           />
+          <View
+            style={StyleSheet.flatten([
+              styles.trackContainer,
+              trackContainerStyle,
+              styles.trackContainerMax,
+              maxTrackContainerStyle,
+              {width: `${(1 - progress) * 100}%`},
+            ])}
+          />
+          {handleRenderThumb}
         </View>
-      ) : (
-        <View style={styles.sectionTrackContainer}>
-          {handleRenderTopIndicator}
-          <View style={styles.sectionTrack}>
-            <View
-              style={StyleSheet.flatten([
-                styles.trackContainer,
-                trackContainerStyle,
-                styles.trackContainerMin,
-                minTrackContainerStyle,
-                {width: progress * width},
-              ])}
-            />
-            <View
-              style={StyleSheet.flatten([
-                styles.trackContainer,
-                trackContainerStyle,
-                styles.trackContainerMax,
-                maxTrackContainerStyle,
-                {width: (1 - progress) * width},
-              ])}
-            />
-            <View
-              onLayout={event => setThumbLayout(event.nativeEvent.layout)}
-              onStartShouldSetResponder={() => true}
-              onResponderStart={handleResponderStart}
-              onResponderMove={handleResponderMove}
-              style={StyleSheet.flatten([
-                styles.thumbContainer,
-                thumbContainerStyle,
-                styles.sectionThumb,
-                {
-                  left:
-                    progress * width -
-                    (thumbLayout ? thumbLayout.width / 2 : 0),
-                },
-              ])}>
-              {thumb || <View style={styles.thumb} />}
-            </View>
-          </View>
-          {handleRenderBottomIndicator}
-        </View>
-      ),
+        {handleRenderBottomIndicator}
+      </View>
+    ),
     [
       trackContainerStyle,
       trackContainerStyle,
       minTrackContainerStyle,
       maxTrackContainerStyle,
-      thumbContainerStyle,
-      thumb,
-      width,
       progress,
-      thumbLayout,
+      handleRenderThumb,
       handleRenderTopIndicator,
       handleRenderBottomIndicator,
       handleResponderStart,
       handleResponderMove,
     ],
   );
+
+  useDidUpdate(() => {
+    onChangeValue && onChangeValue(value, progress);
+  }, [value]);
 
   return (
     <View style={StyleSheet.flatten([styles.container, containerStyle])}>
@@ -380,6 +373,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   sectionTrackContainer: {
+    flex: 1,
     zIndex: 1,
   },
   sectionThumb: {
