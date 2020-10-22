@@ -1,70 +1,78 @@
-import React, {useState, useEffect, ReactNode, useMemo} from 'react';
-import {ScrollView, StyleSheet, View, ViewStyle, Platform} from 'react-native';
+import React, {useState, ReactNode, useMemo, useRef, useCallback} from 'react';
+import {ScrollView, StyleSheet, View, ViewStyle, Animated} from 'react-native';
+import {useDidUpdate} from '../../utilities';
 
 export interface MarqueeProps {
   containerStyle?: ViewStyle;
   speed?: number;
+  delay?: number;
   cooldown?: number;
   children: ReactNode;
 }
 
 export default function Marquee({
+  speed = 0.125,
+  delay,
   containerStyle,
-  speed = 1,
-  cooldown = 1000,
   children,
 }: MarqueeProps) {
-  const [width, setWidth] = useState<number>(0);
-  const [length, setLength] = useState<number>(0);
-  const [offset, setOffset] = useState<number>();
+  const [layoutWidth, setLayoutWidth] = useState<number>();
+  const [contentWidth, setContentWidth] = useState(0);
+  const animation = useRef(new Animated.Value(0)).current;
+  const lineWidth = useMemo(
+    () => (layoutWidth ? layoutWidth + contentWidth * 2 : undefined),
+    [layoutWidth, contentWidth],
+  );
+  const duration = useMemo(() => (lineWidth ? lineWidth / speed : undefined), [
+    lineWidth,
+    speed,
+  ]);
 
-  useEffect(() => {
-    if (offset !== undefined) {
-      const scale = Platform.select({android: 1.5, default: 1});
-      const speedScaled = speed * scale;
-
-      if (offset <= -length - (cooldown / 10) * speedScaled) {
-        setOffset(width);
-      } else {
-        const timeout = setTimeout(() => {
-          setOffset(offset - speedScaled);
-        }, 10);
-
-        return () => clearTimeout(timeout);
-      }
+  const handleRunAnimation = useCallback(() => {
+    if (duration) {
+      animation.setValue(0);
+      Animated.timing(animation, {
+        duration,
+        delay,
+        toValue: 1,
+        useNativeDriver: true,
+      }).start(callback => callback.finished && handleRunAnimation());
     }
-  }, [offset]);
+  }, [duration, animation, delay]);
 
   const handleRenderMarquee = useMemo(
     () =>
-      offset !== undefined && (
+      layoutWidth !== undefined && (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           bounces={false}
+          onContentSizeChange={w => setContentWidth(w)}
           scrollEnabled={false}
-          contentContainerStyle={StyleSheet.flatten([
-            styles.sectionContent,
-            {marginLeft: offset},
-          ])}>
-          <View onLayout={event => setLength(event.nativeEvent.layout.width)}>
+          contentContainerStyle={StyleSheet.flatten([styles.sectionContent])}>
+          <Animated.View
+            style={StyleSheet.flatten([
+              {
+                translateX: animation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [layoutWidth, -contentWidth],
+                }),
+              },
+            ])}>
             {children}
-          </View>
+          </Animated.View>
         </ScrollView>
       ),
-    [offset, children],
+    [layoutWidth, contentWidth, children],
   );
 
-  useEffect(() => {
-    setWidth(width);
-    setOffset(width);
-  }, [width]);
+  useDidUpdate(handleRunAnimation, [layoutWidth, handleRunAnimation]);
 
   return (
     <View
       style={StyleSheet.flatten([styles.container, containerStyle])}
-      onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+      onLayout={event => setLayoutWidth(event.nativeEvent.layout.width)}>
       {handleRenderMarquee}
     </View>
   );
@@ -74,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
-    width: '100%',
     alignItems: 'center',
   },
   sectionContent: {
