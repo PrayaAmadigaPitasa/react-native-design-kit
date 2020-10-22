@@ -1,4 +1,10 @@
-import React, {useState, ReactNode, useEffect, useMemo} from 'react';
+import React, {
+  useState,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,6 +14,7 @@ import {
   ViewStyle,
   Animated,
   TouchableOpacityProps,
+  GestureResponderEvent,
 } from 'react-native';
 
 export interface RadioInfo {
@@ -107,34 +114,44 @@ export default function Radio({
     return selected === id;
   }
 
-  function getRadioItem(id: string) {
-    const component =
-      radioComponent && radioComponent({id: id, isSelected: isSelected(id)});
-    const title =
-      typeof component === 'string'
-        ? component
-        : component === undefined
-        ? id
-        : undefined;
+  const handlePressRadioItem = useCallback(
+    (id: string, event: GestureResponderEvent) => {
+      onPress && onPress(event);
+      onSelect(id);
+      setSelected(id);
+    },
+    [onPress, onSelect],
+  );
 
-    return (
-      <RadioItem
-        {...props}
-        key={id}
-        title={title}
-        isSelected={selected === id}
-        onPress={event => {
-          onPress !== undefined && onPress(event);
-          onSelect(id);
-          setSelected(id);
-        }}>
-        {component !== undefined && typeof component !== 'string' && component}
-      </RadioItem>
-    );
-  }
+  const handleRenderRadioitem = useCallback(
+    (id: string) => {
+      const component =
+        radioComponent && radioComponent({id, isSelected: isSelected(id)});
+      const title =
+        typeof component === 'string'
+          ? component
+          : component === undefined
+          ? id
+          : undefined;
+
+      return (
+        <RadioItem
+          {...props}
+          key={id}
+          title={title}
+          isSelected={selected === id}
+          onPress={event => handlePressRadioItem(id, event)}>
+          {component !== undefined &&
+            typeof component !== 'string' &&
+            component}
+        </RadioItem>
+      );
+    },
+    [props, selected, radioComponent, handlePressRadioItem],
+  );
 
   const handleRenderListRadioItem = useMemo(
-    () => radioIds.map(value => getRadioItem(value)),
+    () => radioIds.map(value => handleRenderRadioitem(value)),
     [radioIds],
   );
 
