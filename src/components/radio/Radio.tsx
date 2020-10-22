@@ -1,4 +1,4 @@
-import React, {useState, ReactNode, useEffect} from 'react';
+import React, {useState, ReactNode, useEffect, useMemo} from 'react';
 import {
   View,
   StyleSheet,
@@ -133,20 +133,12 @@ export default function Radio({
     );
   }
 
-  function getListRadioItem() {
-    const list: ReactNode[] = [];
+  const handleRenderListRadioItem = useMemo(
+    () => radioIds.map(value => getRadioItem(value)),
+    [radioIds],
+  );
 
-    for (let index = 0; index < radioIds.length; index++) {
-      const id = radioIds[index];
-      const item = getRadioItem(id);
-
-      list.push(item);
-    }
-
-    return list;
-  }
-
-  return <View style={containerStyle}>{getListRadioItem()}</View>;
+  return <View style={containerStyle}>{handleRenderListRadioItem}</View>;
 }
 
 function DefaultSelectedRadio() {
