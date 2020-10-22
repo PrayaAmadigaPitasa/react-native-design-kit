@@ -18,7 +18,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "build": "tsc --project tsconfig.prod.json",
-    "prepublish": "nom run build",
+    "prepublish": "npm run build",
     "test": "jest --coverage",
     "test:watch": "npm run test -- --watch",
     "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
