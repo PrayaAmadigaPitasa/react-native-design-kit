@@ -29,4 +29,9 @@ export default function App() {
 }
 ```
 
-![](https://imgur.com/a/CL5sqqw.gif)
+#### Snapshot
+
+![](https://media.giphy.com/media/LcANCbSeO962lHVMRg/giphy.gif)
+
+#### Try It Now!
+- APK: https://bit.ly/3dM4J3X
