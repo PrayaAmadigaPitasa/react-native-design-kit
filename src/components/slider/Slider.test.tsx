@@ -24,4 +24,7 @@ function runTest(name: string, props?: ObjectPartial<SliderProps>) {
 describe('Slider', () => {
   runTest('default');
   runTest('button', {button: true});
+  runTest('button buttonValue', {button: true, buttonValue: 20});
+  runTest('indicator', {indicator: true});
+  runTest('initialValue', {initialValue: 50});
 });
