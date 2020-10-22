@@ -19,7 +19,7 @@ export default function PlayingBar({
   minHeight = 4,
   maxHeight = 20,
   tps = 60,
-  frequency = 1.5,
+  frequency = 2,
   byPassAnimatedCallback = false,
 }: PlayingBarProps) {
   const [progress, setProgress] = useState(0);

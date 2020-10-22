@@ -88,7 +88,7 @@ export default function SwitchableText({
     setIndex(0);
   }, [texts]);
 
-  useEffect(() => handleRunAnimation, [handleRunAnimation]);
+  useEffect(handleRunAnimation, [handleRunAnimation]);
 
   return texts.length > 0 ? (
     <View style={containerStyle}>
