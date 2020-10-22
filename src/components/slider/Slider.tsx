@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {View, StyleSheet, LayoutRectangle, ViewStyle} from 'react-native';
+import {useDidUpdate} from '../../utilities';
 import {Icon} from '../icon';
 import {Touchable} from '../touchable';
 
@@ -63,28 +64,29 @@ export default function Slider({
   const [thumbLayout, setThumbLayout] = useState<LayoutRectangle>();
   const [pageX, setPageX] = useState<number>();
   const [width, setWidth] = useState<number>();
+  const value = useMemo(() => progress * (maxValue - minValue) + minValue, [
+    progress,
+    maxValue,
+    minValue,
+  ]);
 
   useEffect(() => {
     setWidth(undefined);
   }, [trackContainerStyle, button]);
 
-  useEffect(() => {
-    onChangeValue !== undefined && onChangeValue(getValue(), progress);
-  }, [progress]);
+  useDidUpdate(() => {
+    onChangeValue && onChangeValue(value, progress);
+  }, [value]);
 
-  function setValue(value: number) {
-    setProgress(getProgress(value));
+  function setValue(val: number) {
+    setProgress(getProgress(val));
   }
 
-  function getProgress(value: number) {
+  function getProgress(val: number) {
     return (
-      (Math.max(minValue, Math.min(maxValue, value)) - minValue) /
+      (Math.max(minValue, Math.min(maxValue, val)) - minValue) /
       (maxValue - minValue)
     );
-  }
-
-  function getValue() {
-    return progress * (maxValue - minValue) + minValue;
   }
 
   function getIndicatorComponent() {
@@ -129,25 +131,35 @@ export default function Slider({
     return components;
   }
 
-  return (
-    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
-      {button && (
+  const handlePressButtonLeft = useCallback(
+    () =>
+      setValue(
+        value -
+          (buttonValue !== undefined
+            ? Math.max(0, buttonValue)
+            : (maxValue - minValue) * 0.15),
+      ),
+    [value, buttonValue, maxValue, minValue],
+  );
+
+  const handleRenderButtonLeft = useMemo(
+    () =>
+      button && (
         <Touchable
           style={StyleSheet.flatten([
             styles.startButtonContainer,
             startButtonContainerStyle,
           ])}
-          onPress={() =>
-            setValue(
-              getValue() -
-                (buttonValue !== undefined
-                  ? Math.max(0, buttonValue)
-                  : (maxValue - minValue) * 0.15),
-            )
-          }>
+          onPress={handlePressButtonLeft}>
           {startButton || <Icon style={styles.buttonIcon} name="caret-left" />}
         </Touchable>
-      )}
+      ),
+    [button, startButtonContainerStyle, startButton, handlePressButtonLeft],
+  );
+
+  return (
+    <View style={StyleSheet.flatten([styles.container, containerStyle])}>
+      {handleRenderButtonLeft}
       {width === undefined ? (
         <View style={styles.trackDefaultBaseContainer}>
           <View
@@ -242,7 +254,7 @@ export default function Slider({
           ])}
           onPress={() =>
             setValue(
-              getValue() +
+              value +
                 (buttonValue !== undefined
                   ? Math.max(0, buttonValue)
                   : (maxValue - minValue) * 0.15),
