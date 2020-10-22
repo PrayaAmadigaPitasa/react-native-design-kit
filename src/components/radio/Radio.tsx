@@ -110,10 +110,6 @@ export default function Radio({
 }: RadioProps) {
   const [selected, setSelected] = useState(defaultId);
 
-  function isSelected(id: string) {
-    return selected === id;
-  }
-
   const handlePressRadioItem = useCallback(
     (id: string, event: GestureResponderEvent) => {
       onPress && onPress(event);
@@ -123,10 +119,10 @@ export default function Radio({
     [onPress, onSelect],
   );
 
-  const handleRenderRadioitem = useCallback(
+  const handleRenderRadioItem = useCallback(
     (id: string) => {
-      const component =
-        radioComponent && radioComponent({id, isSelected: isSelected(id)});
+      const isSelected = selected === id;
+      const component = radioComponent && radioComponent({id, isSelected});
       const title =
         typeof component === 'string'
           ? component
@@ -151,7 +147,7 @@ export default function Radio({
   );
 
   const handleRenderListRadioItem = useMemo(
-    () => radioIds.map(value => handleRenderRadioitem(value)),
+    () => radioIds.map(value => handleRenderRadioItem(value)),
     [radioIds],
   );
 
