@@ -10,6 +10,15 @@ const defaultProps: SliderProps = {
 function runTest(name: string, props?: ObjectPartial<SliderProps>) {
   test(name, async () => {
     const {getByTestId} = render(<Slider {...defaultProps} {...props} />);
+    const trackContainer = getByTestId('track-container');
+
+    fireEvent(trackContainer, 'layout', {nativeEvent: {layout: {width: 250}}});
+
+    const thumbContainer = getByTestId('thumb-container');
+
+    fireEvent(thumbContainer, 'layout', {
+      nativeEvent: {layout: {width: 10, height: 20}},
+    });
 
     if (props?.button) {
       const buttonStart = getByTestId('button-start');

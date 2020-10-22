@@ -254,6 +254,7 @@ export default function Slider({
     () =>
       width ? (
         <View
+          testID="thumb-container"
           onLayout={event => setThumbLayout(event.nativeEvent.layout)}
           style={StyleSheet.flatten([
             styles.thumbContainer,
@@ -274,6 +275,7 @@ export default function Slider({
   const handleRenderSlider = useMemo(
     () => (
       <View
+        testID="track-container"
         style={styles.sectionTrackContainer}
         pointerEvents="box-only"
         onStartShouldSetResponder={() => true}
